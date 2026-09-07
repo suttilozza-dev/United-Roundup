@@ -1,0 +1,203 @@
+/* Extra styles for pages beyond the ChatGPT-captured homepage */
+
+.page-hero{
+  padding:3rem clamp(1.5rem,5vw,4rem) 2rem;
+  background:var(--cream);
+  border-bottom:1px solid var(--line);
+}
+.page-hero h1{
+  font-size:clamp(1.8rem,4vw,2.6rem);
+  margin:0 0 .5rem;
+  color:var(--char);
+}
+.page-hero p{
+  color:var(--muted);
+  max-width:60ch;
+  margin:0;
+}
+.page-stats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:1.5rem;
+  margin-top:1.5rem;
+}
+.page-stat{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:.9rem 1.3rem;
+}
+.page-stat b{
+  display:block;
+  font-size:1.4rem;
+  color:var(--terra);
+}
+.page-stat span{
+  font-size:.85rem;
+  color:var(--muted);
+}
+
+.conf-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:1.25rem;
+  padding:2rem clamp(1.5rem,5vw,4rem) 4rem;
+  max-width:1400px;
+  margin:0 auto;
+}
+.conf-card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:1.25rem;
+}
+.conf-card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:.75rem;
+}
+.conf-card-head h3{
+  margin:0;
+  font-size:1.05rem;
+  color:var(--char);
+}
+.conf-context{
+  display:block;
+  font-size:.78rem;
+  font-weight:400;
+  color:var(--muted);
+  margin-top:.15rem;
+}
+.conf-result{
+  font-size:.75rem;
+  font-weight:700;
+  padding:.2rem .55rem;
+  border-radius:999px;
+  background:var(--line);
+  color:var(--muted);
+  white-space:nowrap;
+}
+.res-win{background:#e4f3e6;color:#1e7a34}
+.res-loss{background:#fbe4e0;color:#b0311a}
+.res-draw{background:#f0eadb;color:#8a6d1f}
+.conf-date{
+  font-size:.85rem;
+  color:var(--muted);
+  margin:.5rem 0 .75rem;
+}
+.conf-videos{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.4rem;
+}
+.video-pill{
+  font-size:.75rem;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:.3rem .65rem;
+  color:var(--terra);
+  background:var(--cream);
+}
+a.video-pill:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
+.video-pill-missing{color:var(--muted);font-style:italic}
+.conf-note{
+  margin:.6rem 0 0;
+  font-size:.78rem;
+  color:var(--muted);
+  font-style:italic;
+  border-top:1px dashed var(--line);
+  padding-top:.5rem;
+}
+
+/* Press Room Watch — search & filter tools */
+.prw-tools{
+  padding:0 clamp(1.5rem,5vw,4rem);
+  max-width:1400px;
+  margin:2rem auto 0;
+}
+.prw-tools input[type="text"]{
+  width:100%;
+  font-size:1rem;
+  padding:.8rem 1rem;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:var(--paper);
+  color:var(--ink);
+  box-sizing:border-box;
+}
+.prw-filters{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.6rem;
+  margin-top:.75rem;
+}
+.prw-filters select{
+  padding:.5rem .8rem;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:var(--paper);
+  color:var(--ink);
+  font-size:.85rem;
+}
+.prw-count{
+  color:var(--muted);
+  font-size:.85rem;
+  margin:.75rem 0 0;
+}
+
+.prw-results{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+  gap:1rem;
+  padding:1.5rem clamp(1.5rem,5vw,4rem) 4rem;
+  max-width:1400px;
+  margin:0 auto;
+}
+.prw-card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:1.1rem 1.25rem;
+}
+.prw-card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:.5rem;
+  margin-bottom:.5rem;
+}
+.prw-fixture{
+  font-size:.75rem;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.03em;
+}
+.prw-question{
+  margin:0 0 .75rem;
+  color:var(--char);
+  font-size:1rem;
+  line-height:1.4;
+}
+.prw-card-foot{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.4rem;
+  align-items:center;
+}
+.prw-tag{
+  font-size:.72rem;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:.2rem .6rem;
+  color:var(--muted);
+  background:var(--cream);
+}
+.prw-tag-verbatim{color:#1e7a34;background:#e4f3e6;border-color:transparent}
+.prw-tag-transcript{color:#8a6d1f;background:#f0eadb;border-color:transparent}
+.prw-source-link{
+  margin-left:auto;
+  font-size:.78rem;
+  color:var(--terra);
+  font-weight:600;
+}
