@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   var data = PRESS_ROOM_QUESTIONS;
+  var PAGE_SIZE = 20;
+  var visibleCount = PAGE_SIZE;
 
   var searchEl = document.getElementById('prw-topic-search');
   var topicEl = document.getElementById('prw-topic-select');
@@ -8,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var wordingEl = document.getElementById('prw-evidence-select');
   var listEl = document.getElementById('prw-question-list');
   var countEl = document.getElementById('prw-match-count');
+  var moreEl = document.getElementById('prw-load-more');
 
   var topics = Array.from(new Set(data.map(function (d) { return d.topic; })))
     .filter(Boolean).sort();
@@ -24,14 +27,14 @@ document.addEventListener('DOMContentLoaded', function () {
     return div.innerHTML;
   }
 
-  function render() {
+  function getFiltered() {
     var q = searchEl.value.trim().toLowerCase();
     var topic = topicEl.value;
     var context = contextEl.value;
     var result = resultEl.value;
     var wording = wordingEl.value;
 
-    var filtered = data.filter(function (row) {
+    return data.filter(function (row) {
       if (topic && row.topic !== topic) return false;
       if (context && row.context !== context) return false;
       if (result && row.result !== result) return false;
@@ -42,10 +45,16 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       return true;
     });
+  }
+
+  function render() {
+    var filtered = getFiltered();
 
     countEl.textContent = filtered.length + (filtered.length === 1 ? ' question matches' : ' questions match');
 
-    listEl.innerHTML = filtered.map(function (row, i) {
+    var toShow = filtered.slice(0, visibleCount);
+
+    listEl.innerHTML = toShow.map(function (row, i) {
       var resultAttr = row.result && row.result !== 'not_applicable' ? row.result : 'not_applicable';
       var response = row.response
         ? '<div class="prw-response">' + escapeHtml(row.response) + '</div>'
@@ -79,12 +88,53 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
     });
+
+    if (moreEl) {
+      var remaining = filtered.length - visibleCount;
+      if (remaining > 0) {
+        moreEl.hidden = false;
+        moreEl.textContent = 'Show ' + Math.min(PAGE_SIZE, remaining) + ' more question' + (Math.min(PAGE_SIZE, remaining) === 1 ? '' : 's');
+      } else {
+        moreEl.hidden = true;
+      }
+    }
+  }
+
+  if (moreEl) {
+    moreEl.addEventListener('click', function () {
+      visibleCount += PAGE_SIZE;
+      render();
+    });
   }
 
   [searchEl, topicEl, contextEl, resultEl, wordingEl].forEach(function (el) {
-    el.addEventListener('input', render);
-    el.addEventListener('change', render);
+    el.addEventListener('input', function () { visibleCount = PAGE_SIZE; render(); });
+    el.addEventListener('change', function () { visibleCount = PAGE_SIZE; render(); });
   });
 
   render();
+
+  // Method section tabs (Counting / Evidence / Fairness) — Radix markup was exported
+  // statically with no click behaviour wired up; this restores it using the same
+  // data-state/aria-selected/hidden attributes the existing CSS already targets.
+  var tabRoot = document.querySelector('.prw-method-tabs');
+  if (tabRoot) {
+    var tabButtons = tabRoot.querySelectorAll('[role="tab"]');
+    var tabPanels = tabRoot.querySelectorAll('[role="tabpanel"]');
+    tabButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var controls = btn.getAttribute('aria-controls');
+        tabButtons.forEach(function (b) {
+          var active = b === btn;
+          b.setAttribute('aria-selected', active ? 'true' : 'false');
+          b.setAttribute('data-state', active ? 'active' : 'inactive');
+        });
+        tabPanels.forEach(function (panel) {
+          var show = panel.id === controls;
+          panel.hidden = !show;
+          panel.setAttribute('data-state', show ? 'active' : 'inactive');
+        });
+      });
+    });
+  }
 });
