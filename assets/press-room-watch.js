@@ -1,15 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
   var data = PRESS_ROOM_QUESTIONS;
 
-  var searchEl = document.getElementById('prw-search');
-  var topicEl = document.getElementById('prw-topic');
-  var contextEl = document.getElementById('prw-context');
-  var resultEl = document.getElementById('prw-result');
-  var wordingEl = document.getElementById('prw-wording');
-  var resultsEl = document.getElementById('prw-results');
-  var countEl = document.getElementById('prw-count');
+  var searchEl = document.getElementById('prw-topic-search');
+  var topicEl = document.getElementById('prw-topic-select');
+  var contextEl = document.getElementById('prw-context-select');
+  var resultEl = document.getElementById('prw-result-select');
+  var wordingEl = document.getElementById('prw-evidence-select');
+  var listEl = document.getElementById('prw-question-list');
+  var countEl = document.getElementById('prw-match-count');
 
-  // Populate topic dropdown from data
   var topics = Array.from(new Set(data.map(function (d) { return d.topic; })))
     .filter(Boolean).sort();
   topics.forEach(function (t) {
@@ -19,8 +18,11 @@ document.addEventListener('DOMContentLoaded', function () {
     topicEl.appendChild(opt);
   });
 
-  var resultLabels = { win: 'Win', draw: 'Draw', loss: 'Loss', not_applicable: '—' };
-  var resultClasses = { win: 'res-win', draw: 'res-draw', loss: 'res-loss', not_applicable: '' };
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
 
   function render() {
     var q = searchEl.value.trim().toLowerCase();
@@ -43,38 +45,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
     countEl.textContent = filtered.length + (filtered.length === 1 ? ' question matches' : ' questions match');
 
-    resultsEl.innerHTML = filtered.map(function (row) {
-      var contextLabel = row.context === 'pre_match' ? 'Pre-match' : 'Post-match';
-      var resultBadge = row.result && row.result !== 'not_applicable'
-        ? '<span class="conf-result ' + resultClasses[row.result] + '">' + resultLabels[row.result] + '</span>'
-        : '';
-      var wordingBadge = row.wording_status === 'article-verbatim'
-        ? '<span class="prw-tag prw-tag-verbatim">Club verbatim</span>'
-        : '<span class="prw-tag prw-tag-transcript">Transcript-derived</span>';
-      var link = row.source_url
-        ? '<a href="' + row.source_url + '" target="_blank" rel="noreferrer" class="prw-source-link">Source ↗</a>'
-        : '';
+    listEl.innerHTML = filtered.map(function (row, i) {
+      var resultAttr = row.result && row.result !== 'not_applicable' ? row.result : 'not_applicable';
+      var response = row.response
+        ? '<div class="prw-response">' + escapeHtml(row.response) + '</div>'
+        : '<div class="prw-response prw-response-missing">No linked response recovered for this question.</div>';
       return (
-        '<article class="prw-card">' +
-          '<div class="prw-card-head">' +
-            '<span class="prw-fixture">' + row.fixture + ' &middot; ' + contextLabel + ' &middot; ' + row.date_disp + '</span>' +
-            resultBadge +
-          '</div>' +
-          '<p class="prw-question">' + escapeHtml(row.question) + '</p>' +
-          '<div class="prw-card-foot">' +
-            '<span class="prw-tag">' + escapeHtml(row.topic) + '</span>' +
-            wordingBadge +
-            link +
-          '</div>' +
+        '<article>' +
+          '<button class="prw-question-toggle" aria-expanded="false" data-idx="' + i + '">' +
+            '<div class="prw-question-meta">' +
+              '<span>' + row.date_disp + '</span>' +
+              '<b>' + escapeHtml(row.fixture) + '</b>' +
+              '<i class="' + resultAttr + '">' + row.context_label + '</i>' +
+              '<i>' + escapeHtml(row.section) + '</i>' +
+            '</div>' +
+            '<h3>' + escapeHtml(row.question) + '</h3>' +
+            '<div class="prw-question-tags">' +
+              '<span>' + escapeHtml(row.topic) + '</span>' +
+              (row.framing ? '<span>' + escapeHtml(row.framing) + '</span>' : '') +
+              (row.narrative_tag ? '<span>' + escapeHtml(row.narrative_tag) + '</span>' : '') +
+            '</div>' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>' +
+          '</button>' +
+          response +
         '</article>'
       );
     }).join('');
-  }
 
-  function escapeHtml(str) {
-    var div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
+    listEl.querySelectorAll('.prw-question-toggle').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var article = btn.closest('article');
+        var open = article.classList.toggle('prw-open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    });
   }
 
   [searchEl, topicEl, contextEl, resultEl, wordingEl].forEach(function (el) {

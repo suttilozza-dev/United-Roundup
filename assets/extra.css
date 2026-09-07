@@ -110,94 +110,159 @@ a.video-pill:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
   padding-top:.5rem;
 }
 
-/* Press Room Watch — search & filter tools */
-.prw-tools{
-  padding:0 clamp(1.5rem,5vw,4rem);
-  max-width:1400px;
-  margin:2rem auto 0;
-}
-.prw-tools input[type="text"]{
-  width:100%;
-  font-size:1rem;
-  padding:.8rem 1rem;
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  background:var(--paper);
-  color:var(--ink);
-  box-sizing:border-box;
-}
-.prw-filters{
-  display:flex;
-  flex-wrap:wrap;
-  gap:.6rem;
-  margin-top:.75rem;
-}
-.prw-filters select{
-  padding:.5rem .8rem;
-  border:1px solid var(--line);
-  border-radius:999px;
-  background:var(--paper);
-  color:var(--ink);
-  font-size:.85rem;
-}
-.prw-count{
-  color:var(--muted);
-  font-size:.85rem;
-  margin:.75rem 0 0;
-}
 
-.prw-results{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
-  gap:1rem;
-  padding:1.5rem clamp(1.5rem,5vw,4rem) 4rem;
-  max-width:1400px;
+/* Sources directory */
+.src-section{
+  padding:2.5rem clamp(1.5rem,5vw,4rem);
+  max-width:1300px;
   margin:0 auto;
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:2rem;
+  border-top:1px solid var(--line);
 }
-.prw-card{
-  background:var(--paper);
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:1.1rem 1.25rem;
+.src-section:first-of-type{border-top:none}
+.src-section h2{
+  font-size:1.4rem;
+  margin:0 0 .4rem;
+  color:var(--char);
 }
-.prw-card-head{
+.src-section > p{
+  color:var(--muted);
+  font-size:.9rem;
+  margin:0;
+}
+.src-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:.9rem;
+  align-content:start;
+}
+.src-card{
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:.5rem;
-  margin-bottom:.5rem;
-}
-.prw-fixture{
-  font-size:.75rem;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:.03em;
-}
-.prw-question{
-  margin:0 0 .75rem;
-  color:var(--char);
-  font-size:1rem;
-  line-height:1.4;
-}
-.prw-card-foot{
-  display:flex;
-  flex-wrap:wrap;
-  gap:.4rem;
-  align-items:center;
-}
-.prw-tag{
-  font-size:.72rem;
-  border:1px solid var(--line);
-  border-radius:999px;
-  padding:.2rem .6rem;
-  color:var(--muted);
   background:var(--cream);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:.9rem 1.1rem;
+  color:inherit;
 }
-.prw-tag-verbatim{color:#1e7a34;background:#e4f3e6;border-color:transparent}
-.prw-tag-transcript{color:#8a6d1f;background:#f0eadb;border-color:transparent}
-.prw-source-link{
+.src-card:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
+.src-card:hover .src-sub{color:#fde8df}
+.src-name{font-weight:700;font-size:.92rem;display:block}
+.src-sub{font-size:.78rem;color:var(--muted);display:block;margin-top:.15rem}
+.src-arrow{font-size:1.1rem;flex-shrink:0}
+.src-note{
+  background:var(--char);
+  color:#f2e9e2;
+  border-radius:var(--radius);
+  padding:1.5rem clamp(1.5rem,5vw,2.5rem);
+  margin:0 clamp(1.5rem,5vw,4rem) 3rem;
+  max-width:1300px;
   margin-left:auto;
-  font-size:.78rem;
-  color:var(--terra);
-  font-weight:600;
+  margin-right:auto;
 }
+.src-note b{display:block;margin-bottom:.4rem;font-size:1.05rem}
+.src-note a{color:#ffb38f;font-weight:600}
+
+/* About page */
+.ab-hero{
+  display:grid;
+  grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr);
+  gap:2.5rem;
+  align-items:start;
+  padding:3rem clamp(1.5rem,5vw,4rem);
+  max-width:1300px;
+  margin:0 auto;
+}
+.ab-kicker{
+  color:var(--terra);
+  font-size:.78rem;
+  font-weight:700;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  margin:0 0 .5rem;
+}
+.ab-hero h1{
+  font-size:clamp(2rem,4.5vw,3rem);
+  line-height:1.05;
+  margin:0 0 1rem;
+  color:var(--char);
+}
+.ab-accent{color:var(--terra)}
+.ab-hero p{color:var(--muted);max-width:52ch;margin:0 0 1.3rem}
+.ab-btn-row{display:flex;gap:.7rem;flex-wrap:wrap}
+.ab-btn-primary{
+  background:var(--terra);color:#fff;border-radius:999px;
+  padding:.7rem 1.3rem;font-weight:700;font-size:.9rem;
+}
+.ab-btn-secondary{
+  border:1px solid var(--line);border-radius:999px;
+  padding:.7rem 1.3rem;font-weight:700;font-size:.9rem;color:var(--char);
+}
+.ab-quote-card{
+  background:var(--char);color:#f2e9e2;border-radius:var(--radius);
+  padding:1.6rem 1.7rem;
+}
+.ab-quote-card .ab-kicker{color:#ffb38f}
+.ab-quote-card q, .ab-quote-card blockquote{
+  font-size:1.35rem;line-height:1.2;font-weight:700;margin:0 0 .8rem;
+  display:block;font-style:normal;
+}
+.ab-quote-card p{color:#d9c9c0;font-size:.85rem;max-width:none;margin:0}
+
+.ab-section{
+  padding:2.5rem clamp(1.5rem,5vw,4rem);
+  max-width:1300px;margin:0 auto;
+  display:grid;grid-template-columns:340px 1fr;gap:2.5rem;
+  border-top:1px solid var(--line);
+}
+.ab-section h2{font-size:1.7rem;margin:.4rem 0 0;color:var(--char);line-height:1.15}
+.ab-section > div > p{color:var(--muted);max-width:60ch}
+
+.ab-dark{background:var(--char);color:#f2e9e2;border-top:none}
+.ab-dark .ab-kicker{color:#ffb38f}
+.ab-dark h2{color:#fff}
+.ab-dark p{color:#d9c9c0}
+
+.ab-cards{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1rem;margin-top:1.5rem;
+}
+.ab-card{
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:1.2rem;
+}
+.ab-dark .ab-card{border-color:#3a2b26;background:#241a17}
+.ab-card b{
+  display:block;font-size:1.05rem;margin-bottom:.4rem;
+  color:inherit;
+}
+.ab-card p{font-size:.85rem;color:var(--muted);margin:0;max-width:none}
+.ab-dark .ab-card p{color:#c9b9b0}
+.ab-card-num{font-size:.7rem;color:var(--terra);font-weight:700}
+
+.ab-founder{
+  display:flex;gap:1rem;align-items:flex-start;margin-top:1.5rem;
+}
+.ab-avatar{
+  width:52px;height:52px;border-radius:50%;background:var(--terra);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-weight:700;flex-shrink:0;
+}
+.ab-founder blockquote{
+  font-size:1.3rem;font-weight:700;line-height:1.2;margin:0 0 .8rem;color:var(--char);
+}
+.ab-founder p{color:var(--muted);max-width:60ch;font-size:.92rem}
+.ab-founder cite{font-style:normal;font-weight:700;color:var(--char);display:block;margin-top:.6rem}
+.ab-founder cite span{display:block;font-weight:400;color:var(--muted);font-size:.85rem}
+
+.ab-contact{
+  text-align:center;padding:3rem clamp(1.5rem,5vw,4rem);
+  border-top:1px solid var(--line);
+}
+.ab-contact h2{font-size:1.9rem;margin:.4rem 0 .6rem}
+.ab-contact p{color:var(--muted);max-width:50ch;margin:0 auto 1.3rem}
+.ab-contact .ab-btn-row{justify-content:center}
