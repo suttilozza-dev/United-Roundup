@@ -306,3 +306,10 @@ a.video-pill:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
 
 .prw-load-more{display:block;margin:32px auto 0;padding:14px 32px;border-radius:999px;border:1.5px solid var(--red);background:transparent;color:var(--red);font-weight:700;font-size:.95rem;cursor:pointer;transition:background .15s,color .15s}
 .prw-load-more:hover{background:var(--red);color:var(--paper)}
+
+/* The filterbar's <select> elements were built to sit inside a wrapper div
+   ([data-slot=native-select-wrapper]) that stretches to 100% width, but the
+   live markup uses bare <select> elements with no such wrapper -- so each one
+   falls back to the browser's native auto-sizing (based on its widest
+   <option>) instead of filling its grid column. Fix: stretch them directly. */
+.prw-filterbar select{width:100%}
