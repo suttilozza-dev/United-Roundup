@@ -1,0 +1,43 @@
+# Save this file as .github/workflows/source-tracking.yml in the repo root
+# (GitHub Actions only recognizes workflows inside that exact folder).
+name: Update Latest news feed
+
+on:
+  schedule:
+    - cron: "0 */4 * * *"   # every 4 hours
+  workflow_dispatch:         # lets you also trigger it manually from GitHub's UI
+
+jobs:
+  update-feed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install anthropic
+
+      - name: Validate sources
+        run: python automation/validate_sources.py
+
+      - name: Fetch new items
+        run: python automation/fetch_sources.py
+
+      - name: Classify items
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python automation/classify.py
+
+      - name: Update site data
+        run: python automation/update_site_data.py
+
+      - name: Commit and push if anything changed
+        run: |
+          git config user.name "United Roundup Bot"
+          git config user.email "bot@unitedroundup.com"
+          git add site/assets/latest-data.js
+          git diff --staged --quiet || git commit -m "Auto-update latest news feed"
+          git push

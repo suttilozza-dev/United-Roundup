@@ -1,0 +1,104 @@
+{
+  "youtube_channels": [
+    {
+      "name": "Manchester United",
+      "channel_id": "UC6yW44UGJJBvYTlfC7CRg2Q"
+    },
+    {
+      "name": "Stretford Paddock",
+      "channel_id": "UC7w8GnTF2Sp3wldDMtCCtVw"
+    },
+    {
+      "name": "The United Stand",
+      "channel_id": "UCMmVPVb0BwSIOWVeDwlPocQ"
+    },
+    {
+      "name": "Talk of the Devils",
+      "channel_id": "UC_mSvSjJrxm46bwDr7HQalg"
+    },
+    {
+      "name": "UnitedPeoplesTV",
+      "channel_id": "UCEfEaGKGSxy8ZYIV1RWLbCQ"
+    },
+    {
+      "name": "United View",
+      "channel_id": "UCQWkxGgZFv3VcrwqwIIGFgA"
+    },
+    {
+      "name": "The Football Terrace",
+      "channel_id": "UCjoj16PAB4l1o8B6I7dgD8Q"
+    },
+    {
+      "name": "Rio Ferdinand Presents",
+      "channel_id": "UCPAiS32go3-GwTO0kmlVX7g"
+    }
+  ],
+  "rss_feeds": [
+    {
+      "name": "BBC Sport Football",
+      "url": "https://feeds.bbci.co.uk/sport/football/rss.xml"
+    },
+    {
+      "name": "Manchester Evening News",
+      "url": "https://www.manchestereveningnews.co.uk/all-about/manchester-united-fc/?service=rss"
+    },
+    {
+      "name": "The Guardian",
+      "url": "https://www.theguardian.com/football/manchesterunited/rss"
+    },
+    {
+      "name": "The Athletic",
+      "url": "https://www.nytimes.com/athletic/rss/news/"
+    },
+    {
+      "name": "ESPN",
+      "url": "https://www.espn.com/espn/rss/soccer/news"
+    },
+    {
+      "name": "Daily Mail",
+      "url": "https://www.dailymail.co.uk/sport/manchester-united/index.rss"
+    },
+    {
+      "name": "PA Media",
+      "url": "https://www.pa.media/feed"
+    },
+    {
+      "name": "The Mill",
+      "url": "https://manchestermill.co.uk/rss/"
+    },
+    {
+      "name": "Stretty News",
+      "url": "https://strettynews.com/feed/"
+    },
+    {
+      "name": "Republik of Mancunia",
+      "url": "https://therepublikofmancunia.com/feed/"
+    },
+    {
+      "name": "United In Focus",
+      "url": "https://www.unitedinfocus.com/feed/"
+    },
+    {
+      "name": "RedCafe",
+      "url": "https://www.redcafe.net/forums/-/index.rss"
+    },
+    {
+      "name": "Sky Sports",
+      "url": "https://www.skysports.com/rss/12040"
+    }
+  ],
+  "google_news_search": [
+    {
+      "name": "The Telegraph",
+      "query": "\"Manchester United\" site:telegraph.co.uk"
+    },
+    {
+      "name": "Reuters",
+      "query": "\"Manchester United\" site:reuters.com"
+    },
+    {
+      "name": "The Times",
+      "query": "\"Manchester United\" site:thetimes.co.uk"
+    }
+  ]
+}
