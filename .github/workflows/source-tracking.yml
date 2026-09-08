@@ -38,6 +38,6 @@ jobs:
         run: |
           git config user.name "United Roundup Bot"
           git config user.email "bot@unitedroundup.com"
-          git add site/assets/latest-data.js
+          git add assets/latest-data.js
           git diff --staged --quiet || git commit -m "Auto-update latest news feed"
           git push

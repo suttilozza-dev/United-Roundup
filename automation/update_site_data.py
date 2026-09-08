@@ -11,7 +11,7 @@ from email.utils import parsedate_to_datetime
 from pathlib import Path
 
 HERE = Path(__file__).parent
-SITE_DATA_PATH = HERE.parent / "site" / "assets" / "latest-data.js"
+SITE_DATA_PATH = HERE.parent / "assets" / "latest-data.js"
 MAX_ITEMS = 60
 
 
