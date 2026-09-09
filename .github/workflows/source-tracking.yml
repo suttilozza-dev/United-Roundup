@@ -4,7 +4,7 @@ name: Update Latest news feed
 
 on:
   schedule:
-    - cron: "0 */4 * * *"   # every 4 hours
+    - cron: "0 0 */2 * *"   # every 2 days
   workflow_dispatch:         # lets you also trigger it manually from GitHub's UI
 
 jobs:
