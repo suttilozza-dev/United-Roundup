@@ -1,5 +1,6 @@
-// Rebuilt from source CSVs supplied by the user (questions/responses/conference-coverage/article-source-register).
-// Rebuilt: 2026-09-16T10:09:11.664880Z
+// Source of truth for Press Room Watch. Append new press-conference
+// question objects here, then run automation/rebuild_press_room.py.
+// Last rebuilt: 2026-09-16T10:56:05.275313+00:00
 const PRESS_ROOM_QUESTIONS = [
   {
     "fixture": "Manchester City",
