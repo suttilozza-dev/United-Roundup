@@ -542,3 +542,4 @@ const LATEST_ITEMS = [
     "type": "article"
   }
 ];
+const LATEST_UPDATED = "2026-09-15T00:13:12.980310+00:00";
