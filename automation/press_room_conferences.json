@@ -232,5 +232,41 @@
     "date": "2026-09-04",
     "context": "pre_match",
     "result": "not_applicable"
+  },
+  {
+    "fixture": "Everton",
+    "date": "2026-09-06",
+    "context": "post_match",
+    "result": "draw"
+  },
+  {
+    "fixture": "Sabah FK",
+    "date": "2026-09-09",
+    "context": "pre_match",
+    "result": "not_applicable"
+  },
+  {
+    "fixture": "Sabah FK",
+    "date": "2026-09-10",
+    "context": "post_match",
+    "result": "win"
+  },
+  {
+    "fixture": "Manchester City",
+    "date": "2026-09-11",
+    "context": "pre_match",
+    "result": "not_applicable"
+  },
+  {
+    "fixture": "Manchester City",
+    "date": "2026-09-13",
+    "context": "post_match",
+    "result": "loss"
+  },
+  {
+    "fixture": "Brighton and Hove Albion",
+    "date": "2026-09-15",
+    "context": "pre_match",
+    "result": "not_applicable"
   }
 ]
