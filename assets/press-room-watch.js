@@ -44,6 +44,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (hay.indexOf(q) === -1) return false;
       }
       return true;
+    }).sort(function (a, b) {
+      // Most recent conference first; within the same date, post-match
+      // before pre-match (mirrors the build order, reversed).
+      if (a.date !== b.date) return a.date < b.date ? 1 : -1;
+      if (a.context !== b.context) return a.context === 'pre_match' ? 1 : -1;
+      return 0;
     });
   }
 
