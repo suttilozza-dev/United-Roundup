@@ -422,3 +422,9 @@ a.video-pill:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
    colours both the legend swatches and the bar segments. */
 .prw-style-legend i.verbatim,.prw-style-bars i.verbatim{background:#d65432}
 .prw-style-legend i.transcript,.prw-style-bars i.transcript{background:#c9c0ba}
+
+/* Narrative leaderboard bars: every rank uses the accent colour, not just
+   #1 -- #1 gets the darker/richer red (matching the section kicker) so it
+   still stands out against the lighter accent used for the rest. */
+.prw-narrative-meter span{background:#ff956f}
+.prw-leaderboard li.top-1 .prw-narrative-meter span{background:#d65432}
