@@ -428,3 +428,12 @@ a.video-pill:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
    still stands out against the lighter accent used for the rest. */
 .prw-narrative-meter span{background:#ff956f}
 .prw-leaderboard li.top-1 .prw-narrative-meter span{background:#d65432}
+
+/* Homepage masthead: dark background (matching the Press Room Watch promo
+   section) so the "One UNITED view." accent colours stand out. "Every
+   angle." keeps the site's default ink colour per request -- note this
+   reads faint against the dark background; swap to a lighter grey if it's
+   too hard to read once live. */
+.masthead{background:radial-gradient(circle at 85% 18%,#d654322b,#0000 31%),#1a1e28}
+.mast-copy h1 em{color:#fff}
+.mast-copy h1 em .mh-accent{color:var(--terra)}
