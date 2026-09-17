@@ -60,11 +60,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var toShow = filtered.slice(0, visibleCount);
 
+    var arrowSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>';
+    var fileWarnSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-warning" aria-hidden="true"><path d="M12 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>';
+
     listEl.innerHTML = toShow.map(function (row, i) {
       var resultAttr = row.result && row.result !== 'not_applicable' ? row.result : 'not_applicable';
-      var response = row.response
-        ? '<div class="prw-response">' + escapeHtml(row.response) + '</div>'
-        : '<div class="prw-response prw-response-missing">No linked response recovered for this question.</div>';
+      var main = row.response
+        ? '<div><span>CARRICK&rsquo;S PUBLISHED RESPONSE</span><blockquote><p>' + escapeHtml(row.response) + '</p>' +
+          '<footer><span>' + (row.wording_status === 'article-verbatim' ? 'Official wording' : 'Transcript-derived') + '</span>' +
+          '<a href="' + escapeHtml(row.source_url) + '" target="_blank" rel="noreferrer">Open source ' + arrowSvg + '</a></footer></blockquote></div>'
+        : '<div class="prw-no-answer">' + fileWarnSvg + '<p>No answer could be linked safely to this exact question. The question remains in the topic totals, but no response has been inferred.</p>' +
+          '<a href="' + escapeHtml(row.source_url) + '" target="_blank" rel="noreferrer">Open question source ' + arrowSvg + '</a></div>';
+      var aside = '<aside><b>Evidence note</b><p>' +
+        (row.wording_status === 'article-verbatim' ? 'Question wording published by the club.' : 'Question wording recovered from available captions and checked as far as the source permits.') +
+        '</p><dl><div><dt>Section</dt><dd>' + escapeHtml(row.section) + '</dd></div>' +
+        (row.narrative_tag ? '<div><dt>Narrative</dt><dd>' + escapeHtml(row.narrative_tag.replace(/_/g, ' ')) + '</dd></div>' : '') +
+        '</dl></aside>';
       return (
         '<article>' +
           '<button class="prw-question-toggle" aria-expanded="false" data-idx="' + i + '">' +
@@ -82,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
             '</div>' +
             '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>' +
           '</button>' +
-          response +
+          '<div class="prw-answer">' + main + aside + '</div>' +
         '</article>'
       );
     }).join('');
@@ -90,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
     listEl.querySelectorAll('.prw-question-toggle').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var article = btn.closest('article');
-        var open = article.classList.toggle('prw-open');
+        var open = article.classList.toggle('open');
         btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
     });

@@ -180,11 +180,21 @@ def compute_stats(records):
             "date_max": dates[-1],
         })
 
+    # Evidence mix per context (for the Visual Analysis "Evidence mix" chart):
+    # how many recovered QUESTIONS in each context are club-published
+    # (article-verbatim) versus recovered from captions (transcript-derived).
+    # Deliberately question-based, not response-based -- wording_status is a
+    # property of a question record.
+    wording_mix = defaultdict(Counter)
+    for r in records:
+        wording_mix[r["context"]][r["wording_status"]] += 1
+
     dates_all = sorted(r["date"] for r in records)
     return {
         "topic_counts": topic_counts,
         "n_conf": n_conf, "pre_conf": pre_conf, "post_conf": post_conf,
         "ctx_counts": ctx_counts, "ctx_confs": ctx_confs,
+        "wording_mix": wording_mix,
         "narr_rows": narr_rows,
         "date_min": dates_all[0], "date_max": dates_all[-1],
         "n_questions": len(records),
@@ -243,10 +253,61 @@ def build_fragments(stats):
                      f'<!-- -->{n["conferences"]}<!-- --> conference{"s" if n["conferences"] != 1 else ""}</small></article>')
     radar_div = "<div>" + "".join(arts) + "</div>"
 
+    # 5. Visual Analysis: question-mix donut (top 5 topics + "Other")
+    donut_palette = ["#d65432", "#f08a5d", "#e2b173", "#63748d", "#9b7b88", "#d8d1c8"]
+    top5 = top10[:5]
+    other_count = stats["n_questions"] - sum(c for _, c in top5)
+    slices = top5 + [("Other topics", other_count)]
+    cursor = 0.0
+    stops, donut_li = [], []
+    for (label, val), color in zip(slices, donut_palette):
+        pct = val / stats["n_questions"] * 100 if stats["n_questions"] else 0
+        start = cursor
+        cursor += pct
+        stops.append(f"{color} {start}% {cursor}%")
+        donut_li.append(f'<li><i style="background:{color}"></i><span>{esc(label)}</span>'
+                         f'<b>{val}</b><small>{round(pct)}%</small></li>')
+    donut_bg = f"conic-gradient({','.join(stops)})"
+    donut_ol = "<ol>" + "".join(donut_li) + "</ol>"
+    top_pct = round(top10[0][1] / stats["n_questions"] * 100) if stats["n_questions"] else 0
+
+    # 6. Visual Analysis: context-comparison bar columns (reuses the same
+    #    per-conference rates as the Findings context panel).
+    max_rate = max((totals[k] / len(stats["ctx_confs"].get(k, [])) if stats["ctx_confs"].get(k) else 0
+                     for k in order), default=1) or 1
+    columns = []
+    for k in order:
+        total = totals[k]
+        confs = len(stats["ctx_confs"].get(k, []))
+        rate = round(total / confs, 2) if confs else 0
+        height = round((rate / max_rate) * 100) if max_rate else 0
+        label = k.replace("post-", "")
+        columns.append(f'<div><div class="prw-column-value">{rate}</div><div class="prw-column-track">'
+                        f'<i style="height:{height}%"></i></div><b>{label}</b>'
+                        f'<small>{confs} conference{"s" if confs != 1 else ""}</small></div>')
+    columns_html = "".join(columns)
+
+    # 7. Visual Analysis: evidence-mix bars (article-verbatim vs
+    #    transcript-derived), one bar per context.
+    evidence_bars = []
+    for ctx, label in (("pre_match", "Pre-match"), ("post_match", "Post-match")):
+        mix = stats["wording_mix"].get(ctx, {})
+        verbatim = mix.get("article-verbatim", 0)
+        transcript = mix.get("transcript-derived", 0)
+        total = verbatim + transcript
+        vw = round(verbatim / total * 100) if total else 0
+        tw = 100 - vw
+        evidence_bars.append(
+            f'<div><b>{label}</b><div><i class="verbatim" style="width:{vw}%" title="Official article: {verbatim}"></i>'
+            f'<i class="transcript" style="width:{tw}%" title="Transcript-derived: {transcript}"></i></div><span>{total}</span></div>')
+    evidence_bars_html = "".join(evidence_bars)
+
     return {
         "topics_ol": topics_ol, "context_div": context_div,
         "narrative_ol": narrative_ol, "radar_div": radar_div,
         "established": established, "top_topic": top10[0],
+        "donut_bg": donut_bg, "donut_ol": donut_ol, "top_pct": top_pct,
+        "columns_html": columns_html, "evidence_bars_html": evidence_bars_html,
     }
 
 
@@ -302,6 +363,30 @@ def splice_html(html, stats, frags):
     html = must(html, r'analytical lenses measure published responses rather than questions\.</p><div>.*?</div></aside></div></section>',
                 'analytical lenses measure published responses rather than questions.</p>' + frags["radar_div"] + '</aside></div></section>',
                 "radar-div", flags=re.S)
+
+    # visual analysis: donut + its caption paragraph, spliced together in one
+    # match anchored on the unique "prw-donut-layout" wrapper and the
+    # article close that immediately follows the caption -- NOT a bare
+    # "<p><strong>" pattern, which also matches the unrelated "UNITED
+    # ROUNDUP'S READ" paragraph earlier in the Live Editorial Read section.
+    top_topic_name, _ = frags["top_topic"]
+    donut_caption = (f'<p><strong>{esc(top_topic_name)} alone accounts for {frags["top_pct"]}%.</strong> '
+                      'The broad match story dominates, while recurring narratives reveal which specific concerns persist beneath it.</p>')
+    html = must(html, r'<div class="prw-donut-layout">.*?</div><p><strong>.*?</strong>.*?</p></article>',
+                '<div class="prw-donut-layout"><div class="prw-donut" style="background:'
+                + frags["donut_bg"] + f'"><div><strong>{stats["n_questions"]}</strong><span>questions</span></div></div>'
+                + frags["donut_ol"] + '</div>' + donut_caption + '</article>',
+                "visuals-donut", flags=re.S)
+
+    # visual analysis: context comparison columns
+    html = must(html, r'<div class="prw-columns">.*?</div>\s*<p>Pre-match releases preserve more material\.',
+                '<div class="prw-columns">' + frags["columns_html"] + '</div><p>Pre-match releases preserve more material.',
+                "visuals-columns", flags=re.S)
+
+    # visual analysis: evidence mix bars
+    html = must(html, r'<div class="prw-style-bars">.*?</div>\s*<p>Almost every recovered question',
+                '<div class="prw-style-bars">' + frags["evidence_bars_html"] + '</div><p>Almost every recovered question',
+                "visuals-evidence-bars", flags=re.S)
 
     return html
 

@@ -313,3 +313,112 @@ a.video-pill:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
    falls back to the browser's native auto-sizing (based on its widest
    <option>) instead of filling its grid column. Fix: stretch them directly. */
 .prw-filterbar select{width:100%}
+
+
+/* ---- Press Room Watch v2: Live Editorial Read + Visual Analysis ---- */
+.prw-now{padding:110px clamp(20px,6vw,90px);background:var(--navy);color:#fff;overflow:hidden;position:relative}
+.prw-now:before{content:"";position:absolute;right:-100px;top:-180px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(214,84,50,.25),transparent 68%)}
+.prw-now-heading{max-width:1240px;margin:0 auto 42px;display:flex;justify-content:space-between;align-items:flex-end;gap:30px;position:relative}
+.prw-now-heading p{margin:0 0 12px;color:#ff9b78;font-size:.72rem;font-weight:900;letter-spacing:.16em}
+.prw-now-heading h2{max-width:850px;margin:0;font:700 clamp(3.1rem,5.5vw,5.8rem)/.92 Georgia,serif;letter-spacing:-.055em}
+.prw-now-heading h2 em{color:#ff8b62;font-style:normal}
+.prw-window{display:flex;align-items:center;gap:11px;padding:14px 18px;border:1px solid #404653;border-radius:14px;background:#202630;white-space:nowrap}
+.prw-window>svg{width:22px;color:#ff8b62}
+.prw-window span,.prw-window b,.prw-window small{display:block}
+.prw-window b{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em}
+.prw-window small{margin-top:3px;color:#9da2ab;font-size:.72rem}
+.prw-now-lead{max-width:1240px;margin:auto;display:grid;grid-template-columns:92px minmax(0,1.2fr) minmax(280px,.55fr);border:1px solid #404653;border-top:4px solid var(--ember);border-radius:22px;background:linear-gradient(135deg,#232936,#1b2029);box-shadow:0 30px 80px rgba(0,0,0,.28);overflow:hidden;position:relative}
+.prw-now-number{padding:30px 20px;color:#ff8961;font:700 2.5rem Georgia,serif;border-right:1px solid #3c424d}
+.prw-now-copy{padding:34px 38px}
+.prw-status-row{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.prw-status-row span,.prw-status-row i{display:inline-flex;align-items:center;gap:6px;font-size:.65rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;font-style:normal}
+.prw-status-row span{padding:7px 10px;border-radius:99px;background:var(--red)}
+.prw-status-row i{color:#ffae92}
+.prw-status-row svg{width:13px;height:13px}
+.prw-now-copy h3{max-width:760px;margin:0 0 17px;font:700 clamp(2.1rem,3.5vw,3.7rem)/1 Georgia,serif;letter-spacing:-.04em}
+.prw-now-copy>p{max-width:760px;margin:0;color:#c5c6c9;line-height:1.75}
+.prw-now-proof{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:25px}
+.prw-now-proof b{margin-right:4px;color:#ff9b78;font-size:.62rem;letter-spacing:.12em}
+.prw-now-proof span{padding:7px 9px;border:1px solid #4b515c;border-radius:6px;color:#d6d7d9;font-size:.68rem}
+.prw-now-lead>aside{padding:34px 30px;border-left:1px solid #3c424d;background:rgba(10,13,18,.24)}
+.prw-now-lead>aside>span{color:#ff9b78;font-size:.62rem;font-weight:900;letter-spacing:.13em}
+.prw-now-lead blockquote{margin:18px 0 15px;color:#fff;font:italic 700 2rem/1.12 Georgia,serif}
+.prw-now-lead>aside p{color:#aeb1b7;font-size:.8rem;line-height:1.65}
+.prw-now-lead>aside a{display:inline-flex;align-items:center;gap:5px;margin-top:13px;color:#ff9b78;font-size:.7rem;font-weight:900}
+.prw-now-lead>aside a svg{width:13px}
+.prw-now-grid{max-width:1240px;margin:18px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.prw-now-card{min-height:285px;padding:25px;display:flex;flex-direction:column;border:1px solid #3a404b;border-radius:17px;background:#202630}
+.prw-now-card-top{display:flex;justify-content:space-between;align-items:center}
+.prw-now-card-top>span{color:#666e7b;font:700 1.4rem Georgia,serif}
+.prw-now-card-top i{display:flex;align-items:center;gap:5px;color:#ff9b78;font-size:.64rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em;font-style:normal}
+.prw-now-card.cooling .prw-now-card-top i{color:#8ab7db}
+.prw-now-card.emerging .prw-now-card-top i{color:#e7c779}
+.prw-now-card-top svg{width:14px;height:14px}
+.prw-now-card h3{margin:31px 0 12px;font:700 1.55rem/1.1 Georgia,serif;letter-spacing:-.025em}
+.prw-now-card>p{margin:0;color:#adb1b9;font-size:.8rem;line-height:1.65}
+.prw-now-card footer{margin-top:auto;padding-top:22px;border-top:1px solid #383e49}
+.prw-now-card footer b,.prw-now-card footer span{display:block}
+.prw-now-card footer b{margin-bottom:5px;color:#7e8591;font-size:.58rem;letter-spacing:.11em;text-transform:uppercase}
+.prw-now-card footer span{color:#e4e4e5;font-size:.72rem}
+.prw-now-read{max-width:1240px;margin:18px auto 0;padding:28px 32px;display:grid;grid-template-columns:170px 1fr;gap:5px 28px;border-radius:15px;background:#f2e3d4;color:var(--ink)}
+.prw-now-read>b{padding-top:5px;color:var(--red);font-size:.65rem;letter-spacing:.13em}
+.prw-now-read p{margin:0;font:400 1.08rem/1.65 Georgia,serif}
+.prw-now-read>span{grid-column:2;color:#7b665c;font-size:.7rem;line-height:1.5}
+.prw-visuals{padding:100px clamp(20px,6vw,90px);background:#f1e5db}
+.prw-chart-grid{max-width:1240px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.prw-chart-grid>article{padding:30px;border:1px solid #decfc5;border-radius:20px;background:#fff;box-shadow:0 13px 30px rgba(61,37,27,.06)}
+.prw-chart-grid header>span{color:var(--red);font-size:.62rem;font-weight:900;letter-spacing:.13em}
+.prw-chart-grid header h3{margin:7px 0 0;font:700 1.65rem Georgia,serif}
+.prw-donut-card{grid-row:span 2}
+.prw-donut-layout{display:grid;grid-template-columns:220px 1fr;gap:30px;align-items:center;margin:35px 0}
+.prw-donut{box-sizing:border-box;width:220px;height:220px;padding:30px;border-radius:50%}
+.prw-donut>div{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:50%;background:#fff;box-shadow:0 4px 18px rgba(45,25,18,.12)}
+.prw-donut strong{font:700 2.9rem Georgia,serif}
+.prw-donut span{color:var(--muted);font-size:.67rem;text-transform:uppercase;letter-spacing:.09em}
+.prw-donut-layout ol{list-style:none;margin:0;padding:0}
+.prw-donut-layout li{display:grid;grid-template-columns:10px 1fr auto 34px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #eee5df}
+.prw-donut-layout li i{width:9px;height:9px;border-radius:3px}
+.prw-donut-layout li span{font-size:.7rem}
+.prw-donut-layout li b{font:700 .9rem Georgia,serif}
+.prw-donut-layout li small{color:var(--muted);font-size:.65rem;text-align:right}
+.prw-chart-grid article>p{margin:25px 0 0;padding-top:19px;border-top:1px solid #e8ddd5;color:var(--muted);font-size:.76rem;line-height:1.6}
+.prw-chart-grid article>p strong{color:var(--ink)}
+.prw-columns{height:220px;margin:30px 0 10px;display:flex;align-items:flex-end;justify-content:space-around;gap:18px;border-bottom:1px solid #d9cbc1}
+.prw-columns>div{height:100%;min-width:72px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.prw-column-value{margin-bottom:6px;font:700 1.15rem Georgia,serif}
+.prw-column-track{width:50px;height:150px;display:flex;align-items:flex-end;border-radius:7px 7px 0 0;background:#f0e8e2;overflow:hidden}
+.prw-column-track i{display:block;width:100%;min-height:5px;background:linear-gradient(180deg,var(--ember),var(--red))}
+.prw-columns b{margin-top:9px;font-size:.66rem;text-transform:capitalize}
+.prw-columns small{margin-top:3px;color:var(--muted);font-size:.58rem}
+.prw-style-card{grid-column:2}
+.prw-style-legend{display:flex;flex-wrap:wrap;gap:8px 13px;margin:22px 0}
+.prw-style-legend span{display:flex;align-items:center;gap:5px;color:#66534b;font-size:.6rem}
+.prw-style-legend i{width:8px;height:8px;border-radius:2px}
+.prw-style-bars{display:grid;gap:17px}
+.prw-style-bars>div{display:grid;grid-template-columns:68px 1fr 28px;gap:10px;align-items:center}
+.prw-style-bars b{font-size:.64rem;text-transform:capitalize}
+.prw-style-bars>div>div{height:20px;display:flex;border-radius:5px;overflow:hidden;background:#eee}
+.prw-style-bars>div>div i{display:block;height:100%;min-width:1px}
+.prw-style-bars>div>span{font:700 .8rem Georgia,serif;text-align:right}
+.prw-style-legend .direct,.prw-style-bars .direct{background:#d65432}
+.prw-style-legend .expansive,.prw-style-bars .expansive{background:#ef8a5f}
+.prw-style-legend .brief,.prw-style-bars .brief{background:#e4b36d}
+.prw-style-legend .corrective,.prw-style-bars .corrective{background:#63748d}
+.prw-style-legend .answer-only,.prw-style-bars .answer-only{background:#c9c0ba}
+.prw-style-legend .other,.prw-style-bars .other{background:#8e6f7d}
+@media(max-width:1050px){.prw-now-grid{grid-template-columns:1fr 1fr}.prw-now-lead{grid-template-columns:72px 1fr}.prw-now-lead>aside{grid-column:2;border-left:0;border-top:1px solid #3c424d}.prw-chart-grid{grid-template-columns:1fr}.prw-donut-card,.prw-style-card{grid-row:auto;grid-column:auto}}
+@media(max-width:800px){.prw-now-heading{display:block}.prw-window{margin-top:20px;width:max-content}.prw-now-grid{grid-template-columns:1fr}.prw-now-read{grid-template-columns:1fr}.prw-now-read>span{grid-column:1}.prw-donut-layout{grid-template-columns:1fr}.prw-donut{margin:auto}}
+@media(max-width:560px){.prw-now,.prw-visuals{padding:70px 20px}.prw-now-heading h2{font-size:3.1rem}.prw-now-lead{grid-template-columns:1fr}.prw-now-number{padding:18px 25px;border-right:0;border-bottom:1px solid #3c424d}.prw-now-copy{padding:26px 24px}.prw-now-lead>aside{grid-column:1;padding:26px 24px}.prw-now-card{min-height:250px}.prw-chart-grid>article{padding:23px}.prw-donut{width:200px;height:200px}.prw-columns{gap:7px}.prw-columns>div{min-width:55px}.prw-column-track{width:38px}}
+@media print{.prw-header,.prw-filterbar,.prw-question-list,.prw-load,.prw-method,.prw-footer{display:none!important}.prw-now,.prw-visuals,.prw-narratives,.prw-findings{break-inside:avoid;page-break-inside:avoid}.prw-now{background:#171b24!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.prw-chart-grid{grid-template-columns:1fr 1fr}.prw-now-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* Evidence Explorer accordion: the response panel is only ever un-hidden
+   when its article carries .open (see assets/press-room-watch.js) --
+   without this, .prw-answer (always present in the DOM) would show for
+   every question at once. */
+.prw-question-list>article:not(.open) .prw-answer{display:none}
+
+/* Evidence-mix chart (Visual Analysis): replaces the unavailable
+   response-style breakdown, which needs data this site doesn't collect --
+   colours both the legend swatches and the bar segments. */
+.prw-style-legend i.verbatim,.prw-style-bars i.verbatim{background:#d65432}
+.prw-style-legend i.transcript,.prw-style-bars i.transcript{background:#c9c0ba}

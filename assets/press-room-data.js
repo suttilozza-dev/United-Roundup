@@ -1,6 +1,6 @@
 // Source of truth for Press Room Watch. Append new press-conference
 // question objects here, then run automation/rebuild_press_room.py.
-// Last rebuilt: 2026-09-16T11:53:12.191467+00:00
+// Last rebuilt: 2026-09-17T11:06:28.186323+00:00
 const PRESS_ROOM_QUESTIONS = [
   {
     "fixture": "Manchester City",
