@@ -463,10 +463,18 @@ a.video-pill:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
   letter-spacing:.08em;
 }
 /* Header brand badge: the logo + wordmark get the masthead's black/red
-   treatment (dark nameplate, faint red floodlight glow, "United" in
-   crest red) so the brand reads the same in the header as it does in
-   the hero banner below it. Scoped to .site-header so the footer's
-   identical markup -- which sits on a light background -- is untouched. */
+   treatment (dark nameplate, faint red floodlight glow) so the brand
+   reads the same in the header as it does lower on the page. Scoped to
+   .site-header so the footer's identical markup -- which sits on a
+   light background -- is untouched.
+   The wordmark itself nods at the hero banner's "UNITED ROUNDUP"
+   graphic (white + orange, bold condensed, slightly slanted): same
+   Impact display face the masthead h1 already uses, a light italic
+   skew and a drop shadow for some poster-style depth. Lifting the
+   banner's actual distressed texture isn't practical -- it's painted
+   straight onto a busy fire/skyline photo with no flat background
+   behind the letters, so there's nothing clean to cut out -- and a
+   grain texture that fine wouldn't read at this font-size anyway. */
 .site-header .brand{
   background:radial-gradient(circle at 80% 15%,#9b050655,#0000 60%),#0a0a0c;
   border:1px solid rgba(155,5,6,.45);
@@ -481,8 +489,17 @@ a.video-pill:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
   box-shadow:0 10px 22px -8px rgba(0,0,0,.7);
   transform:translateY(-1px);
 }
-.site-header .brand b{color:#fff;white-space:nowrap}
+.site-header .brand b{
+  color:#fff;
+  white-space:nowrap;
+  font-family:Impact,"Arial Narrow",sans-serif;
+  letter-spacing:-.01em;
+  font-weight:400;
+  transform:skewX(-8deg);
+  display:inline-block;
+  text-shadow:1px 2px 1px rgba(0,0,0,.6);
+}
 .site-header .brand b .brand-roundup{color:#ca3916}
-.site-header .brand b .brand-accent{color:#9b0506}
+.site-header .brand b .brand-accent{color:#fff}
 .site-header .brand small{color:#ff9c77;white-space:nowrap}
 @media(width<=540px){.site-header .brand{padding:4px 14px 4px 6px;border-radius:17px}}
