@@ -462,3 +462,26 @@ a.video-pill:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
   text-transform:uppercase;
   letter-spacing:.08em;
 }
+/* Header brand badge: the logo + wordmark get the masthead's black/red
+   treatment (dark nameplate, faint red floodlight glow, "United" in
+   crest red) so the brand reads the same in the header as it does in
+   the hero banner below it. Scoped to .site-header so the footer's
+   identical markup -- which sits on a light background -- is untouched. */
+.site-header .brand{
+  background:radial-gradient(circle at 80% 15%,#9b050655,#0000 60%),#0a0a0c;
+  border:1px solid rgba(155,5,6,.45);
+  border-radius:20px;
+  padding:5px 18px 5px 8px;
+  flex:none;
+  box-shadow:0 8px 18px -10px rgba(0,0,0,.6);
+  transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease;
+}
+.site-header .brand:hover{
+  border-color:rgba(155,5,6,.8);
+  box-shadow:0 10px 22px -8px rgba(0,0,0,.7);
+  transform:translateY(-1px);
+}
+.site-header .brand b{color:#fff;white-space:nowrap}
+.site-header .brand b .brand-accent{color:#9b0506}
+.site-header .brand small{color:#ff9c77;white-space:nowrap}
+@media(width<=540px){.site-header .brand{padding:4px 14px 4px 6px;border-radius:17px}}
