@@ -30,9 +30,48 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ---- Lead ("top story") card ----
+  // Only genuine national/regional newsrooms and wire agencies qualify for
+  // this slot -- independent blogs, fanzines, forums (RedCafe) and YouTube
+  // channels are excluded even when their story is the most recent thing
+  // in the wire. An official club item can still win the slot, but only
+  // when it reads like an actual announcement (a signing, an appointment,
+  // a sacking, a big club statement) -- routine club news is excluded like
+  // any other ineligible source. Extend either list below as new outlets
+  // or announcement phrasing show up.
+  var NATIONAL_REGIONAL_OUTLETS = [
+    'bbc sport', 'bbc sport football', 'sky sports', 'the athletic', 'the telegraph',
+    'the guardian', 'manchester evening news', 'espn', 'reuters', 'daily mail',
+    'the times', 'pa media', 'associated press', 'ap', 'yahoo sports',
+    'evening standard', 'tnt sports', 'teamtalk', 'footballtransfers',
+    'the independent', 'mirror', 'the sun', 'metro', 'talksport', 'wsls'
+  ];
+  var CLUB_SOURCES = ['manchester united', 'manchester united academy'];
+  var CLUB_ANNOUNCEMENT_WORDS = [
+    'sign', 'signs', 'signing', 'signed', 'appoint', 'appoints', 'appointed',
+    'sack', 'sacked', 'sacking', 'depart', 'departs', 'departure', 'resign',
+    'resigns', 'resignation', 'confirm', 'confirms', 'confirmed', 'announce',
+    'announces', 'announced', 'statement', 'contract extension', 'new manager',
+    'new head coach', 'charged', 'banned', 'charge'
+  ];
+
+  function isNationalOrRegional(source) {
+    return NATIONAL_REGIONAL_OUTLETS.indexOf((source || '').trim().toLowerCase()) !== -1;
+  }
+  function isBigClubAnnouncement(item) {
+    if (CLUB_SOURCES.indexOf((item.source || '').trim().toLowerCase()) === -1) return false;
+    var title = (item.title || '').toLowerCase();
+    return CLUB_ANNOUNCEMENT_WORDS.some(function (w) { return title.indexOf(w) !== -1; });
+  }
+
   var lead = document.getElementById('lead-card');
   if (lead && items.length) {
-    var top = items.find(function (i) { return i.type !== 'video'; }) || items[0];
+    var eligible = items.filter(function (i) {
+      return i.type !== 'video' && (isNationalOrRegional(i.source) || isBigClubAnnouncement(i));
+    });
+    // Falls back to the previous "most recent, non-video" behaviour only
+    // if nothing in the wire currently qualifies, so the card never ends
+    // up empty.
+    var top = eligible[0] || items.find(function (i) { return i.type !== 'video'; }) || items[0];
     lead.href = top.url;
     var leadTime = document.getElementById('lead-time');
     var leadTitle = document.getElementById('lead-title');
