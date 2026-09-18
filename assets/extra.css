@@ -482,6 +482,7 @@ a.video-pill:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
   transform:translateY(-1px);
 }
 .site-header .brand b{color:#fff;white-space:nowrap}
+.site-header .brand b .brand-roundup{color:#ca3916}
 .site-header .brand b .brand-accent{color:#9b0506}
 .site-header .brand small{color:#ff9c77;white-space:nowrap}
 @media(width<=540px){.site-header .brand{padding:4px 14px 4px 6px;border-radius:17px}}
