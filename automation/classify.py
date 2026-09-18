@@ -10,7 +10,7 @@ Two modes:
               capable for a tagging task like this). Needs ANTHROPIC_API_KEY
               set as an environment variable.
 
-Categories match the tabs already built into latest.html:
+Categories match the tabs already built into the homepage news wire:
   transfers, team, academy, interviews, club, videos
 """
 import argparse

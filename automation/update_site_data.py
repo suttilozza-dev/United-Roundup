@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Converts classified_items.json into assets/latest-data.js, the file
-latest.html actually reads in the browser.
+the homepage (index.html) actually reads in the browser.
 
 Keeps the newest N items only, so the data file doesn't grow forever.
 """
