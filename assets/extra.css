@@ -503,3 +503,12 @@ a.video-pill:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
 .site-header .brand b .brand-accent{color:#fff}
 .site-header .brand small{color:#ff9c77;white-space:nowrap}
 @media(width<=540px){.site-header .brand{padding:4px 14px 4px 6px;border-radius:17px}}
+
+/* Nav-anchor sections (Latest, Who's Saying What, Academy, Watch, the
+   Weekly Roundup, Community...) were landing with their heading tucked
+   behind the sticky site-header (84px tall, position:sticky): native
+   anchor scrolling aligns a target's top edge with the very top of the
+   viewport, and the header then sits over it. Offsetting every anchor
+   jump by the header's height plus a little breathing room lands each
+   section fully clear of it instead. */
+html{scroll-padding-top:104px}
