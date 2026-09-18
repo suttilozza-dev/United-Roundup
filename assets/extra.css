@@ -436,3 +436,29 @@ a.video-pill:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
 .mast-copy h1{color:#fff}
 .mast-copy h1 em{color:#fff}
 .mast-copy h1 em .mh-accent{color:#9b0506}
+
+/* "Who's Saying What" articles: a distinct block for the editor's own,
+   personal-opinion take -- set apart from the fact-based ".article-conclusion"
+   verdict, using a lighter paper card with a red rule rather than the dark
+   maroon gradient, so readers can't mistake opinion for the reported view. */
+.article-editor-note{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-left:5px solid #9b0506;
+  border-radius:14px;
+  margin:55px 0;
+  padding:32px 35px;
+}
+.article-editor-note .eyebrow{color:#9b0506}
+.article-editor-note h2{margin:0 0 18px;color:var(--ink);font:700 1.6rem/1.2 Georgia,serif}
+.article-editor-note p{color:#4a3830;line-height:1.8;margin:0 0 18px}
+.article-editor-note p:last-of-type{margin-bottom:0}
+.article-editor-note footer{
+  margin-top:22px;
+  padding-top:16px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:.72rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
