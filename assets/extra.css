@@ -512,3 +512,50 @@ a.video-pill:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
    jump by the header's height plus a little breathing room lands each
    section fully clear of it instead. */
 html{scroll-padding-top:104px}
+
+/* Homepage search box (.search in the masthead): the input had no logic
+   behind it. This adds a results dropdown, populated from LATEST_ITEMS by
+   assets/search.js. The dropdown is appended to <body> (not next to the
+   input) and positioned with position:fixed because .masthead has
+   overflow:hidden -- an absolutely-positioned child there would get
+   clipped as soon as it extended past the hero section. */
+.search-results{
+  position:fixed;
+  z-index:500;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:0 20px 45px rgba(33,22,19,.18);
+  max-height:360px;
+  overflow-y:auto;
+  padding:8px;
+}
+.search-results .search-result{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  padding:10px 12px;
+  border-radius:10px;
+  text-decoration:none;
+  color:var(--ink);
+}
+.search-results .search-result:hover,
+.search-results .search-result.active{
+  background:var(--cream);
+}
+.search-result-title{
+  font-weight:700;
+  font-size:.92rem;
+  line-height:1.3;
+}
+.search-result-meta{
+  font-size:.76rem;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.search-empty{
+  padding:14px 12px;
+  color:var(--muted);
+  font-size:.88rem;
+}
