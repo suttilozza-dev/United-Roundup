@@ -592,3 +592,53 @@ footer .social-row{
   opacity:.75;
   user-select:none;
 }
+
+/* Weekly Roundup newsletter sign-up (Kit) */
+.newsletter{
+  max-width:900px;margin:60px auto;padding:2.5rem clamp(1.5rem,5vw,3rem);
+  background:var(--cream);border:1px solid var(--line);border-radius:var(--radius);
+  text-align:center;
+}
+.newsletter-form{min-height:40px}
+.newsletter-fallback{
+  background:#fff;border:1px solid var(--line);border-radius:calc(var(--radius) - .3rem);
+  padding:1.3rem 1.5rem;
+}
+.newsletter-fallback p{color:var(--muted);margin:0 0 .8rem;font-size:.92rem;line-height:1.5}
+.newsletter-fallback-actions{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
+.newsletter-fallback-btn{
+  border-radius:999px;padding:.65rem 1.2rem;font-weight:700;font-size:.85rem;
+  border:1px solid var(--char);cursor:pointer;background:transparent;color:var(--char);
+}
+.newsletter-privacy{margin-top:1rem;font-size:.8rem;color:var(--muted)}
+.newsletter-privacy a{color:var(--terra);font-weight:600}
+
+/* Cookie consent banner */
+.cookie-consent{
+  position:fixed;left:0;right:0;bottom:0;z-index:80;
+  background:var(--char);color:#f2e9e2;
+  padding:1rem clamp(1rem,4vw,2rem);
+  display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;
+  box-shadow:0 -6px 20px rgba(0,0,0,.18);
+}
+.cookie-consent p{margin:0;font-size:.85rem;max-width:60ch;line-height:1.5}
+.cookie-consent a{color:#ffb38f;font-weight:600}
+.cookie-consent-actions{display:flex;gap:.7rem;flex-shrink:0}
+.cookie-consent-actions button{
+  border-radius:999px;padding:.65rem 1.3rem;font-weight:700;font-size:.85rem;
+  border:1.5px solid #f2e9e2;cursor:pointer;background:transparent;color:#f2e9e2;
+  min-width:100px;
+}
+#cookie-consent-accept{background:var(--terra);border-color:var(--terra);color:#fff}
+@media (max-width:640px){
+  .cookie-consent{flex-direction:column;align-items:stretch;text-align:center}
+  .cookie-consent-actions{justify-content:center}
+  .cookie-consent-actions button{flex:1}
+}
+
+/* Cookie preferences control (privacy page) */
+.cookie-pref-btn{
+  border-radius:999px;padding:.7rem 1.3rem;font-weight:700;font-size:.9rem;
+  border:1px solid var(--char);background:transparent;color:var(--char);cursor:pointer;
+  margin-top:.8rem;
+}
