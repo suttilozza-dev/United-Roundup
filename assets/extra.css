@@ -560,13 +560,13 @@ html{scroll-padding-top:104px}
   font-size:.88rem;
 }
 
-/* Social media row in the footer: X, Facebook, Instagram, Reddit, Pinterest,
-   TikTok, YouTube Shorts and Rumble Shorts. Each is a disabled placeholder
-   (a <span>, not a link) until a real profile URL exists for it -- swap the
-   <span class="social-link" ...> for <a class="social-link" href="...">
-   and drop tabindex="-1"/aria-disabled to switch one on. Spans the full
-   footer width on its own row via grid-column, since footer's own
-   grid-template-columns (in style.css) only expects 3 items per row. */
+/* Social media row in the footer: X, Facebook and Instagram are live links.
+   The other platforms (Reddit, Pinterest, TikTok, YouTube Shorts, Rumble
+   Shorts) are left out until those accounts exist -- add them back the same
+   way, as <a class="social-link" href="..."> once each has a real profile
+   URL. Spans the full footer width on its own row via grid-column, since
+   footer's own grid-template-columns (in style.css) only expects 3 items
+   per row. */
 footer .social-row{
   grid-column:1/-1;
   display:flex;
@@ -588,9 +588,16 @@ footer .social-row{
   font-size:.7rem;
   font-weight:800;
   letter-spacing:.03em;
-  cursor:not-allowed;
-  opacity:.75;
+  text-decoration:none;
+  cursor:pointer;
+  opacity:1;
   user-select:none;
+  transition:background .15s ease,border-color .15s ease,color .15s ease;
+}
+.social-link:hover,.social-link:focus-visible{
+  background:var(--terra);
+  border-color:var(--terra);
+  color:#fff;
 }
 
 /* Weekly Roundup newsletter sign-up (Kit) */
