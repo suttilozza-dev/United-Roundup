@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://unitedroundup.co.uk/sitemap.xml
+Sitemap: https://unitedroundup.com/sitemap.xml
