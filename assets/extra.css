@@ -154,6 +154,26 @@ a.video-pill:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
 .src-name{font-weight:700;font-size:.92rem;display:block}
 .src-sub{font-size:.78rem;color:var(--muted);display:block;margin-top:.15rem}
 .src-arrow{font-size:1.1rem;flex-shrink:0}
+/* Player social accounts grid (Sources page) */
+.player-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:.9rem;
+  align-content:start;
+}
+.player-card{
+  background:var(--cream);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:.9rem 1.1rem;
+  display:flex;
+  flex-direction:column;
+  gap:.55rem;
+}
+.player-name{font-weight:700;font-size:.92rem;}
+.player-role{font-size:.78rem;color:var(--muted);display:block;margin-top:.1rem}
+.player-social-row{display:flex;gap:.4rem;flex-wrap:wrap;}
+
 .src-note{
   background:var(--char);
   color:#f2e9e2;
@@ -499,8 +519,8 @@ a.video-pill:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
   display:inline-block;
   text-shadow:1px 2px 1px rgba(0,0,0,.6);
 }
-.site-header .brand b .brand-roundup{color:#ca3916}
-.site-header .brand b .brand-accent{color:#fff}
+.site-header .brand b .brand-roundup{color:#fff}
+.site-header .brand b .brand-accent{color:#f6110c}
 .site-header .brand small{color:#ff9c77;white-space:nowrap}
 @media(width<=540px){.site-header .brand{padding:4px 14px 4px 6px;border-radius:17px}}
 

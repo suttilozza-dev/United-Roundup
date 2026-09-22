@@ -85,6 +85,10 @@
     {
       "name": "Sky Sports",
       "url": "https://www.skysports.com/rss/12040"
+    },
+    {
+      "name": "talkSPORT",
+      "url": "https://talksport.com/football/feed/"
     }
   ],
   "google_news_search": [

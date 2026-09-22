@@ -2,8 +2,16 @@
   "use strict";
 
   var CONSENT_KEY = "ur_cookie_consent"; // 'accepted' | 'declined'
-  var KIT_SRC = "https://unitedroundup.kit.com/df3c9b9f5a/index.js";
-  var KIT_UID = "df3c9b9f5a";
+
+  // TODO: replace with the real GA4 Measurement ID once created, e.g. "G-ABC1234XYZ".
+  // Left as a placeholder on purpose -- loadAnalytics() below refuses to fire while
+  // this still looks like a placeholder, so nothing calls out to Google until a real
+  // ID is dropped in here.
+  var GA_MEASUREMENT_ID = "G-81QGG9136Z";
+
+  function isConfigured() {
+    return typeof GA_MEASUREMENT_ID === "string" && GA_MEASUREMENT_ID.indexOf("XXXX") === -1;
+  }
 
   function getConsent() {
     try {
@@ -29,23 +37,40 @@
     }
   }
 
-  function loadKitForm() {
-    var mount = document.getElementById("kit-form-mount");
-    if (!mount) return;
-    var fallback = document.getElementById("newsletter-fallback");
-    if (fallback) fallback.hidden = true;
-    if (mount.querySelector("script[data-kit-form]")) return; // already loaded
-    var s = document.createElement("script");
-    s.async = true;
-    s.setAttribute("data-uid", KIT_UID);
-    s.setAttribute("data-kit-form", "1");
-    s.src = KIT_SRC;
-    mount.appendChild(s);
+  // Works out how many directory levels deep the current page is, so the banner's
+  // privacy-policy link and any other relative link stay correct on article pages
+  // (e.g. /briefings/derby-apology/) as well as root pages (e.g. /about.html).
+  function relativePrefix() {
+    var path = window.location.pathname;
+    var segments = path.split("/").filter(Boolean);
+    var depth;
+    if (path.charAt(path.length - 1) === "/") {
+      depth = segments.length; // directory-style URL, e.g. /briefings/derby-apology/
+    } else {
+      depth = Math.max(segments.length - 1, 0); // file URL, e.g. /about.html or /
+    }
+    var prefix = "";
+    for (var i = 0; i < depth; i++) prefix += "../";
+    return prefix;
   }
 
-  function showFallback() {
-    var fallback = document.getElementById("newsletter-fallback");
-    if (fallback) fallback.hidden = false;
+  function loadAnalytics() {
+    if (!isConfigured()) return; // no real Measurement ID yet -- do nothing
+    if (window.__urGaLoaded) return;
+    window.__urGaLoaded = true;
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      window.dataLayer.push(arguments);
+    }
+    window.gtag = gtag;
+    gtag("js", new Date());
+    gtag("config", GA_MEASUREMENT_ID);
+
+    var s = document.createElement("script");
+    s.async = true;
+    s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_MEASUREMENT_ID;
+    document.head.appendChild(s);
   }
 
   function removeBanner() {
@@ -61,9 +86,9 @@
     banner.setAttribute("role", "region");
     banner.setAttribute("aria-label", "Cookie notice");
     banner.innerHTML =
-      '<p>This site uses one cookie, only for the Weekly Roundup sign-up form, ' +
-      "so it can remember if you&rsquo;ve already subscribed. No other cookies are set. " +
-      'See our <a href="' + (window.__ur_privacy_href || "privacy.html") + '">privacy &amp; cookies page</a>.</p>' +
+      "<p>This site uses analytics cookies to understand how many people visit and which " +
+      "stories they read. No tracking or advertising cookies are set. " +
+      'See our <a href="' + relativePrefix() + 'privacy.html">privacy &amp; cookies page</a>.</p>' +
       '<div class="cookie-consent-actions">' +
       '<button type="button" id="cookie-consent-decline">Decline</button>' +
       '<button type="button" id="cookie-consent-accept">Accept</button>' +
@@ -72,39 +97,33 @@
     document.getElementById("cookie-consent-accept").addEventListener("click", function () {
       setConsent("accepted");
       removeBanner();
-      loadKitForm();
+      loadAnalytics();
     });
     document.getElementById("cookie-consent-decline").addEventListener("click", function () {
       setConsent("declined");
       removeBanner();
-      showFallback();
     });
   }
 
   function init() {
     var consent = getConsent();
     if (consent === "accepted") {
-      loadKitForm();
+      loadAnalytics();
       return;
     }
     if (consent === "declined") {
-      showFallback();
       return;
     }
-    // No decision yet: just show the banner. The form area stays empty
-    // (not the "declined" message, which would be inaccurate) until a
-    // choice is actually made.
+    // No decision yet: show the banner and wait.
     buildBanner();
   }
 
-  // Exposed so the "change your choice" controls (in the fallback message
-  // and on the privacy page) can re-open the prompt.
+  // Exposed so a "Cookie settings" link (in the footer, or the privacy page's own
+  // button) can reopen the prompt and let a visitor change their mind.
   window.UR_openCookieChoice = function () {
     clearConsent();
     removeBanner();
     buildBanner();
-    var fallback = document.getElementById("newsletter-fallback");
-    if (fallback) fallback.hidden = false;
   };
 
   if (document.readyState === "loading") {
