@@ -268,5 +268,23 @@
     "date": "2026-09-15",
     "context": "pre_match",
     "result": "not_applicable"
+  },
+  {
+    "fixture": "Brighton and Hove Albion",
+    "date": "2026-09-16",
+    "context": "post_match",
+    "result": "loss"
+  },
+  {
+    "fixture": "Fulham",
+    "date": "2026-09-18",
+    "context": "pre_match",
+    "result": "not_applicable"
+  },
+  {
+    "fixture": "Fulham",
+    "date": "2026-09-20",
+    "context": "post_match",
+    "result": "draw"
   }
 ]
