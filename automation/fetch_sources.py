@@ -11,6 +11,7 @@ IMPORTANT: the URLs in sources.json are a starting point, not verified
 fact. Run validate_sources.py first and fix anything it flags before
 relying on this in production.
 """
+import html
 import json
 import re
 import urllib.parse
@@ -61,13 +62,21 @@ def fetch_xml(url: str) -> ET.Element | None:
         return None
 
 
+def clean_text(value: str | None) -> str:
+    """Some publishers (e.g. talkSPORT) double-encode punctuation in their
+    feeds, so a headline arrives as '&#8216;weak&#8217;' instead of 'weak'
+    in curly quotes. Decode any leftover HTML entities so the wire shows
+    the real characters."""
+    return html.unescape(html.unescape((value or "").strip()))
+
+
 def parse_rss_items(root: ET.Element, source_name: str) -> list[dict]:
     items = []
     for item in root.findall(".//item"):
-        title = (item.findtext("title") or "").strip()
+        title = clean_text(item.findtext("title"))
         link = (item.findtext("link") or "").strip()
         pub = (item.findtext("pubDate") or "").strip()
-        desc = (item.findtext("description") or "").strip()
+        desc = clean_text(item.findtext("description"))
         haystack = f"{title} {desc}"
         if not UNITED_KEYWORDS.search(haystack):
             continue
@@ -87,7 +96,7 @@ def parse_google_news_items(root: ET.Element, source_name: str) -> list[dict]:
     so we strip the outlet suffix back off since we already know the source."""
     items = []
     for item in root.findall(".//item"):
-        raw_title = (item.findtext("title") or "").strip()
+        raw_title = clean_text(item.findtext("title"))
         title = re.sub(r"\s*-\s*[^-]+$", "", raw_title).strip()
         if not UNITED_KEYWORDS.search(title):
             continue
@@ -109,7 +118,7 @@ def parse_youtube_feed(root: ET.Element, source_name: str) -> list[dict]:
     ns = {"a": "http://www.w3.org/2005/Atom", "yt": "http://www.youtube.com/xml/schemas/2015"}
     items = []
     for entry in root.findall("a:entry", ns):
-        title = (entry.findtext("a:title", namespaces=ns) or "").strip()
+        title = clean_text(entry.findtext("a:title", namespaces=ns))
         link_el = entry.find("a:link", ns)
         link = link_el.get("href") if link_el is not None else ""
         published = (entry.findtext("a:published", namespaces=ns) or "").strip()
