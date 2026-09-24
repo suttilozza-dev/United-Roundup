@@ -27,3 +27,13 @@ document.addEventListener('DOMContentLoaded', function () {
   var now = new Date();
   el.textContent = WEEKDAYS[now.getDay()] + ' ' + now.getDate() + ' ' + MONTHS[now.getMonth()];
 });
+
+// Homepage only: show the UR nameplate (as a "back to top" button) in place
+// of the social icons once the banner has scrolled out of view.
+document.addEventListener('DOMContentLoaded', function () {
+  var banner = document.querySelector('.brand-banner');
+  if (!banner || !document.body.classList.contains('home') || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    document.body.classList.toggle('past-banner', !entries[0].isIntersecting);
+  }, { rootMargin: '-84px 0px 0px 0px' }).observe(banner);
+});

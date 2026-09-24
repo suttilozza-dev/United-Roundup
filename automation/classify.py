@@ -18,6 +18,7 @@ import json
 import os
 import re
 import sys
+import time
 from pathlib import Path
 
 HERE = Path(__file__).parent
@@ -81,13 +82,16 @@ def classify_with_api(item: dict, client, usage_totals: dict) -> dict:
         result = json.loads(raw)
     except json.JSONDecodeError:
         return {"category": "club", "confidence": f"low (unparseable model output: {raw[:80]!r})"}
+    if not isinstance(result, dict):
+        return {"category": "club", "confidence": f"low (non-object model output: {raw[:80]!r})"}
     if result.get("category") not in CATEGORIES:
         result["category"] = "club"
+    if "confidence" not in result:
+        result["confidence"] = "low (model omitted confidence)"
     return result
 
 
 def main():
-    import time
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true", help="Use free rule-based classification, no API calls")
     parser.add_argument("--time-budget", type=float, default=150.0,
@@ -108,10 +112,19 @@ def main():
 
     if not args.dry_run and checkpoint_path.exists():
         ckpt = json.loads(checkpoint_path.read_text())
-        classified = ckpt["classified"]
-        usage_totals = ckpt["usage_totals"]
-        start_index = len(classified)
-        print(f"Resuming from checkpoint: {start_index}/{len(items)} already done.")
+        ckpt_classified = ckpt["classified"]
+        if len(ckpt_classified) > len(items):
+            # Checkpoint doesn't match the current raw_items.json (e.g. a stale
+            # checkpoint left over from a completed run, or a re-fetch produced
+            # a differently-sized item set). Resuming from it would silently
+            # write out stale/mismatched data, so start fresh instead.
+            print("Checkpoint doesn't match current raw_items.json (stale) -- ignoring it and starting over.")
+            checkpoint_path.unlink()
+        else:
+            classified = ckpt_classified
+            usage_totals = ckpt["usage_totals"]
+            start_index = len(classified)
+            print(f"Resuming from checkpoint: {start_index}/{len(items)} already done.")
 
     client = None
     if not args.dry_run:
@@ -129,7 +142,14 @@ def main():
             stopped_early = True
             break
         item = items[idx]
-        result = classify_dry_run(item) if args.dry_run else classify_with_api(item, client, usage_totals)
+        if args.dry_run:
+            result = classify_dry_run(item)
+        else:
+            try:
+                result = classify_with_api(item, client, usage_totals)
+            except Exception as exc:  # noqa: BLE001 -- one flaky call shouldn't sink the run
+                print(f"  [classify failed] {item.get('title', '')[:70]!r}: {exc}")
+                result = {"category": "club", "confidence": f"low (API call failed: {exc})"}
         item["category"] = result["category"]
         item["classification_confidence"] = result["confidence"]
         classified.append(item)
@@ -149,11 +169,17 @@ def main():
     out_path.write_text(json.dumps(classified, indent=2, ensure_ascii=False))
     print(f"\nClassified {len(classified)} items -> {out_path}")
 
+    if not args.dry_run and checkpoint_path.exists():
+        # Run finished fully -- the checkpoint's job is done. Leaving it around
+        # would make the next run (against a different raw_items.json) resume
+        # from stale data instead of processing the new items.
+        checkpoint_path.unlink()
+
     if not args.dry_run:
         in_tok = usage_totals["input_tokens"]
         out_tok = usage_totals["output_tokens"]
         cost = (in_tok / 1_000_000 * 1.0) + (out_tok / 1_000_000 * 5.0)
-        print(f"\n--- USAGE (real API run) ---")
+        print("\n--- USAGE (real API run) ---")
         print(f"Input tokens:  {in_tok}")
         print(f"Output tokens: {out_tok}")
         print(f"Estimated cost (Haiku 4.5 @ $1/$5 per MTok): ${cost:.4f}")

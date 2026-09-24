@@ -14,15 +14,14 @@ relying on this in production.
 import html
 import json
 import re
-import urllib.parse
-import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 
+from feed_utils import fetch_xml as _fetch_xml, google_news_feed_url, youtube_feed_url
+
 HERE = Path(__file__).parent
-UA = "Mozilla/5.0 (compatible; UnitedRoundupBot/1.0; +https://unitedroundup.com)"
 MAX_AGE_DAYS = 14  # anything older than this is dropped -- this is a "latest news"
                     # page, not an archive, and Google News search has no recency
                     # window of its own so it happily returns 2014 alongside today
@@ -52,11 +51,11 @@ UNITED_KEYWORDS = re.compile(
 
 
 def fetch_xml(url: str) -> ET.Element | None:
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    """Thin per-source wrapper around feed_utils.fetch_xml: a single bad
+    source should not stop the rest of the pipeline from running, so any
+    failure here is logged and treated as "no items from this source"."""
     try:
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            data = resp.read()
-        return ET.fromstring(data)
+        return _fetch_xml(url)
     except Exception as exc:  # noqa: BLE001 -- we want to keep going on a bad source
         print(f"  [fetch failed] {url}: {exc}")
         return None
@@ -66,8 +65,10 @@ def clean_text(value: str | None) -> str:
     """Some publishers (e.g. talkSPORT) double-encode punctuation in their
     feeds, so a headline arrives as '&#8216;weak&#8217;' instead of 'weak'
     in curly quotes. Decode any leftover HTML entities so the wire shows
-    the real characters."""
-    return html.unescape(html.unescape((value or "").strip()))
+    the real characters. Unescape before stripping -- an entity-encoded
+    space (e.g. '&nbsp;' at the edges) only becomes literal whitespace
+    after decoding, so stripping first would miss it."""
+    return html.unescape(html.unescape(value or "")).strip()
 
 
 def parse_rss_items(root: ET.Element, source_name: str) -> list[dict]:
@@ -150,7 +151,7 @@ def main():
 
     print("Checking YouTube channels...")
     for src in sources.get("youtube_channels", []):
-        feed_url = f"https://www.youtube.com/feeds/videos.xml?channel_id={src['channel_id']}"
+        feed_url = youtube_feed_url(src["channel_id"])
         print(f" - {src['name']}")
         root = fetch_xml(feed_url)
         if root is not None:
@@ -158,8 +159,7 @@ def main():
 
     print("Checking Google News fallback sources (paywalled/blocked sites)...")
     for src in sources.get("google_news_search", []):
-        query = urllib.parse.quote(src["query"])
-        feed_url = f"https://news.google.com/rss/search?q={query}&hl=en-GB&gl=GB&ceid=GB:en"
+        feed_url = google_news_feed_url(src["query"])
         print(f" - {src['name']}")
         root = fetch_xml(feed_url)
         if root is not None:
