@@ -591,3 +591,14 @@ footer .social-row{
 .home.past-banner .site-header .brand{display:flex;animation:ur-brand-in .25s ease}
 @keyframes ur-brand-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.home.past-banner .site-header .brand{animation:none}}
+
+/* Footer + Sources player cards: real X / Facebook / Instagram icons
+   (same shapes as the homepage header) instead of initials in circles. */
+footer .social-row .hs-link{width:38px;height:38px}
+footer .social-row .hs-fb svg{width:38px;height:38px}
+.hs-sm{width:32px;height:32px}
+.hs-sm.hs-x svg{width:14px;height:14px}
+.hs-sm.hs-fb svg{width:32px;height:32px}
+.hs-sm.hs-ig{border-radius:9px}
+.hs-sm.hs-ig svg{width:17px;height:17px}
+.player-social-row{align-items:center}
