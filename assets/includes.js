@@ -18,6 +18,22 @@
 (function () {
   "use strict";
 
+  // Swapping in markup via outerHTML doesn't execute any <script> tags it
+  // contains (a browser limitation, not a bug) - so partials that need a
+  // script (e.g. footer.html's commerce widget) must have it re-created
+  // and re-appended manually.
+  function reviveScripts(root) {
+    var scripts = Array.prototype.slice.call(root.querySelectorAll("script"));
+    scripts.forEach(function (oldScript) {
+      var newScript = document.createElement("script");
+      Array.prototype.forEach.call(oldScript.attributes, function (attr) {
+        newScript.setAttribute(attr.name, attr.value);
+      });
+      newScript.text = oldScript.text;
+      oldScript.parentNode.replaceChild(newScript, oldScript);
+    });
+  }
+
   function loadPartial(el) {
     var name = el.getAttribute("data-include");
     if (!name) return Promise.resolve();
@@ -29,7 +45,9 @@
         return res.text();
       })
       .then(function (html) {
+        var parent = el.parentNode;
         el.outerHTML = html;
+        if (parent) reviveScripts(parent);
       })
       .catch(function (err) {
         // Leave the placeholder out of the page rather than crash the rest
