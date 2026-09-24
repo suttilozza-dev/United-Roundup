@@ -602,3 +602,26 @@ footer .social-row .hs-fb svg{width:38px;height:38px}
 .hs-sm.hs-ig{border-radius:9px}
 .hs-sm.hs-ig svg{width:17px;height:17px}
 .player-social-row{align-items:center}
+
+/* Weekly Roundup subscribe CTA (mirrors .community-soon sizing) */
+.community-link{background:var(--char);color:#fff;border-radius:99px;align-items:center;gap:10px;padding:17px 20px;font-weight:800;white-space:nowrap;text-decoration:none;display:flex}
+.community-link svg{width:19px}
+@media (width<=900px){.community-link{grid-column:1/-1;justify-content:center}}
+
+/* Press Room Watch hero: faded photo of Carrick at a press conference
+   behind the headline. A
+   cream wash sits over it so the headline and text stay easy to read. */
+.prw-dashboard-hero{
+  background:
+    linear-gradient(90deg,rgba(255,248,239,.88) 0%,rgba(255,248,239,.76) 38%,rgba(248,232,219,.42) 62%,rgba(241,221,204,.22) 100%),
+    url("/assets/img/prw-carrick-bg.jpg") 72% 22%/cover no-repeat,
+    #f6e7da;
+}
+@media (width<=900px){
+  .prw-dashboard-hero{
+    background:
+      linear-gradient(180deg,rgba(255,248,239,.84) 0%,rgba(255,248,239,.76) 55%,rgba(248,232,219,.6) 100%),
+      url("/assets/img/prw-carrick-bg.jpg") 50% 15%/cover no-repeat,
+      #f6e7da;
+  }
+}
