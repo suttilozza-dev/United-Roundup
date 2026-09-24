@@ -5,6 +5,7 @@ the homepage (index.html) actually reads in the browser.
 
 Keeps the newest N items only, so the data file doesn't grow forever.
 """
+import hashlib
 import json
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
@@ -42,8 +43,12 @@ def main():
 
     out_items = []
     for i, item in enumerate(items):
+        # Python's built-in hash() is randomized per-process (PYTHONHASHSEED),
+        # so it would give the same URL a different id on every run. Use a
+        # stable hash instead so an item's id doesn't change day to day.
+        url_digest = hashlib.md5(item["url"].encode("utf-8")).hexdigest()[:8]
         out_items.append({
-            "id": f"item-{i}-{abs(hash(item['url'])) % 100000}",
+            "id": f"item-{i}-{url_digest}",
             "title": item["title"],
             "source": item["source"],
             "category": item["category"],
