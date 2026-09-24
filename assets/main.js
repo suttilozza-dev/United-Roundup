@@ -1,13 +1,21 @@
-// Mobile menu toggle
-document.addEventListener('DOMContentLoaded', function () {
+// Mobile menu toggle.
+// The site header (including .menu-button and .site-header nav) is injected
+// client-side by assets/includes.js, which isn't guaranteed to have finished
+// by DOMContentLoaded. Wire up on 'partials:ready' when includes.js is on
+// the page; fall back to DOMContentLoaded for any page that still has the
+// header inline.
+function wireMenuToggle() {
   var btn = document.querySelector('.menu-button');
   var nav = document.querySelector('.site-header nav');
-  if (btn && nav) {
+  if (btn && nav && !btn.dataset.menuWired) {
+    btn.dataset.menuWired = 'true';
     btn.addEventListener('click', function () {
       nav.classList.toggle('open');
     });
   }
-});
+}
+document.addEventListener('partials:ready', wireMenuToggle);
+document.addEventListener('DOMContentLoaded', wireMenuToggle);
 
 // Ticker date: was a hardcoded "Monday 7 September" that never changed.
 // Fill it in with today's real date on every page load instead.
