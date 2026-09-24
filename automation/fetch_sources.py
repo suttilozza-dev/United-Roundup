@@ -65,8 +65,10 @@ def clean_text(value: str | None) -> str:
     """Some publishers (e.g. talkSPORT) double-encode punctuation in their
     feeds, so a headline arrives as '&#8216;weak&#8217;' instead of 'weak'
     in curly quotes. Decode any leftover HTML entities so the wire shows
-    the real characters."""
-    return html.unescape(html.unescape((value or "").strip()))
+    the real characters. Unescape before stripping -- an entity-encoded
+    space (e.g. '&nbsp;' at the edges) only becomes literal whitespace
+    after decoding, so stripping first would miss it."""
+    return html.unescape(html.unescape(value or "")).strip()
 
 
 def parse_rss_items(root: ET.Element, source_name: str) -> list[dict]:
