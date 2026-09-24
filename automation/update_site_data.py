@@ -59,7 +59,16 @@ def load_previous_items() -> list[dict]:
 
 def main():
     classified_path = HERE / "classified_items.json"
-    items = json.loads(classified_path.read_text())
+    checkpoint_path = HERE / "classify_checkpoint2.json"
+    if classified_path.exists():
+        items = json.loads(classified_path.read_text())
+    elif checkpoint_path.exists():
+        # classify.py ran out of time and only saved a checkpoint. Use what
+        # it did get through rather than failing and leaving the site stale.
+        print("classified_items.json missing -- using partial classify checkpoint.")
+        items = json.loads(checkpoint_path.read_text())["classified"]
+    else:
+        items = []
 
     # Videos are always shown in their own homepage section, whatever
     # category the classifier gave them. If classification didn't reach

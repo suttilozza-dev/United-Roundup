@@ -40,4 +40,7 @@ jobs:
           git config user.email "bot@unitedroundup.com"
           git add assets/latest-data.js
           git diff --staged --quiet || git commit -m "Auto-update latest news feed"
+          # If someone pushed to main while this run was working, catch up
+          # with their changes first so the push isn't rejected.
+          git pull --rebase origin main
           git push
