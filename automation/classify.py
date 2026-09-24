@@ -81,8 +81,12 @@ def classify_with_api(item: dict, client, usage_totals: dict) -> dict:
         result = json.loads(raw)
     except json.JSONDecodeError:
         return {"category": "club", "confidence": f"low (unparseable model output: {raw[:80]!r})"}
+    if not isinstance(result, dict):
+        return {"category": "club", "confidence": f"low (non-object model output: {raw[:80]!r})"}
     if result.get("category") not in CATEGORIES:
         result["category"] = "club"
+    if "confidence" not in result:
+        result["confidence"] = "low (model omitted confidence)"
     return result
 
 
@@ -108,10 +112,19 @@ def main():
 
     if not args.dry_run and checkpoint_path.exists():
         ckpt = json.loads(checkpoint_path.read_text())
-        classified = ckpt["classified"]
-        usage_totals = ckpt["usage_totals"]
-        start_index = len(classified)
-        print(f"Resuming from checkpoint: {start_index}/{len(items)} already done.")
+        ckpt_classified = ckpt["classified"]
+        if len(ckpt_classified) > len(items):
+            # Checkpoint doesn't match the current raw_items.json (e.g. a stale
+            # checkpoint left over from a completed run, or a re-fetch produced
+            # a differently-sized item set). Resuming from it would silently
+            # write out stale/mismatched data, so start fresh instead.
+            print("Checkpoint doesn't match current raw_items.json (stale) -- ignoring it and starting over.")
+            checkpoint_path.unlink()
+        else:
+            classified = ckpt_classified
+            usage_totals = ckpt["usage_totals"]
+            start_index = len(classified)
+            print(f"Resuming from checkpoint: {start_index}/{len(items)} already done.")
 
     client = None
     if not args.dry_run:
@@ -148,6 +161,12 @@ def main():
     out_path = HERE / "classified_items.json"
     out_path.write_text(json.dumps(classified, indent=2, ensure_ascii=False))
     print(f"\nClassified {len(classified)} items -> {out_path}")
+
+    if not args.dry_run and checkpoint_path.exists():
+        # Run finished fully -- the checkpoint's job is done. Leaving it around
+        # would make the next run (against a different raw_items.json) resume
+        # from stale data instead of processing the new items.
+        checkpoint_path.unlink()
 
     if not args.dry_run:
         in_tok = usage_totals["input_tokens"]
