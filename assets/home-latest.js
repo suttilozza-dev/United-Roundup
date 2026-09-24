@@ -118,6 +118,64 @@ document.addEventListener('DOMContentLoaded', function () {
 
   render();
 
+  // ---- "United on Screen" (videos) and "The Next Generation" (academy) ----
+  // Both are rebuilt from the daily data feed so they always show the newest
+  // items with thumbnails. The hand-written cards in index.html stay in place
+  // as a fallback if the feed has nothing for a section.
+  var ARROW = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>';
+  var PLAY = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play" aria-hidden="true"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"></path></svg>';
+
+  function safeUrl(u) {
+    return /^https:\/\//i.test(u || '') ? esc(u).replace(/"/g, '&quot;') : '';
+  }
+  // If a publisher's image fails to load, fall back to the branded card art.
+  function thumb(item, cls) {
+    var src = safeUrl(item.image);
+    if (!src) return '';
+    return '<img class="' + cls + '" alt="" loading="lazy" referrerpolicy="no-referrer" src="' + src + '" ' +
+      'onerror="this.parentNode.classList.remove(\'has-image\');this.remove()">';
+  }
+  // Newest first, but no more than `perSource` from any one outlet/channel so
+  // a single busy YouTube channel can't fill the whole row.
+  function pickLatest(list, count, perSource) {
+    var picked = [], perCount = {};
+    list.forEach(function (item) {
+      if (picked.length >= count) return;
+      var key = (item.source || '').toLowerCase();
+      if ((perCount[key] || 0) >= perSource) return;
+      perCount[key] = (perCount[key] || 0) + 1;
+      picked.push(item);
+    });
+    return picked;
+  }
+
+  var videoGrid = document.querySelector('#videos .video-grid');
+  var videos = pickLatest(items.filter(function (i) { return i.type === 'video' && i.url; }), 6, 2);
+  if (videoGrid && videos.length >= 3) {
+    if (videos.length < 6) videos = videos.slice(0, 3);
+    videoGrid.innerHTML = videos.map(function (v, idx) {
+      var official = CLUB_SOURCES.indexOf((v.source || '').trim().toLowerCase()) !== -1;
+      var img = thumb(v, 'video-thumb');
+      return '<a class="video-card" href="' + safeUrl(v.url) + '" target="_blank" rel="noreferrer">' +
+        '<div class="video-art v' + (idx % 3) + (img ? ' has-image' : '') + '">' + img +
+        '<span class="play">' + PLAY + '</span>' +
+        '<small>' + (official ? 'OFFICIAL &middot; ' : '') + esc(timeAgo(v.published).toUpperCase()) + '</small></div>' +
+        '<p>' + esc(v.source) + '</p><h3>' + esc(v.title) + '</h3></a>';
+    }).join('');
+  }
+
+  var academyGrid = document.querySelector('#academy .academy-grid');
+  var academy = pickLatest(items.filter(function (i) { return i.category === 'academy' && i.url; }), 4, 2);
+  if (academyGrid && academy.length) {
+    academyGrid.innerHTML = academy.map(function (a) {
+      var img = thumb(a, 'academy-thumb-img');
+      return '<a href="' + safeUrl(a.url) + '" target="_blank" rel="noreferrer">' +
+        '<div class="academy-thumb' + (img ? ' has-image' : '') + '">' + img + '<i>' + esc(initials(a.source)) + '</i></div>' +
+        '<div class="academy-body"><span>Youth &amp; academy &middot; ' + esc(timeAgo(a.published)) + '</span>' +
+        '<h3>' + esc(a.title) + '</h3><small>' + esc(a.source) + ' ' + ARROW + '</small></div></a>';
+    }).join('');
+  }
+
   if (checkedEl) {
     var updated = (typeof LATEST_UPDATED !== 'undefined') ? LATEST_UPDATED : (items[0] && items[0].published);
     checkedEl.textContent = updated ? ('checked ' + timeAgo(updated)) : 'checked recently';

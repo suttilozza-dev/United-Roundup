@@ -71,6 +71,78 @@ def clean_text(value: str | None) -> str:
     return html.unescape(html.unescape(value or "")).strip()
 
 
+# Media RSS is published under both an http and an https namespace URI
+# (the Daily Mail uses the https one), so look for thumbnails under both.
+MEDIA_NS = ("http://search.yahoo.com/mrss/", "https://search.yahoo.com/mrss/")
+CONTENT_NS = "http://purl.org/rss/1.0/modules/content/"
+IMG_SRC = re.compile(r"""<img[^>]+?src=["']([^"']+)["']""", re.IGNORECASE)
+IMAGE_EXT = re.compile(r"\.(jpe?g|png|webp|gif)(\?|$)", re.IGNORECASE)
+
+
+def _usable_image(url: str | None) -> str:
+    """Only keep absolute https image URLs -- the site is served over https,
+    so an http image would be blocked as mixed content."""
+    url = html.unescape((url or "").strip())
+    if url.startswith("//"):
+        url = "https:" + url
+    if url.startswith("http://"):
+        url = "https://" + url[len("http://"):]
+    # Sky Sports links full 1920px originals; its image server also has a
+    # 768px version at the same path, which is plenty for a homepage card.
+    url = re.sub(r"(\.365dm\.com/\d+/\d+/)\d+x\d+/", r"\g<1>768x432/", url)
+    return url if url.startswith("https://") else ""
+
+
+def extract_rss_image(item: ET.Element) -> str:
+    """Best thumbnail for an RSS <item>, or "" if the feed doesn't give one.
+    Feeds differ a lot: BBC uses media:thumbnail, the Guardian media:content
+    (several sizes), Sky enclosure, and WordPress sites like talkSPORT only
+    put an <img> inside the article body (content:encoded)."""
+    candidates = []  # (width, url)
+    for ns in MEDIA_NS:
+        for tag in ("thumbnail", "content"):
+            for el in item.iter(f"{{{ns}}}{tag}"):
+                url = el.get("url")
+                medium = (el.get("medium") or "").lower()
+                mime = (el.get("type") or "").lower()
+                if tag == "content" and medium not in ("", "image") and not mime.startswith("image"):
+                    continue
+                if tag == "content" and not medium and not mime.startswith("image") and not IMAGE_EXT.search(url or ""):
+                    continue
+                try:
+                    width = int(el.get("width") or 0)
+                except ValueError:
+                    width = 0
+                if _usable_image(url):
+                    candidates.append((width, _usable_image(url)))
+    if candidates:
+        # Prefer a reasonably sized image: the largest one up to ~1200px wide,
+        # otherwise whichever is smallest above that.
+        fitting = [c for c in candidates if c[0] <= 1200]
+        pool = fitting or candidates
+        return max(pool, key=lambda c: c[0])[1] if fitting else min(pool, key=lambda c: c[0])[1]
+    for el in item.findall("enclosure"):
+        mime = (el.get("type") or "").lower()
+        url = el.get("url")
+        if (mime.startswith("image") or IMAGE_EXT.search(url or "")) and _usable_image(url):
+            return _usable_image(url)
+    for text in (item.findtext(f"{{{CONTENT_NS}}}encoded"), item.findtext("description")):
+        match = IMG_SRC.search(text or "")
+        if match and _usable_image(match.group(1)):
+            return _usable_image(match.group(1))
+    return ""
+
+
+def youtube_thumbnail(entry: ET.Element, ns: dict) -> str:
+    video_id = (entry.findtext("yt:videoId", namespaces=ns) or "").strip()
+    if video_id:
+        return f"https://i.ytimg.com/vi/{video_id}/hqdefault.jpg"
+    for thumb in entry.iter(f"{{{MEDIA_NS[0]}}}thumbnail"):
+        if _usable_image(thumb.get("url")):
+            return _usable_image(thumb.get("url"))
+    return ""
+
+
 def parse_rss_items(root: ET.Element, source_name: str) -> list[dict]:
     items = []
     for item in root.findall(".//item"):
@@ -88,6 +160,7 @@ def parse_rss_items(root: ET.Element, source_name: str) -> list[dict]:
             "published_raw": pub,
             "type": "article",
             "raw_text": haystack[:600],
+            "image": extract_rss_image(item),
         })
     return items
 
@@ -115,7 +188,7 @@ def parse_google_news_items(root: ET.Element, source_name: str) -> list[dict]:
     return items
 
 
-def parse_youtube_feed(root: ET.Element, source_name: str) -> list[dict]:
+def parse_youtube_feed(root: ET.Element, source_name: str, united_only: bool = False) -> list[dict]:
     ns = {"a": "http://www.w3.org/2005/Atom", "yt": "http://www.youtube.com/xml/schemas/2015"}
     items = []
     for entry in root.findall("a:entry", ns):
@@ -123,9 +196,11 @@ def parse_youtube_feed(root: ET.Element, source_name: str) -> list[dict]:
         link_el = entry.find("a:link", ns)
         link = link_el.get("href") if link_el is not None else ""
         published = (entry.findtext("a:published", namespaces=ns) or "").strip()
-        # Manchester United's own channel doesn't need the keyword filter --
-        # everything from it is relevant by definition.
-        if source_name != "Manchester United" and not UNITED_KEYWORDS.search(title):
+        # Channels that only cover United (the club's own channel and the
+        # dedicated fan channels, flagged "united_only" in sources.json) skip
+        # the keyword filter -- their titles often say "Carrick" or "United"
+        # rather than "Manchester United", but everything they post is relevant.
+        if not united_only and source_name != "Manchester United" and not UNITED_KEYWORDS.search(title):
             continue
         items.append({
             "title": title,
@@ -134,6 +209,7 @@ def parse_youtube_feed(root: ET.Element, source_name: str) -> list[dict]:
             "published_raw": published,
             "type": "video",
             "raw_text": title,
+            "image": youtube_thumbnail(entry, ns),
         })
     return items
 
@@ -155,7 +231,7 @@ def main():
         print(f" - {src['name']}")
         root = fetch_xml(feed_url)
         if root is not None:
-            all_items.extend(parse_youtube_feed(root, src["name"]))
+            all_items.extend(parse_youtube_feed(root, src["name"], src.get("united_only", False)))
 
     print("Checking Google News fallback sources (paywalled/blocked sites)...")
     for src in sources.get("google_news_search", []):

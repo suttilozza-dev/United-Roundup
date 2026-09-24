@@ -44,7 +44,11 @@ Every top-level page and nested article page (`briefings/*/index.html`, `whos-sa
 
 ### Homepage-only header behavior
 
-`index.html`'s `<body>` carries a `class="home"` that nothing else has. This gates CSS (`.home .header-socials`, `.home.past-banner ...` in `assets/extra.css`) that swaps the X/Facebook/Instagram icon row for the UR nameplate once the hero banner scrolls out of view, via an `IntersectionObserver` in `assets/main.js`. If you're editing the header and something looks different on the homepage vs. other pages, this is why.
+`index.html`'s `<body>` carries a `class="home"` that nothing else has. It gates CSS in `assets/extra.css` that hides the UR nameplate while the hero banner is on screen and slides it in (as a "back to top" button) once the banner scrolls out of view, via an `IntersectionObserver` in `assets/main.js` that adds `.past-banner` to `<body>`. Don't drop that class when editing the homepage. The X/Facebook/Instagram icons and the "Support United Roundup" (Kit) button live at the end of the nav bar on every page (`.nav-extras` in `nav.html`); because of them the nav folds into the menu button below 1240px (see the "Top nav bar" block in `extra.css`), not style.css's 900px.
+
+### Homepage sections built from the data feed
+
+`assets/home-latest.js` fills the lead card, the news wire, **"United on Screen"** (`#videos .video-grid`, newest videos, max 2 per channel) and **"The Next Generation"** (`#academy .academy-grid`, newest `academy` items) from `LATEST_ITEMS`, using each item's `image` thumbnail. The hand-written cards in `index.html` are only a fallback. The Weekly Roundup and Who's Saying What cards (`.feature-pair`) are hand-edited: update them in `index.html` when a new edition/analysis is published.
 
 ### Generated files — never hand-edit
 
@@ -58,7 +62,7 @@ Runs in this order (see `.github/workflows/source-tracking.yml`, cron `0 0 * * *
 1. `validate_sources.py` — checks every source in `automation/sources.json` actually resolves; reports pass/fail per source, doesn't fail the build.
 2. `fetch_sources.py` — pulls current items from RSS feeds, YouTube channels, and Google News fallbacks (for paywalled sites) into `automation/raw_items.json`.
 3. `classify.py` — sorts each item into `transfers`/`team`/`academy`/`interviews`/`club`/`videos` via the Claude API (Haiku). Has a `--time-budget` (workflow passes `600`) and checkpoints progress to `automation/classify_checkpoint2.json` if it runs out of time mid-run — but the checkpoint only survives *within* a run; if you see stale-checkpoint issues, check that the item-count guard (discards a checkpoint that doesn't match the current `raw_items.json`) and the post-completion `unlink()` are both intact. Each item's API call is individually try/excepted — a single flaky call degrades to a low-confidence `"club"` classification rather than crashing the whole run.
-4. `update_site_data.py` — writes `assets/latest-data.js`. Item IDs are an MD5 digest of the URL (not Python's built-in `hash()`, which is randomized per-process and would give every item a new ID on every run).
+4. `update_site_data.py` — writes `assets/latest-data.js` (newest 60 items, at most 12 of them videos, plus the newest 8 videos and 6 academy items always kept for the homepage sections; any video the classifier didn't reach is taken straight from `raw_items.json`; if a run finds no videos/academy items it carries over the previous file's). Each item has an `image` URL (https only) extracted by `fetch_sources.py` from `media:thumbnail`/`media:content`/`enclosure`/first `<img>` in RSS, or the YouTube `hqdefault.jpg`. Item IDs are an MD5 digest of the URL (not Python's built-in `hash()`, which is randomized per-process and would give every item a new ID on every run).
 
 `fetch_sources.py` and `validate_sources.py` share their feed-fetching/parsing logic via `automation/feed_utils.py` — don't reintroduce a second copy of that logic in either script.
 

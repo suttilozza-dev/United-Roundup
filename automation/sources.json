@@ -6,23 +6,28 @@
     },
     {
       "name": "Stretford Paddock",
-      "channel_id": "UC7w8GnTF2Sp3wldDMtCCtVw"
+      "channel_id": "UC7w8GnTF2Sp3wldDMtCCtVw",
+      "united_only": true
     },
     {
       "name": "The United Stand",
-      "channel_id": "UCMmVPVb0BwSIOWVeDwlPocQ"
+      "channel_id": "UCMmVPVb0BwSIOWVeDwlPocQ",
+      "united_only": true
     },
     {
       "name": "Talk of the Devils",
-      "channel_id": "UC_mSvSjJrxm46bwDr7HQalg"
+      "channel_id": "UC_mSvSjJrxm46bwDr7HQalg",
+      "united_only": true
     },
     {
       "name": "UnitedPeoplesTV",
-      "channel_id": "UCEfEaGKGSxy8ZYIV1RWLbCQ"
+      "channel_id": "UCEfEaGKGSxy8ZYIV1RWLbCQ",
+      "united_only": true
     },
     {
       "name": "United View",
-      "channel_id": "UCQWkxGgZFv3VcrwqwIIGFgA"
+      "channel_id": "UCQWkxGgZFv3VcrwqwIIGFgA",
+      "united_only": true
     },
     {
       "name": "The Football Terrace",

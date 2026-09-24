@@ -571,12 +571,8 @@ footer .social-row{
 @media(width<=540px){.prw-header .prw-brand{padding:4px 14px 4px 6px;border-radius:17px}.prw-header .prw-brand img{width:55px;height:55px}}
 
 
-/* Homepage header: social links sit where the UR nameplate normally is.
-   Once the banner has scrolled out of view (main.js adds .past-banner),
-   they swap for the UR nameplate, which then works as a "back to top"
-   button. Other pages keep the nameplate as normal. */
-.header-socials{display:none}
-.home .header-socials{display:flex;align-items:center;gap:10px;flex:none;margin-right:28px}
+/* Social icon shapes (X, Facebook, Instagram), shared by the top nav,
+   the footer and the Sources player cards. */
 .hs-link{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;transition:transform .18s ease,box-shadow .18s ease}
 .hs-link svg{display:block;fill:currentColor}
 .hs-link:hover,.hs-link:focus-visible{transform:translateY(-2px);box-shadow:0 6px 14px -6px rgba(0,0,0,.45)}
@@ -586,11 +582,58 @@ footer .social-row{
 .hs-fb svg{width:40px;height:40px}
 .hs-ig{color:#fff;border-radius:12px;background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285aeb 90%)}
 .hs-ig svg{width:22px;height:22px}
+
+/* Homepage: the UR nameplate stays hidden while the banner is on screen
+   and slides in (as a "back to top" button) once the banner has scrolled
+   out of view -- main.js adds .past-banner to <body class="home">. */
 .home .site-header .brand{display:none}
-.home.past-banner .header-socials{display:none}
 .home.past-banner .site-header .brand{display:flex;animation:ur-brand-in .25s ease}
 @keyframes ur-brand-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.home.past-banner .site-header .brand{animation:none}}
+
+/* Top nav bar: social icons + "Support United Roundup" sit at the end of
+   the link bar on every page. With those added the full bar needs about
+   1240px, so below that the links fold into the menu button (style.css
+   only does this at 900px), and between 1241-1480px everything is
+   tightened up a little so it fits on one line. */
+.site-header nav{margin-left:auto}
+.nav-extras{display:flex;align-items:center;gap:12px;flex:none}
+.nav-socials{display:flex;align-items:center;gap:6px}
+.hs-nav{width:30px;height:30px}
+.hs-nav.hs-x svg{width:13px;height:13px}
+.hs-nav.hs-fb svg{width:30px;height:30px}
+.hs-nav.hs-ig{border-radius:9px}
+.hs-nav.hs-ig svg{width:16px;height:16px}
+.site-header nav a.hs-x:hover{color:#fff}
+.site-header nav a.hs-fb:hover{color:#0866ff}
+.site-header nav a.hs-ig:hover{color:#fff}
+.site-header nav a.nav-support{display:inline-flex;align-items:center;gap:8px;color:#fff;background:linear-gradient(135deg,#e2231a,#a50d0b);border-radius:99px;padding:7px 15px 7px 12px;font-size:.62rem;line-height:1.2;letter-spacing:.06em;white-space:nowrap;box-shadow:0 6px 14px -8px rgba(165,13,11,.8);transition:transform .18s ease,box-shadow .18s ease}
+.site-header nav a.nav-support svg{width:15px;height:15px;flex:none}
+.site-header nav a.nav-support:hover{color:#fff;transform:translateY(-1px);box-shadow:0 8px 18px -8px rgba(165,13,11,.9)}
+.site-header nav a.community-link{padding:10px 15px;gap:7px}
+.site-header nav a.community-link svg{width:16px}
+@media (width>1240px){
+  .site-header nav{gap:clamp(12px,1.4vw,24px);padding-left:18px}
+  .site-header nav>a:not(.nav-press):not(.community-link){text-align:center}
+}
+@media (width>1240px) and (width<=1480px){
+  .site-header{padding:0 20px}
+  .site-header nav{font-size:.72rem;letter-spacing:.02em;gap:13px}
+  .site-header .brand{padding:4px 14px 4px 6px}
+  .site-header .brand .brand-logo{width:56px;height:56px}
+  .site-header .brand b{font-size:1.1rem}
+  .site-header nav a.nav-press{padding:8px 13px 6px 10px}
+}
+@media (width<=1240px){
+  .menu-button{display:block}
+  .site-header nav{border-bottom:1px solid var(--line);background:#fff;flex-direction:column;align-items:flex-start;gap:20px;padding:25px;display:none;position:absolute;top:84px;left:0;right:0;box-shadow:0 18px 30px -20px rgba(33,22,19,.35)}
+  .site-header nav.open{display:flex}
+  .nav-extras{width:100%;flex-wrap:wrap;gap:16px;padding-top:18px;border-top:1px solid var(--line)}
+  .hs-nav{width:36px;height:36px}
+  .hs-nav.hs-fb svg{width:36px;height:36px}
+  .site-header nav a.nav-support{font-size:.72rem;padding:10px 18px 10px 14px}
+  .site-header nav a.nav-support br{display:none}
+}
 
 /* Footer + Sources player cards: real X / Facebook / Instagram icons
    (same shapes as the homepage header) instead of initials in circles. */
@@ -625,3 +668,49 @@ footer .social-row .hs-fb svg{width:38px;height:38px}
       #f6e7da;
   }
 }
+
+/* Homepage: the Weekly Roundup and Who's Saying What sit side by side as
+   two equal cards (same size, same structure) -- stacked on phones. */
+.feature-pair{max-width:1320px;margin:34px auto 0;padding:0 clamp(16px,3vw,40px);display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.2vw,28px);align-items:stretch}
+.pair-card{color:#fff;border-radius:22px;padding:clamp(28px,3.2vw,46px);display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:0 26px 60px -30px rgba(33,22,19,.7)}
+.pair-card:after{content:"";background:url(/assets/img/united-roundup-logo-watermark.png) no-repeat center/contain;opacity:.08;pointer-events:none;width:300px;height:300px;position:absolute;right:-60px;bottom:-40px}
+.pair-card>*{position:relative;z-index:1}
+.pair-roundup{background:radial-gradient(circle at 90% 5%,#e85a3657,#0000 38%),linear-gradient(135deg,#241411 0%,#482017 54%,#7b2d1d 100%)}
+.pair-wsw{background:radial-gradient(circle at 90% 5%,#f6110c40,#0000 38%),linear-gradient(135deg,#141214 0%,#2e1215 54%,#6e1216 100%)}
+.pair-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding-bottom:20px;border-bottom:1px solid #ffffff2e}
+.pair-card .eyebrow{color:#ff8a62;margin:0 0 6px}
+.pair-wsw .eyebrow{color:#ff7a70}
+.pair-date{color:#d7b9ae;margin:0;font-size:.78rem}
+.pair-badge{color:#ffe4d8;letter-spacing:.1em;border:1px solid #ffffff47;border-radius:99px;padding:8px 12px;font-size:.58rem;font-weight:900;white-space:nowrap;flex:none}
+.pair-number{color:#ff8a62;letter-spacing:.14em;margin:26px 0 12px;font-size:.68rem;font-weight:900;display:block}
+.pair-wsw .pair-number{color:#ff7a70}
+.pair-card h2{letter-spacing:-.03em;margin:0;font:700 clamp(1.8rem,2.7vw,2.6rem)/1.05 Georgia,serif}
+.pair-dek{color:#ead6ce;margin:18px 0 22px;font-size:.98rem;line-height:1.65}
+.pair-points{border-top:1px solid #ffffff2e;margin-bottom:26px}
+.pair-points>div{border-bottom:1px solid #ffffff2e;padding:14px 2px}
+.pair-points span{color:#ff9a78;letter-spacing:.09em;font-size:.62rem;font-weight:900;display:block}
+.pair-wsw .pair-points span{color:#ff8f86}
+.pair-points h3{margin:6px 0 0;font:700 1.02rem/1.4 Georgia,serif}
+.pair-actions{margin-top:auto;display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+.pair-read{color:#fff;background:#ef633d;border-radius:99px;align-items:center;gap:9px;padding:13px 18px;font-size:.82rem;font-weight:900;display:inline-flex;transition:all .2s}
+.pair-wsw .pair-read{background:#e2231a}
+.pair-read:hover{background:#ff7a50;transform:translateY(-2px)}
+.pair-wsw .pair-read:hover{background:#f6413a}
+.pair-archive{color:#ffe0d4;align-items:center;gap:6px;font-size:.76rem;font-weight:900;display:inline-flex}
+.pair-archive:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}
+.pair-read svg,.pair-archive svg{width:17px;height:17px}
+@media (width<=900px){
+  .feature-pair{grid-template-columns:1fr;margin-top:26px}
+  .pair-head{flex-direction:column;gap:12px}
+}
+
+/* "The Next Generation" cards are built from the daily feed (home-latest.js)
+   and now lead with the story's own photo; the branded panel with the
+   outlet's initials shows if a publisher gives no image. */
+.academy-grid>a{padding:0;overflow:hidden}
+.academy-thumb{aspect-ratio:16/9;background:linear-gradient(145deg,#5b1a14,#de4f2e);display:grid;place-items:center;position:relative;overflow:hidden}
+.academy-thumb i{color:#fff;opacity:.85;font:italic 700 2rem/1 Georgia,serif}
+.academy-thumb img{object-fit:cover;width:100%;height:100%;position:absolute;inset:0}
+.academy-thumb.has-image i{display:none}
+.academy-body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
+.academy-grid .academy-body h3{margin:10px 0 14px;font-size:1.05rem}
