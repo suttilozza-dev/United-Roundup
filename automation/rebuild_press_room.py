@@ -72,6 +72,12 @@ def esc(s):
             .replace('"', "&quot;").replace("'", "&#39;"))
 
 
+def rate_per_conf(total, confs):
+    """Responses-per-conference rate, used by both the Findings context
+    panel and the Visual Analysis context-comparison columns."""
+    return round(total / confs, 2) if confs else 0
+
+
 def date_disp(iso):
     return datetime.strptime(iso, "%Y-%m-%d").strftime("%-d %b %Y")
 
@@ -220,7 +226,7 @@ def build_fragments(stats):
     for k in order:
         total = totals[k]
         confs = len(stats["ctx_confs"].get(k, []))
-        rate = round(total / confs, 2) if confs else 0
+        rate = rate_per_conf(total, confs)
         pct = round(total / maxtotal * 100)
         blocks.append(f'<div><span>{k}</span><strong>{total}</strong><i>{rate}<!-- --> per eligible conference</i>'
                        f'<div><span style="width:{pct}%"></span></div></div>')
@@ -279,7 +285,7 @@ def build_fragments(stats):
     for k in order:
         total = totals[k]
         confs = len(stats["ctx_confs"].get(k, []))
-        rate = round(total / confs, 2) if confs else 0
+        rate = rate_per_conf(total, confs)
         height = round((rate / max_rate) * 100) if max_rate else 0
         label = k.replace("post-", "")
         columns.append(f'<div><div class="prw-column-value">{rate}</div><div class="prw-column-track">'

@@ -18,6 +18,7 @@ import json
 import os
 import re
 import sys
+import time
 from pathlib import Path
 
 HERE = Path(__file__).parent
@@ -87,7 +88,6 @@ def classify_with_api(item: dict, client, usage_totals: dict) -> dict:
 
 
 def main():
-    import time
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true", help="Use free rule-based classification, no API calls")
     parser.add_argument("--time-budget", type=float, default=150.0,
@@ -129,7 +129,14 @@ def main():
             stopped_early = True
             break
         item = items[idx]
-        result = classify_dry_run(item) if args.dry_run else classify_with_api(item, client, usage_totals)
+        if args.dry_run:
+            result = classify_dry_run(item)
+        else:
+            try:
+                result = classify_with_api(item, client, usage_totals)
+            except Exception as exc:  # noqa: BLE001 -- one flaky call shouldn't sink the run
+                print(f"  [classify failed] {item.get('title', '')[:70]!r}: {exc}")
+                result = {"category": "club", "confidence": f"low (API call failed: {exc})"}
         item["category"] = result["category"]
         item["classification_confidence"] = result["confidence"]
         classified.append(item)
@@ -153,7 +160,7 @@ def main():
         in_tok = usage_totals["input_tokens"]
         out_tok = usage_totals["output_tokens"]
         cost = (in_tok / 1_000_000 * 1.0) + (out_tok / 1_000_000 * 5.0)
-        print(f"\n--- USAGE (real API run) ---")
+        print("\n--- USAGE (real API run) ---")
         print(f"Input tokens:  {in_tok}")
         print(f"Output tokens: {out_tok}")
         print(f"Estimated cost (Haiku 4.5 @ $1/$5 per MTok): ${cost:.4f}")
