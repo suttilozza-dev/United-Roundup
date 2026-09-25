@@ -714,3 +714,18 @@ footer .social-row .hs-fb svg{width:38px;height:38px}
 .academy-thumb.has-image i{display:none}
 .academy-body{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
 .academy-grid .academy-body h3{margin:10px 0 14px;font-size:1.05rem}
+
+/* Homepage: let the main sections use more of a wide screen. They were
+   capped at ~1220-1320px, which left big empty margins on large monitors.
+   Everything still centres, and phones/laptops are unaffected. */
+.home{--home-wide:1640px}
+.home .feature-pair{max-width:calc(var(--home-wide) + 2*clamp(16px,3vw,40px))}
+.home .content{max-width:calc(var(--home-wide) + 2*clamp(20px,4vw,55px))}
+.home .press-room-heading,.home .press-room-promo-grid,
+.home .dark-section>.section-heading,.home .track-grid{max-width:var(--home-wide)}
+.home .community{max-width:var(--home-wide)}
+.home .academy-section,.home .sources{padding-inline:max(clamp(20px,7vw,105px),calc((100% - var(--home-wide))/2))}
+.home .feature-pair{margin-bottom:56px}
+@media (width>900px){.home .news-layout{grid-template-columns:1fr 360px}}
+.home .video-art{height:auto;aspect-ratio:16/9}
+@media (width>1500px){.home .press-room-image{min-height:420px}}
