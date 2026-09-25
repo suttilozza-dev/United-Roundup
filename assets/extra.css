@@ -729,3 +729,17 @@ footer .social-row .hs-fb svg{width:38px;height:38px}
 @media (width>900px){.home .news-layout{grid-template-columns:1fr 360px}}
 .home .video-art{height:auto;aspect-ratio:16/9}
 @media (width>1500px){.home .press-room-image{min-height:420px}}
+
+/* Footer social icons: their own row, centred across the full width of
+   the footer on every page (including Press Room Watch's own footer). */
+footer .social-row{grid-column:1/-1;justify-content:center;gap:14px;margin-top:0;padding-top:22px;border-top:1px solid var(--line)}
+.prw-footer .social-row{border-top-color:#383e49;text-transform:none}
+.prw-footer>div:last-of-type{color:#ff956f;gap:18px;font-size:.75rem;font-weight:900;display:flex;flex-wrap:wrap}
+/* Site footer: the link list used to take its full one-line width, which
+   squeezed the copyright text into a thin column. Let the links wrap and
+   give the text a sensible minimum width. */
+@media (width>900px){
+  .site-footer{grid-template-columns:auto minmax(280px,1fr) minmax(0,1.25fr)}
+  .site-footer>div:not(.social-row){justify-content:flex-end;row-gap:10px}
+  .site-footer>p{margin:0;line-height:1.6}
+}
