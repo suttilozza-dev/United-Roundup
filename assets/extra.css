@@ -743,3 +743,53 @@ footer .social-row{grid-column:1/-1;justify-content:center;gap:14px;margin-top:0
   .site-footer>div:not(.social-row){justify-content:flex-end;row-gap:10px}
   .site-footer>p{margin:0;line-height:1.6}
 }
+
+/* Who's Saying What: "how the numbers are being reported" comparison
+   tables (first used on whos-saying-what/united-accounts/). The figure
+   breaks out wider than the 760px text column on big screens. */
+.acc-figure{margin:36px 0 44px;width:min(1180px,calc(100vw - 48px));position:relative;left:50%;transform:translateX(-50%)}
+.acc-figure figcaption{font-size:.92rem;color:#654d45;line-height:1.6;margin-bottom:12px;max-width:760px}
+.acc-figure figcaption b{display:block;color:var(--ink);font:700 1.35rem/1.25 Georgia,serif;margin-bottom:4px}
+.acc-legend{list-style:none;display:flex;flex-wrap:wrap;gap:6px 16px;margin:0 0 12px;padding:0;font-size:.78rem;color:#78635c}
+.acc-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;border:1px solid}
+.acc-legend .ok{background:#e8f3ec;border-color:#1d6f47}
+.acc-legend .label{background:#fbf1dc;border-color:#8a5a00}
+.acc-legend .diff{background:#fbe7e5;border-color:#a61f1a}
+.acc-legend .x{background:#fff;border-color:#9a918b}
+.acc-legend .na{background:#fff;border-color:#9a918b;border-style:dashed}
+.acc-scroll{overflow-x:auto;border:1px solid #eadbd0;border-radius:14px;background:#fff}
+.acc-table{border-collapse:separate;border-spacing:0;width:100%;font-size:.82rem}
+.acc-compact{min-width:860px}
+.acc-full{min-width:1240px}
+.acc-table th,.acc-table td{padding:9px 10px;border-bottom:1px solid #eadbd0;vertical-align:top;text-align:left}
+.acc-table thead th{background:#fffaf5;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:#78635c;font-weight:900;border-bottom:2px solid #211613}
+.acc-table tbody th{position:sticky;left:0;z-index:1;background:#fff;min-width:170px;max-width:200px;font-weight:400;border-right:1px solid #eadbd0}
+.acc-table tbody th a{color:#211613;font-weight:800;text-decoration:none;border-bottom:1px solid #eadbd0}
+.acc-table tbody th a:hover{border-bottom-color:#d65432}
+.acc-table tbody th small{display:block;color:#78635c;font-size:.7rem;line-height:1.35;margin-top:3px}
+.acc-table tr.bench td,.acc-table tr.bench th{background:#fff4f1}
+.acc-table tr.bench th a{color:#b23d25}
+.acc-table tr.grp th{position:static;background:#f6ede6;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:#78635c;font-weight:900;max-width:none}
+.acc-table .v{display:block;font-weight:800;font-variant-numeric:tabular-nums;font-size:.86rem}
+.acc-table .l{display:block;color:#78635c;font-size:.72rem;line-height:1.35;margin-top:2px}
+.acc-table td.ok{background:#e8f3ec}.acc-table td.ok .v{color:#1d6f47}
+.acc-table td.label{background:#fbf1dc}.acc-table td.label .v{color:#8a5a00}
+.acc-table td.diff{background:#fbe7e5}.acc-table td.diff .v{color:#a61f1a}
+.acc-table td.na .v{color:#b3a79f}
+.acc-table tr.bench td .v{color:#211613}
+.acc-more{margin-top:14px}
+.acc-more summary{cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:#211613;color:#fff;border-radius:99px;padding:11px 18px;font-size:.82rem;font-weight:900;list-style:none}
+.acc-more summary::-webkit-details-marker{display:none}
+.acc-more summary::after{content:"+";font-size:1rem;line-height:1}
+.acc-more[open] summary::after{content:"\2212"}
+.acc-more summary:focus-visible{outline:2px solid #d65432;outline-offset:2px}
+.acc-more[open] summary{margin-bottom:12px}
+.acc-note{font-size:.8rem;color:#78635c;line-height:1.6;margin:10px 0 0;max-width:760px}
+.article-body h3{margin:34px 0 10px;font:700 1.3rem/1.25 Georgia,serif;color:var(--ink)}
+.article-body>h3+p{margin-top:0}
+.acc-excluded{font-size:.85rem;color:#78635c;line-height:1.65;border-top:1px solid #eadbd0;padding-top:14px}
+@media (width<=900px){.acc-figure{width:auto;left:auto;transform:none}}
+.analysis-page .article-body>p:not(.article-lead){margin:0 0 18px}
+.analysis-page .article-conclusion h2{margin-bottom:16px}
+.analysis-page .article-conclusion p:not(.eyebrow){margin:0 0 14px}
+.analysis-page .article-conclusion p:last-child{margin-bottom:0}
