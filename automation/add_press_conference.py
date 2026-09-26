@@ -23,6 +23,12 @@ It does NOT touch press-room-watch.html (so no Netlify deploy is needed);
 the live page's tallies are rebuilt on GitHub Pages after the data is pushed.
 
 Usage (from the repo root):  python3 automation/add_press_conference.py draft.json
+
+To add questions to a conference that is ALREADY in the data (e.g. a question
+Laurie approved from the cross-check, or the second part of a pre-match presser):
+    python3 automation/add_press_conference.py --add-to-existing draft.json
+Here "response_count" is the number of EXTRA answer paragraphs being added,
+and "conference" must match the existing entry exactly (including result).
 """
 import json
 import sys
@@ -61,9 +67,12 @@ def fail(msg):
 
 
 def main():
-    if len(sys.argv) != 2:
-        fail("usage: add_press_conference.py draft.json")
-    draft = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+    args = sys.argv[1:]
+    add_to_existing = "--add-to-existing" in args
+    args = [a for a in args if a != "--add-to-existing"]
+    if len(args) != 1:
+        fail("usage: add_press_conference.py [--add-to-existing] draft.json")
+    draft = json.loads(Path(args[0]).read_text(encoding="utf-8"))
     conf = draft.get("conference") or fail("missing 'conference'")
     for k in ("fixture", "date", "context", "result"):
         if not conf.get(k):
@@ -75,11 +84,20 @@ def main():
     prw.date_disp(conf["date"])  # raises if the date isn't YYYY-MM-DD
 
     registry = json.loads(prw.CONF_REGISTRY_PATH.read_text(encoding="utf-8"))
-    if any((c["fixture"], c["date"], c["context"]) == (conf["fixture"], conf["date"], conf["context"]) for c in registry):
-        fail(f"{conf['fixture']} {conf['date']} {conf['context']} is already in Press Room Watch")
+    match = [c for c in registry
+             if (c["fixture"], c["date"], c["context"]) == (conf["fixture"], conf["date"], conf["context"])]
+    if add_to_existing:
+        if not match:
+            fail(f"{conf['fixture']} {conf['date']} {conf['context']} isn't in Press Room Watch yet "
+                 "(run without --add-to-existing to add it as a new conference)")
+        if match[0]["result"] != conf["result"]:
+            fail(f"result {conf['result']!r} doesn't match the existing entry ({match[0]['result']!r})")
+    elif match:
+        fail(f"{conf['fixture']} {conf['date']} {conf['context']} is already in Press Room Watch "
+             "(use --add-to-existing to add questions to it)")
 
     count = draft.get("response_count")
-    if not isinstance(count, int) or count < 0:
+    if not isinstance(count, int) or isinstance(count, bool) or count < 0:
         fail("response_count must be a whole number (count every quoted answer paragraph)")
 
     questions = draft.get("questions") or []
@@ -114,17 +132,22 @@ def main():
     records = prw.normalize(existing + new)
     prw.write_data_js(records)
 
-    registry.append({"fixture": conf["fixture"], "date": conf["date"],
-                     "context": conf["context"], "result": conf["result"]})
-    registry.sort(key=lambda c: (c["date"], c["context"] != "pre_match"))
-    prw.CONF_REGISTRY_PATH.write_text(json.dumps(registry, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    if not add_to_existing:
+        registry.append({"fixture": conf["fixture"], "date": conf["date"],
+                         "context": conf["context"], "result": conf["result"]})
+        registry.sort(key=lambda c: (c["date"], c["context"] != "pre_match"))
+        prw.CONF_REGISTRY_PATH.write_text(json.dumps(registry, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     counts = json.loads(prw.RESP_COUNTS_PATH.read_text(encoding="utf-8"))
-    counts[f"{conf['fixture']}|{conf['date']}|{conf['context']}"] = count
+    key = f"{conf['fixture']}|{conf['date']}|{conf['context']}"
+    if add_to_existing:
+        count = counts.get(key, 0) + count
+    counts[key] = count
     prw.RESP_COUNTS_PATH.write_text(json.dumps(counts, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-    print(f"Added {conf['fixture']} {conf['context']} ({conf['date']}): {len(new)} questions, "
-          f"{count} response paragraphs. Press Room Watch now has {len(records)} questions.")
+    verb = "Added to" if add_to_existing else "Added"
+    print(f"{verb} {conf['fixture']} {conf['context']} ({conf['date']}): {len(new)} questions, "
+          f"{count} response paragraphs in total. Press Room Watch now has {len(records)} questions.")
 
 
 if __name__ == "__main__":
