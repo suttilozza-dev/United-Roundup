@@ -526,9 +526,33 @@
 </nav>
     </footer>
   </main>
-  <script src="assets/press-room-data.js"></script>
+  <!-- Press Room Watch data is published to GitHub Pages (free) so new press
+       conferences go live without a Netlify deploy. Falls back to the copy
+       stored with the site if that fails. -->
+  <script src="https://suttilozza-dev.github.io/United-Roundup/press-room-data.js"></script>
+  <script>if (typeof PRESS_ROOM_QUESTIONS === "undefined") document.write('<script src="assets/press-room-data.js"><\/script>');</script>
   <script src="assets/press-room-watch.js"></script>
   <script src="assets/cookie-consent.js"></script>
+  <script>
+    // Swap in the latest tallies (scoreboard, findings, visual analysis,
+    // narratives) from GitHub Pages. If this fails, the numbers already on
+    // the page stay as they are.
+    (function () {
+      if (!window.fetch || !window.DOMParser) return;
+      fetch("https://suttilozza-dev.github.io/United-Roundup/press-room-sections.json", { cache: "no-cache" })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (sections) {
+          if (!sections) return;
+          Object.keys(sections).forEach(function (sel) {
+            var el = document.querySelector(sel);
+            if (!el) return;
+            var fresh = new DOMParser().parseFromString(sections[sel], "text/html").body.firstElementChild;
+            if (fresh && fresh.tagName === "SECTION") el.replaceWith(fresh);
+          });
+        })
+        .catch(function () {});
+    })();
+  </script>
 </body>
 
 </html>

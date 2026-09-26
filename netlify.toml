@@ -1,0 +1,9 @@
+# Netlify settings for United Roundup.
+#
+# Every production deploy costs 15 Netlify credits. Skip the deploy when a
+# push only changes files that visitors never load from Netlify: the
+# automation scripts, GitHub workflows, notes, and the Press Room Watch data
+# (the live page reads that from GitHub Pages instead). Netlify skips the
+# build when this command exits with 0, i.e. when nothing else changed.
+[build]
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)automation' ':(exclude).github' ':(exclude)assets/press-room-data.js' ':(exclude)assets/latest-data.js' ':(exclude)CLAUDE.md' ':(exclude)README.md' ':(exclude).gitignore'"

@@ -113,8 +113,8 @@
       <div class="press-room-promo-grid">
         <div class="press-room-copy">
           <h3>Which questions keep coming back?</h3>
-          <p>Explore 354 sourced questions, 422 preserved responses and the recurring narratives across Michael Carrick’s Manchester United press conferences.</p>
-          <div class="press-room-actions"><span>40 conferences · 23 established narratives</span><a href="press-room-watch.html">Explore the findings <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true">
+          <p>Explore <span id="prw-sum-questions">431</span> sourced questions, <span id="prw-sum-responses">507</span> preserved responses and the recurring narratives across Michael Carrick’s Manchester United press conferences.</p>
+          <div class="press-room-actions"><span><span id="prw-sum-conferences">48</span> conferences · <span id="prw-sum-narratives">14</span> established narratives</span><a href="press-room-watch.html">Explore the findings <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true">
                 <path d="M7 7h10v10"></path>
                 <path d="M7 17 17 7"></path>
               </svg></a></div>
@@ -445,6 +445,8 @@
        stored with the site. -->
   <script src="https://suttilozza-dev.github.io/United-Roundup/latest-data.js"></script>
   <script>if (typeof LATEST_ITEMS === "undefined") document.write('<script src="assets/latest-data.js"><\/script>');</script>
+  <!-- Press Room Watch headline numbers, published daily to GitHub Pages. -->
+  <script src="https://suttilozza-dev.github.io/United-Roundup/press-room-summary.js" async onload="if(typeof PRESS_ROOM_SUMMARY!=='undefined'){['questions','responses','conferences','narratives'].forEach(function(k){var e=document.getElementById('prw-sum-'+k);if(e)e.textContent=PRESS_ROOM_SUMMARY[k];});}"></script>
   <script src="assets/home-latest.js"></script>
   <script src="assets/search.js"></script>
   <script src="assets/main.js"></script>

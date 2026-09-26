@@ -319,7 +319,10 @@ def build_fragments(stats):
 
 def splice_html(html, stats, frags):
     def must(html, pattern, repl, label, flags=0):
-        new_html, n = re.subn(pattern, repl, html, count=1, flags=flags)
+        # The page's HTML is pretty-printed (indented, one tag per line), so
+        # allow any whitespace between adjacent tags in every pattern.
+        pattern = pattern.replace("><", r">\s*<")
+        new_html, n = re.subn(pattern, lambda _m: repl, html, count=1, flags=flags)
         if n != 1:
             sys.exit(f"FAIL [{label}]: pattern did not match exactly once (matched {n})")
         return new_html

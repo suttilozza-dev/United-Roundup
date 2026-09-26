@@ -1,10 +1,16 @@
 # Save this file as .github/workflows/source-tracking.yml in the repo root
 # (GitHub Actions only recognizes workflows inside that exact folder).
 #
-# Runs every hour. Instead of committing the new news feed to `main`
-# (which triggered a paid Netlify deploy every time), it publishes the feed
-# to GitHub Pages: https://suttilozza-dev.github.io/United-Roundup/latest-data.js
-# The homepage loads it from there, so hourly refreshes cost 0 Netlify credits.
+# Publishes the site's live data to GitHub Pages
+# (https://suttilozza-dev.github.io/United-Roundup/) instead of committing it
+# to `main`, so data updates never trigger a paid Netlify deploy:
+#   - every hour: fetch + classify the latest news -> latest-data.js
+#   - every run:  rebuild Press Room Watch from the data in `main`
+#                 -> press-room-data.js, press-room-sections.json,
+#                    press-room-summary.js
+# It also runs straight away whenever Press Room Watch data is pushed to
+# `main` (e.g. after approving a new press conference), without re-fetching
+# the news.
 # One-time setup: repo Settings -> Pages -> Source: "GitHub Actions".
 name: Update Latest news feed
 
@@ -12,10 +18,19 @@ on:
   schedule:
     - cron: "7 * * * *"   # every hour, at 7 minutes past
   workflow_dispatch:         # lets you also trigger it manually from GitHub's UI
+  push:
+    branches: [main]
+    paths:
+      - assets/press-room-data.js
+      - automation/press_room_conferences.json
+      - automation/press_room_response_counts.json
+      - automation/rebuild_press_room.py
+      - automation/build_press_room_pages.py
+      - press-room-watch.html
 
-# Never run two updates at once.
+# Never run two publishes at once (each one replaces the whole Pages site).
 concurrency:
-  group: news-feed
+  group: pages
   cancel-in-progress: false
 
 permissions:
@@ -40,29 +55,33 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
+        if: github.event_name != 'push'
         run: pip install anthropic
 
       # Start from the last published feed (used when a source is briefly
-      # down) and the saved categories, so only NEW stories are sent to the
-      # Claude API. If nothing has been published yet, start fresh.
+      # down, and as-is on Press-Room-only runs) and the saved categories,
+      # so only NEW stories are sent to the Claude API.
       - name: Restore last published feed and category cache
         run: |
-          curl -fsSL "$FEED_URL/latest-data.js" -o /tmp/latest-data.js && mv /tmp/latest-data.js assets/latest-data.js || echo "No published feed yet - using the copy in the repo."
-          curl -fsSL "$FEED_URL/classify_cache.json" -o automation/classify_cache.json || echo "No category cache yet - every story will be classified this run."
+          curl -fsSL "$FEED_URL/latest-data.js?run=${{ github.run_id }}" -o /tmp/latest-data.js && mv /tmp/latest-data.js assets/latest-data.js || echo "No published feed yet - using the copy in the repo."
+          curl -fsSL "$FEED_URL/classify_cache.json?run=${{ github.run_id }}" -o automation/classify_cache.json || echo "No category cache yet."
 
       - name: Validate sources (manual runs only)
         if: github.event_name == 'workflow_dispatch'
         run: python automation/validate_sources.py
 
       - name: Fetch new items
+        if: github.event_name != 'push'
         run: python automation/fetch_sources.py
 
       - name: Classify items
+        if: github.event_name != 'push'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python automation/classify.py --time-budget 600
 
       - name: Update site data
+        if: github.event_name != 'push'
         run: python automation/update_site_data.py
 
       - name: Prepare files to publish
@@ -70,7 +89,8 @@ jobs:
           mkdir -p public
           cp assets/latest-data.js public/
           if [ -f automation/classify_cache.json ]; then cp automation/classify_cache.json public/; fi
-          echo "United Roundup news feed data. The website is https://unitedroundup.com" > public/index.html
+          python automation/build_press_room_pages.py public
+          echo "United Roundup live data. The website is https://unitedroundup.com" > public/index.html
 
       - uses: actions/upload-pages-artifact@v3
         with:
