@@ -440,7 +440,11 @@
 <div data-include="footer"></div>
   </main>
   <script src="/assets/includes.js" defer></script>
-  <script src="assets/latest-data.js"></script>
+  <!-- The news feed is refreshed hourly and published to GitHub Pages (free), so it no
+       longer needs a Netlify deploy. If that ever fails to load, fall back to the copy
+       stored with the site. -->
+  <script src="https://suttilozza-dev.github.io/United-Roundup/latest-data.js"></script>
+  <script>if (typeof LATEST_ITEMS === "undefined") document.write('<script src="assets/latest-data.js"><\/script>');</script>
   <script src="assets/home-latest.js"></script>
   <script src="assets/search.js"></script>
   <script src="assets/main.js"></script>

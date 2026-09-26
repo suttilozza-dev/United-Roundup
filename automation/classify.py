@@ -106,6 +106,25 @@ def main():
     items = json.loads(items_path.read_text())
     checkpoint_path = HERE / "classify_checkpoint2.json"
 
+    # Categories saved from earlier runs, keyed by story URL. The workflow
+    # restores this file from the published feed, so each hourly run only
+    # sends NEW stories to the Claude API instead of re-classifying all of them.
+    cache_path = HERE / "classify_cache.json"
+    cache = {}
+    if not args.dry_run and cache_path.exists():
+        try:
+            cache = json.loads(cache_path.read_text())
+        except (json.JSONDecodeError, OSError):
+            cache = {}
+    reused = 0
+
+    def save_cache():
+        # Keep only stories still in the current feed, so the file stays small.
+        fresh = {i["url"]: {"category": i["category"], "confidence": i["classification_confidence"]}
+                 for i in classified if i.get("url")
+                 and not str(i.get("classification_confidence", "")).startswith("low (API call failed")}
+        cache_path.write_text(json.dumps(fresh, ensure_ascii=False))
+
     classified = []
     usage_totals = {"input_tokens": 0, "output_tokens": 0}
     start_index = 0
@@ -142,7 +161,11 @@ def main():
             stopped_early = True
             break
         item = items[idx]
-        if args.dry_run:
+        cached = cache.get(item.get("url")) if not args.dry_run else None
+        if cached and cached.get("category") in CATEGORIES:
+            result = cached
+            reused += 1
+        elif args.dry_run:
             result = classify_dry_run(item)
         else:
             try:
@@ -159,6 +182,10 @@ def main():
             checkpoint_path.write_text(json.dumps(
                 {"classified": classified, "usage_totals": usage_totals}, ensure_ascii=False
             ))
+
+    if not args.dry_run:
+        save_cache()
+        print(f"\nReused saved categories for {reused} stories; classified {len(classified) - reused} new ones.")
 
     if stopped_early:
         print(f"\nTime budget reached -- {len(classified)}/{len(items)} done, checkpoint saved. "

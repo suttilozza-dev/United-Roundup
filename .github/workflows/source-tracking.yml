@@ -1,15 +1,37 @@
 # Save this file as .github/workflows/source-tracking.yml in the repo root
 # (GitHub Actions only recognizes workflows inside that exact folder).
+#
+# Runs every hour. Instead of committing the new news feed to `main`
+# (which triggered a paid Netlify deploy every time), it publishes the feed
+# to GitHub Pages: https://suttilozza-dev.github.io/United-Roundup/latest-data.js
+# The homepage loads it from there, so hourly refreshes cost 0 Netlify credits.
+# One-time setup: repo Settings -> Pages -> Source: "GitHub Actions".
 name: Update Latest news feed
 
 on:
   schedule:
-    - cron: "0 0 * * *"   # once a day
+    - cron: "7 * * * *"   # every hour, at 7 minutes past
   workflow_dispatch:         # lets you also trigger it manually from GitHub's UI
+
+# Never run two updates at once.
+concurrency:
+  group: news-feed
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   update-feed:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      FEED_URL: https://suttilozza-dev.github.io/United-Roundup
     steps:
       - uses: actions/checkout@v4
 
@@ -20,7 +42,16 @@ jobs:
       - name: Install dependencies
         run: pip install anthropic
 
-      - name: Validate sources
+      # Start from the last published feed (used when a source is briefly
+      # down) and the saved categories, so only NEW stories are sent to the
+      # Claude API. If nothing has been published yet, start fresh.
+      - name: Restore last published feed and category cache
+        run: |
+          curl -fsSL "$FEED_URL/latest-data.js" -o /tmp/latest-data.js && mv /tmp/latest-data.js assets/latest-data.js || echo "No published feed yet - using the copy in the repo."
+          curl -fsSL "$FEED_URL/classify_cache.json" -o automation/classify_cache.json || echo "No category cache yet - every story will be classified this run."
+
+      - name: Validate sources (manual runs only)
+        if: github.event_name == 'workflow_dispatch'
         run: python automation/validate_sources.py
 
       - name: Fetch new items
@@ -34,13 +65,17 @@ jobs:
       - name: Update site data
         run: python automation/update_site_data.py
 
-      - name: Commit and push if anything changed
+      - name: Prepare files to publish
         run: |
-          git config user.name "United Roundup Bot"
-          git config user.email "bot@unitedroundup.com"
-          git add assets/latest-data.js
-          git diff --staged --quiet || git commit -m "Auto-update latest news feed"
-          # If someone pushed to main while this run was working, catch up
-          # with their changes first so the push isn't rejected.
-          git pull --rebase origin main
-          git push
+          mkdir -p public
+          cp assets/latest-data.js public/
+          if [ -f automation/classify_cache.json ]; then cp automation/classify_cache.json public/; fi
+          echo "United Roundup news feed data. The website is https://unitedroundup.com" > public/index.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Publish to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
