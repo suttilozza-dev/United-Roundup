@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return CLUB_ANNOUNCEMENT_WORDS.some(function (w) { return title.indexOf(w) !== -1; });
   }
 
+  var heroUrl = null;
   var lead = document.getElementById('lead-card');
   if (lead && items.length) {
     var eligible = items.filter(function (i) {
@@ -81,31 +82,104 @@ document.addEventListener('DOMContentLoaded', function () {
     if (leadTitle) leadTitle.textContent = top.title;
     if (leadInitials) leadInitials.textContent = initials(top.source);
     if (leadSource) leadSource.textContent = top.source;
+    var leadArt = document.getElementById('lead-art');
+    var heroImg = /^https:\/\//i.test(top.image || '') ? top.image : '';
+    if (leadArt && heroImg) {
+      var ph = document.createElement('img');
+      ph.className = 'lead-art-photo'; ph.alt = ''; ph.referrerPolicy = 'no-referrer'; ph.src = heroImg;
+      ph.onerror = function () { leadArt.classList.remove('has-image'); ph.remove(); };
+      leadArt.appendChild(ph); leadArt.classList.add('has-image');
+    }
+    heroUrl = top.url;
   }
 
   // ---- Wire list ----
+  // The newest story in the chosen filter gets the big "lead" slot above the
+  // scrolling list. Every story shows the publisher's own image; when there
+  // isn't one (or it fails to load) the red box names the outlet instead.
   var listEl = document.getElementById('home-story-list');
+  var leadSlot = document.getElementById('wire-lead');
   var countEl = document.getElementById('wire-count');
   var checkedEl = document.getElementById('wire-checked');
   var tabs = document.querySelectorAll('.wire-toolbar .filters button');
   var activeCategory = 'all';
+  var WIRE_ARROW = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>';
+
+  // Friendlier names for the "no image" box, where the feed's own spelling
+  // runs words together.
+  var DISPLAY_NAMES = { 'redcafe': 'Red Cafe', 'unitedpeoplestv': 'United Peoples TV' };
+  function displayName(source) {
+    return DISPLAY_NAMES[(source || '').replace(/\s+/g, '').toLowerCase()] || source || 'Unknown source';
+  }
+  function httpsUrl(u) {
+    return /^https:\/\//i.test(u || '') ? esc(u).replace(/"/g, '&quot;') : '';
+  }
+  function wireThumb(item, extra) {
+    var src = httpsUrl(item.image);
+    var fallback = '<i><b>' + esc(displayName(item.source)) + '</b><small>No image available</small></i>';
+    var img = src ? '<img alt="" loading="lazy" referrerpolicy="no-referrer" src="' + src + '" ' +
+      'onerror="this.parentNode.classList.remove(\'has-image\');this.remove()">' : '';
+    return '<span class="story-thumb' + (src ? ' has-image' : '') + (extra ? ' ' + extra : '') + '" aria-hidden="true">' + img + fallback + '</span>';
+  }
+  function labelFor(item) {
+    return item.type === 'video' ? 'Videos' : (categoryLabels[item.category] || item.category || 'News');
+  }
 
   function render() {
     var filtered = activeCategory === 'all' ? items : items.filter(function (i) { return i.category === activeCategory; });
     if (countEl) countEl.textContent = filtered.length + ' report' + (filtered.length === 1 ? '' : 's');
+    // In "All stories" the big wire slot skips the story already shown as
+    // the Top story card above, so the two don't repeat each other.
+    var top = filtered[0];
+    if (activeCategory === 'all' && heroUrl && filtered.length > 1 && top && top.url === heroUrl) top = filtered[1];
+    var rest = leadSlot ? filtered.filter(function (i) { return i !== top; }) : filtered;
+    if (leadSlot) {
+      leadSlot.innerHTML = top ?
+        '<a class="wire-lead" href="' + httpsUrl(top.url) + '" target="_blank" rel="noreferrer">' +
+          wireThumb(top, 'wire-lead-thumb') +
+          '<div class="wire-lead-body"><p><span class="wire-lead-flag">Latest</span><b>' + esc(labelFor(top)) + '</b> &middot; ' + timeAgo(top.published) + '</p>' +
+          '<h3>' + esc(top.title) + '</h3>' +
+          '<span class="byline">' + esc(top.source) + ' ' + WIRE_ARROW + '</span></div></a>' : '';
+    }
     if (!listEl) return;
-    listEl.innerHTML = filtered.map(function (item, idx) {
-      var label = categoryLabels[item.category] || item.category;
-      var num = String(idx + 1).padStart(2, '0');
-      return '<a class="story" href="' + item.url + '" target="_blank" rel="noreferrer">' +
+    listEl.innerHTML = rest.map(function (item, idx) {
+      var num = String(idx + (leadSlot ? 2 : 1)).padStart(2, '0');
+      return '<a class="story" href="' + httpsUrl(item.url) + '" target="_blank" rel="noreferrer">' +
         '<span class="story-index">' + num + '</span>' +
-        '<span class="story-thumb" aria-hidden="true"><i>' + esc(initials(item.source)) + '</i></span>' +
-        '<div><p><b>' + esc(item.type === 'video' ? 'Videos' : label) + '</b> &middot; ' + timeAgo(item.published) + '</p>' +
+        wireThumb(item) +
+        '<div><p><b>' + esc(labelFor(item)) + '</b> &middot; ' + timeAgo(item.published) + '</p>' +
         '<h3>' + esc(item.title) + '</h3>' +
-        '<span class="byline">' + esc(item.source) + ' <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg></span>' +
+        '<span class="byline">' + esc(item.source) + ' ' + WIRE_ARROW + '</span>' +
         '</div></a>';
     }).join('');
   }
+
+  // ---- "Who's reporting most" ----
+  // Counts stories per outlet over the last 24 hours (or the whole wire if
+  // the last day is quiet). A count, not a verdict.
+  (function renderSourceCounts() {
+    var box = document.getElementById('wire-sources');
+    var list = document.getElementById('wire-sources-list');
+    if (!box || !list || !items.length) return;
+    var dayAgo = Date.now() - 24 * 3600 * 1000;
+    var pool = items.filter(function (i) { return new Date(i.published).getTime() >= dayAgo; });
+    var title = 'Last 24 hours';
+    if (pool.length < 8) { pool = items; title = 'Across the current wire'; }
+    var counts = {};
+    pool.forEach(function (i) { var k = i.source || 'Unknown'; counts[k] = (counts[k] || 0) + 1; });
+    var ranked = Object.keys(counts).map(function (k) { return { name: k, n: counts[k] }; })
+      .sort(function (a, b) { return b.n - a.n || a.name.localeCompare(b.name); });
+    var max = ranked[0] ? ranked[0].n : 1;
+    list.innerHTML = ranked.slice(0, 6).map(function (r) {
+      return '<li><span class="ws-name">' + esc(r.name) + '</span><b>' + r.n + '</b>' +
+        '<span class="ws-bar"><i style="width:' + Math.max(6, Math.round(r.n / max * 100)) + '%"></i></span></li>';
+    }).join('');
+    var t = document.getElementById('wire-sources-title');
+    var s = document.getElementById('wire-sources-sum');
+    if (t) t.textContent = title;
+    if (s) s.textContent = pool.length + ' report' + (pool.length === 1 ? '' : 's') + ' from ' + ranked.length + ' outlet' + (ranked.length === 1 ? '' : 's');
+    box.hidden = false;
+  })();
 
   tabs.forEach(function (tab) {
     tab.addEventListener('click', function () {
