@@ -5,5 +5,7 @@
 # automation scripts, GitHub workflows, notes, and the Press Room Watch data
 # (the live page reads that from GitHub Pages instead). Netlify skips the
 # build when this command exits with 0, i.e. when nothing else changed.
+# If Netlify has no earlier build to compare with (CACHED_COMMIT_REF empty or equal
+# to COMMIT_REF, e.g. after an upload deploy or a cache clear), always build.
 [build]
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)automation' ':(exclude).github' ':(exclude)assets/press-room-data.js' ':(exclude)assets/latest-data.js' ':(exclude)CLAUDE.md' ':(exclude)README.md' ':(exclude).gitignore'"
+  ignore = "[ -n \"$CACHED_COMMIT_REF\" ] && [ \"$CACHED_COMMIT_REF\" != \"$COMMIT_REF\" ] && git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)automation' ':(exclude).github' ':(exclude)assets/press-room-data.js' ':(exclude)assets/latest-data.js' ':(exclude)CLAUDE.md' ':(exclude)README.md' ':(exclude).gitignore'"
