@@ -9,8 +9,8 @@
 #                 -> press-room-data.js, press-room-sections.json,
 #                    press-room-summary.js
 # It also runs straight away whenever Press Room Watch data is pushed to
-# `main` (e.g. after approving a new press conference), without re-fetching
-# the news.
+# `main` (e.g. after approving a new press conference). Those runs fetch the
+# news too, so a push can never republish an out-of-date feed.
 # One-time setup: repo Settings -> Pages -> Source: "GitHub Actions".
 name: Update Latest news feed
 
@@ -55,7 +55,6 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        if: github.event_name != 'push'
         run: pip install anthropic
 
       # Start from the last published feed (used when a source is briefly
@@ -63,25 +62,22 @@ jobs:
       # so only NEW stories are sent to the Claude API.
       - name: Restore last published feed and category cache
         run: |
-          curl -fsSL "$FEED_URL/latest-data.js?run=${{ github.run_id }}" -o /tmp/latest-data.js && mv /tmp/latest-data.js assets/latest-data.js || echo "No published feed yet - using the copy in the repo."
-          curl -fsSL "$FEED_URL/classify_cache.json?run=${{ github.run_id }}" -o automation/classify_cache.json || echo "No category cache yet."
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors "$FEED_URL/latest-data.js?run=${{ github.run_id }}" -o /tmp/latest-data.js && mv /tmp/latest-data.js assets/latest-data.js || echo "::warning::Could not restore the published feed - using the copy in the repo."
+          curl -fsSL --retry 5 --retry-delay 5 --retry-all-errors "$FEED_URL/classify_cache.json?run=${{ github.run_id }}" -o automation/classify_cache.json || echo "::warning::No category cache restored."
 
       - name: Validate sources (manual runs only)
         if: github.event_name == 'workflow_dispatch'
         run: python automation/validate_sources.py
 
       - name: Fetch new items
-        if: github.event_name != 'push'
         run: python automation/fetch_sources.py
 
       - name: Classify items
-        if: github.event_name != 'push'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python automation/classify.py --time-budget 600
 
       - name: Update site data
-        if: github.event_name != 'push'
         run: python automation/update_site_data.py
 
       - name: Prepare files to publish

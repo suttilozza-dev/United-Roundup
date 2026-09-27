@@ -63,6 +63,31 @@ document.addEventListener('DOMContentLoaded', function () {
     return CLUB_ANNOUNCEMENT_WORDS.some(function (w) { return title.indexOf(w) !== -1; });
   }
 
+  // Bigger version of a publisher's image for the large slots (Top story
+  // card, wire lead, video cards). Feeds give thumbnail-sized links; these
+  // image servers offer the same picture at a larger size. If the larger one
+  // is missing, the <img> falls back to the original (data-fallback).
+  function largeImage(u) {
+    u = u || '';
+    return u
+      .replace(/(\/ALTERNATES\/)s\d+\//, '$1s1200/')                        // Reach (MEN, Mirror)
+      .replace(/(\.365dm\.com\/\d+\/\d+\/)\d+x\d+\//, '$11600x900/')     // Sky Sports
+      .replace(/(ichef\.bbci\.co\.uk\/ace\/standard\/)\d+\//, '$1976/')     // BBC
+      .replace(/(i\.ytimg\.com\/vi\/[^/]+\/)hqdefault\.jpg/, '$1maxresdefault.jpg'); // YouTube
+  }
+  // onerror handler: try the original image first, then give up and show
+  // the branded art behind it.
+  window.urImgFallback = function (img, onGiveUp) {
+    var fb = img.getAttribute('data-fallback');
+    if (fb) { img.removeAttribute('data-fallback'); img.src = fb; return; }
+    if (onGiveUp) onGiveUp(img);
+  };
+  // YouTube answers a missing large thumbnail with a tiny 120x90 grey
+  // placeholder instead of an error, so check the size once it loads.
+  window.urImgCheck = function (img) {
+    if (img.naturalWidth && img.naturalWidth <= 120 && img.getAttribute('data-fallback')) window.urImgFallback(img);
+  };
+
   var heroUrl = null;
   var lead = document.getElementById('lead-card');
   if (lead && items.length) {
@@ -86,8 +111,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var heroImg = /^https:\/\//i.test(top.image || '') ? top.image : '';
     if (leadArt && heroImg) {
       var ph = document.createElement('img');
-      ph.className = 'lead-art-photo'; ph.alt = ''; ph.referrerPolicy = 'no-referrer'; ph.src = heroImg;
-      ph.onerror = function () { leadArt.classList.remove('has-image'); ph.remove(); };
+      ph.className = 'lead-art-photo'; ph.alt = ''; ph.referrerPolicy = 'no-referrer';
+      var heroBig = largeImage(heroImg);
+      if (heroBig !== heroImg) ph.setAttribute('data-fallback', heroImg);
+      ph.onerror = function () { window.urImgFallback(ph, function () { leadArt.classList.remove('has-image'); ph.remove(); }); };
+      ph.onload = function () { window.urImgCheck(ph); };
+      ph.src = heroBig;
       leadArt.appendChild(ph); leadArt.classList.add('has-image');
     }
     heroUrl = top.url;
@@ -114,11 +143,14 @@ document.addEventListener('DOMContentLoaded', function () {
   function httpsUrl(u) {
     return /^https:\/\//i.test(u || '') ? esc(u).replace(/"/g, '&quot;') : '';
   }
-  function wireThumb(item, extra) {
+  function wireThumb(item, extra, big) {
     var src = httpsUrl(item.image);
     var fallback = '<i><b>' + esc(displayName(item.source)) + '</b><small>No image available</small></i>';
-    var img = src ? '<img alt="" loading="lazy" referrerpolicy="no-referrer" src="' + src + '" ' +
-      'onerror="this.parentNode.classList.remove(\'has-image\');this.remove()">' : '';
+    var bigSrc = big && src ? httpsUrl(largeImage(item.image)) : '';
+    var useSrc = bigSrc || src;
+    var img = src ? '<img alt="" loading="lazy" referrerpolicy="no-referrer" src="' + useSrc + '"' +
+      (bigSrc && bigSrc !== src ? ' data-fallback="' + src + '"' : '') +
+      ' onload="urImgCheck(this)" onerror="urImgFallback(this,function(i){i.parentNode.classList.remove(\'has-image\');i.remove()})">' : '';
     return '<span class="story-thumb' + (src ? ' has-image' : '') + (extra ? ' ' + extra : '') + '" aria-hidden="true">' + img + fallback + '</span>';
   }
   function labelFor(item) {
@@ -128,16 +160,19 @@ document.addEventListener('DOMContentLoaded', function () {
   function render() {
     var filtered = activeCategory === 'all' ? items : items.filter(function (i) { return i.category === activeCategory; });
     if (countEl) countEl.textContent = filtered.length + ' report' + (filtered.length === 1 ? '' : 's');
-    // In "All stories" the big wire slot skips the story already shown as
-    // the Top story card above, so the two don't repeat each other.
-    var top = filtered[0];
-    if (activeCategory === 'all' && heroUrl && filtered.length > 1 && top && top.url === heroUrl) top = filtered[1];
+    // The big wire slot goes to the newest story that has a photo. In
+    // "All stories" it also skips the story already shown as the Top story
+    // card above, so the two don't repeat each other.
+    function notHero(i) { return !(activeCategory === 'all' && heroUrl && i.url === heroUrl); }
+    var top = filtered.find(function (i) { return notHero(i) && /^https:\/\//i.test(i.image || ''); }) ||
+      filtered.find(notHero) || filtered[0];
+    var flag = top === filtered[0] ? 'Latest' : 'Featured';
     var rest = leadSlot ? filtered.filter(function (i) { return i !== top; }) : filtered;
     if (leadSlot) {
       leadSlot.innerHTML = top ?
         '<a class="wire-lead" href="' + httpsUrl(top.url) + '" target="_blank" rel="noreferrer">' +
-          wireThumb(top, 'wire-lead-thumb') +
-          '<div class="wire-lead-body"><p><span class="wire-lead-flag">Latest</span><b>' + esc(labelFor(top)) + '</b> &middot; ' + timeAgo(top.published) + '</p>' +
+          wireThumb(top, 'wire-lead-thumb', true) +
+          '<div class="wire-lead-body"><p><span class="wire-lead-flag">' + flag + '</span><b>' + esc(labelFor(top)) + '</b> &middot; ' + timeAgo(top.published) + '</p>' +
           '<h3>' + esc(top.title) + '</h3>' +
           '<span class="byline">' + esc(top.source) + ' ' + WIRE_ARROW + '</span></div></a>' : '';
     }
@@ -203,11 +238,13 @@ document.addEventListener('DOMContentLoaded', function () {
     return /^https:\/\//i.test(u || '') ? esc(u).replace(/"/g, '&quot;') : '';
   }
   // If a publisher's image fails to load, fall back to the branded card art.
-  function thumb(item, cls) {
+  function thumb(item, cls, big) {
     var src = safeUrl(item.image);
     if (!src) return '';
-    return '<img class="' + cls + '" alt="" loading="lazy" referrerpolicy="no-referrer" src="' + src + '" ' +
-      'onerror="this.parentNode.classList.remove(\'has-image\');this.remove()">';
+    var bigSrc = big ? safeUrl(largeImage(item.image)) : '';
+    return '<img class="' + cls + '" alt="" loading="lazy" referrerpolicy="no-referrer" src="' + (bigSrc || src) + '"' +
+      (bigSrc && bigSrc !== src ? ' data-fallback="' + src + '"' : '') +
+      ' onload="urImgCheck(this)" onerror="urImgFallback(this,function(i){i.parentNode.classList.remove(\'has-image\');i.remove()})">';
   }
   // Newest first, but no more than `perSource` from any one outlet/channel so
   // a single busy YouTube channel can't fill the whole row.
@@ -229,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (videos.length < 6) videos = videos.slice(0, 3);
     videoGrid.innerHTML = videos.map(function (v, idx) {
       var official = CLUB_SOURCES.indexOf((v.source || '').trim().toLowerCase()) !== -1;
-      var img = thumb(v, 'video-thumb');
+      var img = thumb(v, 'video-thumb', true);
       return '<a class="video-card" href="' + safeUrl(v.url) + '" target="_blank" rel="noreferrer">' +
         '<div class="video-art v' + (idx % 3) + (img ? ' has-image' : '') + '">' + img +
         '<span class="play">' + PLAY + '</span>' +

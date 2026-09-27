@@ -90,6 +90,11 @@ def _usable_image(url: str | None) -> str:
     # Sky Sports links full 1920px originals; its image server also has a
     # 768px version at the same path, which is plenty for a homepage card.
     url = re.sub(r"(\.365dm\.com/\d+/\d+/)\d+x\d+/", r"\g<1>768x432/", url)
+    # BBC feeds link a tiny 240px version; the same image server does 480px.
+    url = re.sub(r"(ichef\.bbci\.co\.uk/ace/standard/)\d+/", r"\g<1>480/", url)
+    # WordPress feeds (e.g. Republik of Mancunia) often link a small resized
+    # copy such as photo-300x215.jpg; the original sits at photo.jpg.
+    url = re.sub(r"(/wp-content/uploads/.+?)-\d{2,4}x\d{2,4}(\.(?:jpe?g|png|webp))(\?|$)", r"\1\2\3", url, flags=re.IGNORECASE)
     return url if url.startswith("https://") else ""
 
 
@@ -113,6 +118,12 @@ def extract_rss_image(item: ET.Element) -> str:
                     width = int(el.get("width") or 0)
                 except ValueError:
                     width = 0
+                if not width:
+                    # No size given: a media:content image is normally the
+                    # full-size picture (the Daily Mail's is ~636px) and a
+                    # media:thumbnail the small one, so rank them that way
+                    # rather than treating "unknown" as the smallest.
+                    width = 1000 if tag == "content" else 150
                 if _usable_image(url):
                     candidates.append((width, _usable_image(url)))
     if candidates:
