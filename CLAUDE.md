@@ -23,7 +23,7 @@ ROLE: the only lane that edits code. Static site in this folder, GitHub repo sut
 
 RULES: batch changes into one commit per session; never push. Each push costs about 15 Netlify credits (1,000 a month); aim for 20 pushes a month or fewer. Publish each article in ONE commit (article page, homepage card, listing page, sitemap together).
 
-PUBLISHING CHECKLIST: byline and date, labels present, SEO title and meta, Open Graph image, internal links, sitemap updated, mobile check, no console errors.
+PUBLISHING CHECKLIST: byline and date, labels present, SEO title and meta, Open Graph image, internal links, sitemap updated, mobile check, no console errors, image source confirmed licensed or original (no unlicensed third-party photos).
 
 IMAGES: compress for web (WebP where possible, under 200KB for banners).
 
