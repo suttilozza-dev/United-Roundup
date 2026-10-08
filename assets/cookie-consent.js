@@ -73,6 +73,19 @@
     document.head.appendChild(s);
   }
 
+  // Embedded X posts: widgets.js is third-party and sets its own cookies, so it
+  // loads only after consent. Without consent the <blockquote> shows as plain text.
+  function loadEmbeds() {
+    if (window.__urEmbedsLoaded) return;
+    if (!document.querySelector(".twitter-tweet")) return;
+    window.__urEmbedsLoaded = true;
+    var s = document.createElement("script");
+    s.async = true;
+    s.charset = "utf-8";
+    s.src = "https://platform.x.com/widgets.js";
+    document.body.appendChild(s);
+  }
+
   function removeBanner() {
     var banner = document.getElementById("cookie-consent-banner");
     if (banner && banner.parentNode) banner.parentNode.removeChild(banner);
@@ -87,7 +100,7 @@
     banner.setAttribute("aria-label", "Cookie notice");
     banner.innerHTML =
       "<p>This site uses analytics cookies to understand how many people visit and which " +
-      "stories they read. No tracking or advertising cookies are set. " +
+      "stories they read, and lets embedded posts from X load. No advertising cookies are set. " +
       'See our <a href="' + relativePrefix() + 'privacy.html">privacy &amp; cookies page</a>.</p>' +
       '<div class="cookie-consent-actions">' +
       '<button type="button" id="cookie-consent-decline">Decline</button>' +
@@ -98,6 +111,7 @@
       setConsent("accepted");
       removeBanner();
       loadAnalytics();
+      loadEmbeds();
     });
     document.getElementById("cookie-consent-decline").addEventListener("click", function () {
       setConsent("declined");
@@ -109,6 +123,7 @@
     var consent = getConsent();
     if (consent === "accepted") {
       loadAnalytics();
+      loadEmbeds();
       return;
     }
     if (consent === "declined") {

@@ -918,3 +918,6 @@ footer .social-row{grid-column:1/-1;justify-content:center;gap:14px;margin-top:0
   .ab-founder{flex-wrap:wrap}
   .src-note{margin-left:1.1rem;margin-right:1.1rem}
 }
+
+/* Embedded X posts (load only after cookie consent; plain quote shows otherwise) */
+.social-embed { max-width: 550px; margin: 2rem auto; }
