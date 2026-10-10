@@ -286,5 +286,11 @@
     "date": "2026-09-20",
     "context": "post_match",
     "result": "draw"
+  },
+  {
+    "fixture": "Tottenham Hotspur",
+    "date": "2026-10-09",
+    "context": "pre_match",
+    "result": "not_applicable"
   }
 ]
