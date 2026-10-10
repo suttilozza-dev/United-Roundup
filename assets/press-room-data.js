@@ -1,6 +1,6 @@
 // Source of truth for Press Room Watch. Append new press-conference
 // question objects here, then run automation/rebuild_press_room.py.
-// Last rebuilt: 2026-10-10T10:12:43.102509+00:00
+// Last rebuilt: 2026-10-10T23:30:33.471343+00:00
 const PRESS_ROOM_QUESTIONS = [
   {
     "fixture": "Manchester City",
@@ -7217,5 +7217,117 @@ const PRESS_ROOM_QUESTIONS = [
     "response": "Yeah, he's certainly getting closer, Carlos. It's been great to have him out on the grass and to see him up close really. And [he] played a little bit in a training game that we had last week, so that was good for him to get some minutes. And I think the other side of it a little bit, he has missed a lot, and he's missed crucial time in terms of the end of pre-season. There's a little bit of patience there for him to get up to speed, and that's up to us to pick that right time for him as well, but he offers us a lot. I've said it before, the midfield that we've got, we're really happy with, and the selections and the options that we have, and he definitely adds to that.",
     "date_disp": "9 Oct 2026",
     "context_label": "Pre-match"
+  },
+  {
+    "fixture": "Tottenham Hotspur",
+    "date": "2026-10-10",
+    "context": "post_match",
+    "result": "draw",
+    "section": "post",
+    "question": "What feeling are you left with after the performance and the result today?",
+    "topic": "Performance and standards",
+    "framing": "neutral",
+    "narrative_tag": "performance_standards",
+    "wording_status": "article-verbatim",
+    "source_url": "https://www.manutd.com/en/news/what-carrick-made-of-balebas-debut",
+    "response": "Listen, I'm massively disappointed with the result, for sure. A mixed performance, to be totally honest. I think it was tough, it was challenging the first period definitely. We just couldn't find a way to get ourselves into the game, whether that was with the ball or without the ball, we were just a little bit off it. Sometimes a little bit off it, a little bit slower with decision-making, a little bit didn't quite see the pass, didn't see the space, it just wasn't there. Sometimes it happens. We don't want it to happen, but sometimes it can, and it probably spread through the team a little bit too much. But the boys were trying to do the right things, it just wasn't quite there. And then opening certain spaces by almost trying to press, trying to then chase things, which then makes spaces a little bit bigger. I thought the boys got themselves back into the game first half, towards the end of the first half. It was coming, but we spoke a bit about it at half-time. A big improvement through the second half as it progressed and we put ourselves in such a good position really towards the end of the game, to then not see it through. We should find a way of seeing that through. It's a couple of times now, different ways obviously, [we've conceded] two late, late goals against us to throw away two wins really, that changes a lot of things. It changes a lot of feelings for ourselves, it changes points and what it looks like, so we need to do better with seeing out games, that's for sure, once we get ourselves in a good position.",
+    "date_disp": "10 Oct 2026",
+    "context_label": "Post-match"
+  },
+  {
+    "fixture": "Tottenham Hotspur",
+    "date": "2026-10-10",
+    "context": "post_match",
+    "result": "draw",
+    "section": "post",
+    "question": "Throughout this season, you've been very calm when the team have not done as well as maybe other people want. But the longer it goes on, the more the anxiety amongst the fans grows, people wonder if the team is going in the right direction, what do you think when you're on the touchline? Because clearly you expected a lot more from this season than it's delivering so far...",
+    "topic": "Pressure and mentality",
+    "framing": "critical",
+    "narrative_tag": "pressure_mentality",
+    "wording_status": "article-verbatim",
+    "source_url": "https://www.manutd.com/en/news/what-carrick-made-of-balebas-debut",
+    "response": "I'm not happy with the amount of points we've had so far, for sure. I'm not hiding that, there's no hiding from that. It could have been different for a couple of little things here or there, but the reality is the reality, we've got to accept it. We need to put things in a positive direction quite quickly, that's pretty plain [to see]. We can do, of course we can, we're more than capable of doing that. We've just got to be a little bit more street-wise in the moments and a little bit more stubborn and a little bit stronger and see out certain things. But we've been in good positions at times, other times we haven't done well enough, and sometimes you have a real patch when it is going against you and things don't work out as you'd want them to work out. But that's part of the challenge of working through it, and we kind of found a way through it today to come out the other side right at the end. So, it doesn't change my belief or the confidence in the players. We're a really good team, capable of being a really good team, but we've obviously got to start getting more points on the board, that's for sure.",
+    "date_disp": "10 Oct 2026",
+    "context_label": "Post-match"
+  },
+  {
+    "fixture": "Tottenham Hotspur",
+    "date": "2026-10-10",
+    "context": "post_match",
+    "result": "draw",
+    "section": "post",
+    "question": "You said yesterday you've looked at it and you felt the team needs to bring more fire to their perfomance. It felt today the first 30, 35 minutes was as slow and lethargic as it has been this season. Is it proving a challenge to inject that intensity and urgency into the performance?",
+    "topic": "Performance and standards",
+    "framing": "critical",
+    "narrative_tag": "performance_standards",
+    "wording_status": "article-verbatim",
+    "source_url": "https://www.manutd.com/en/news/what-carrick-made-of-balebas-debut",
+    "response": "No, I don't think it was particularly that. It looks like that in the end and I understand why you say that. I just think it can get like that quite quickly when you're not quite there, and you're not quite at it. Credit to Tottenham for that, I thought they started the game really well. I thought we found it, to be honest, as the game progressed, which is sometimes harder. Sometimes it's harder to find it when you haven't quite got it. Credit to the players for that, for finding it towards the end of the first half, certainly the second half. We don't want to start games like that, no-one wants to start games like that. It was challenging for the players, but they worked through it and got themselves in a good position, which is the most disappointing thing in some ways, not seeing the game out.",
+    "date_disp": "10 Oct 2026",
+    "context_label": "Post-match"
+  },
+  {
+    "fixture": "Tottenham Hotspur",
+    "date": "2026-10-10",
+    "context": "post_match",
+    "result": "draw",
+    "section": "post",
+    "question": "Can you put your finger on why it is another occasion you have conceded to 10 men?",
+    "topic": "Performance and standards",
+    "framing": "critical",
+    "narrative_tag": "performance_standards",
+    "wording_status": "article-verbatim",
+    "source_url": "https://www.manutd.com/en/news/what-carrick-made-of-balebas-debut",
+    "response": "It's different types of goals, but it's definitely something where 10 men or not 10 men, if we're ahead in the game, we've got to see games out. Whether that's taking the ball, whether that's controlling the game a little bit more, looking after the ball better in their half and around their box and pinning them in a little bit. Or whether that's defending moments better. Certainly we need to improve that.",
+    "date_disp": "10 Oct 2026",
+    "context_label": "Post-match"
+  },
+  {
+    "fixture": "Tottenham Hotspur",
+    "date": "2026-10-10",
+    "context": "post_match",
+    "result": "draw",
+    "section": "post",
+    "question": "A question on Carlos, had his introduction to the United fans and got a standing ovation before he even came on the pitch, I suppose that showed the desire for change in that moment. What did you make of his performance? And also on the crowd in general, there were some boos at 30 minutes, half-time and full-time, Matheus [Cunha] tried to get them rallied. What do you think about the atmosphere generally around the place?",
+    "topic": "Supporters and atmosphere",
+    "framing": "premise-led",
+    "narrative_tag": "supporter_relationship",
+    "wording_status": "article-verbatim",
+    "source_url": "https://www.manutd.com/en/news/what-carrick-made-of-balebas-debut",
+    "response": "When things aren't quite going to plan, I understand the reaction at times. Obviously, it hurts, it hurts a lot. It's not nice to go through, but sometimes you have to go through it. I care as much as anybody about this place, so sometimes you could say too much because then it overspills. But it's coming from a good place, really, and I understand it. But it's not nice to have to go through that. I thought the players dealt with it well, to be honest, and used it, especially coming out in the second half. Even before the changes, you could see that we were starting to look more like ourselves. We just had to make changes to try and freshen up that little bit more, which we got the benefit of, and it made a difference.",
+    "date_disp": "10 Oct 2026",
+    "context_label": "Post-match"
+  },
+  {
+    "fixture": "Tottenham Hotspur",
+    "date": "2026-10-10",
+    "context": "post_match",
+    "result": "draw",
+    "section": "post",
+    "question": "And just on Carlos, it seemed like he had a real impact as soon as he came on...",
+    "topic": "Performance and standards",
+    "framing": "follow-up",
+    "narrative_tag": "performance_standards",
+    "wording_status": "article-verbatim",
+    "source_url": "https://www.manutd.com/en/news/what-carrick-made-of-balebas-debut",
+    "response": "I think you can get that from a new signing, something fresh, I understand that. He did well, it was good to have him on the pitch. I think he helped, certainly helped.",
+    "date_disp": "10 Oct 2026",
+    "context_label": "Post-match"
+  },
+  {
+    "fixture": "Tottenham Hotspur",
+    "date": "2026-10-10",
+    "context": "post_match",
+    "result": "draw",
+    "section": "post",
+    "question": "I know you don't like coming in here and criticising players, but when you're conceding late in games and goals that are costing you points, do you feel let down at all?",
+    "topic": "Performance and standards",
+    "framing": "critical",
+    "narrative_tag": "performance_standards",
+    "wording_status": "article-verbatim",
+    "source_url": "https://www.manutd.com/en/news/what-carrick-made-of-balebas-debut",
+    "response": "No, I don't feel let down, because you can make mistakes. Things go against you. I've made mistakes in games and it's not so much letting everyone down. We've all got standards, we've all got levels, the players have got levels and standards. They know, they hold their hands up at times when something goes against them. It's not like everyone walks off into the distance tonight like everything's fine and it's left on me. It's not that at all. The players care, for sure, and I think you can see that even the way the game developed. When it's tough, and it was a challenging period at times in the first half, for them to work through that shows how desperate they are to then put them in that position [of nearly winning the game]. So, I don't feel let down by them making a mistake. We've just got to all help each other to be better, and it's on me to help them and guide them through it.",
+    "date_disp": "10 Oct 2026",
+    "context_label": "Post-match"
   }
 ];
