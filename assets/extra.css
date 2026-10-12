@@ -921,3 +921,10 @@ footer .social-row{grid-column:1/-1;justify-content:center;gap:14px;margin-top:0
 
 /* Embedded X posts (load only after cookie consent; plain quote shows otherwise) */
 .social-embed { max-width: 550px; margin: 2rem auto; }
+
+/* Weekly Roundup 06: article subtitle (H2 under the H1), marked-opinion tag, source pill with an inline link */
+.article-hero .article-subtitle{max-width:950px;margin:18px 0 0;color:var(--muted,#78635c);font:400 clamp(1.15rem,2.4vw,1.6rem)/1.35 Georgia,serif}
+.article-editor-note .opinion-flag{display:inline-block;margin:0 0 18px;padding:4px 12px;border:1px solid #9b0506;border-radius:99px;background:#fff;color:#9b0506;font-size:.8rem;line-height:1.4;letter-spacing:.06em;text-transform:uppercase}
+.article-editor-note .opinion-flag em{font-style:italic;font-weight:800}
+.article-sources>.source-pill{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;max-width:100%;overflow-wrap:anywhere;color:#78635c;background:#fff;border:1px solid #eadbd0;border-radius:18px;padding:8px 11px;font-size:.74rem;font-weight:600}
+.article-sources>.source-pill a{display:inline-flex;align-items:center;gap:4px;color:#b64027;font-weight:800}
