@@ -674,7 +674,7 @@ footer .social-row .hs-fb svg{width:38px;height:38px}
    two equal cards (same size, same structure) -- stacked on phones. */
 .feature-pair{max-width:1320px;margin:34px auto 0;padding:0 clamp(16px,3vw,40px);display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.2vw,28px);align-items:stretch}
 .pair-card{color:#fff;border-radius:22px;padding:clamp(28px,3.2vw,46px);display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:0 26px 60px -30px rgba(33,22,19,.7)}
-.pair-card:after{content:"";background:url(/assets/img/brand/ur-trident-watermark.png) no-repeat center/contain;opacity:.08;pointer-events:none;width:300px;height:300px;position:absolute;right:-60px;bottom:-40px}
+.pair-card:after{content:"";background:url(/assets/img/brand/ur-flame-128.png) no-repeat center/contain;opacity:.08;pointer-events:none;width:300px;height:300px;position:absolute;right:-60px;bottom:-40px}
 .pair-card>*{position:relative;z-index:1}
 .pair-roundup{background:radial-gradient(circle at 90% 5%,#e85a3657,#0000 38%),linear-gradient(135deg,#241411 0%,#482017 54%,#7b2d1d 100%)}
 .pair-wsw{background:radial-gradient(circle at 90% 5%,#f6110c40,#0000 38%),linear-gradient(135deg,#141214 0%,#2e1215 54%,#6e1216 100%)}
@@ -928,3 +928,81 @@ footer .social-row{grid-column:1/-1;justify-content:center;gap:14px;margin-top:0
 .article-editor-note .opinion-flag em{font-style:italic;font-weight:800}
 .article-sources>.source-pill{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;max-width:100%;overflow-wrap:anywhere;color:#78635c;background:#fff;border:1px solid #eadbd0;border-radius:18px;padding:8px 11px;font-size:.74rem;font-weight:600}
 .article-sources>.source-pill a{display:inline-flex;align-items:center;gap:4px;color:#b64027;font-weight:800}
+
+/* ── UR Originals — article markers ── */
+
+/* Top marker: flame icon + "UR ORIGINALS" text, sits between article-status and h1 */
+.originals-marker {
+  display:flex;
+  align-items:center;
+  gap:.45rem;
+  margin:.6rem 0 .9rem
+}
+.originals-marker img {
+  width:16px;
+  height:auto;
+  opacity:.65;
+  flex-shrink:0
+}
+.originals-marker span {
+  font-size:.65rem;
+  font-weight:700;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--muted)
+}
+
+/* Bottom divider: flame icon only, sits between "What comes next" paragraph and .article-sources */
+.originals-divider {
+  display:flex;
+  justify-content:center;
+  padding:.9rem 0
+}
+.originals-divider img {
+  width:16px;
+  height:auto;
+  opacity:.3
+}
+
+/* ── UR Originals — nav link ── */
+.nav-originals {
+  display:inline-flex;
+  align-items:center;
+  gap:.35rem
+}
+.nav-originals .nav-flame {
+  width:13px;
+  height:auto;
+  opacity:.85;
+  flex-shrink:0
+}
+
+/* ── UR Originals — type badges on originals.html cards ── */
+.src-type {
+  display:inline-block;
+  font-size:.65rem;
+  font-weight:700;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+  border-radius:3px;
+  padding:.1rem .4rem;
+  margin-bottom:.25rem
+}
+.src-type--wsr {
+  background:rgba(30,58,95,.12);
+  color:#1e3a5f
+}
+.src-type--wsw {
+  background:rgba(45,90,39,.12);
+  color:#2d5a27
+}
+.src-type--bs {
+  background:rgba(90,30,45,.12);
+  color:#5a1e2d
+}
+/* Dark mode overrides for type badges */
+@media (prefers-color-scheme:dark) {
+  .src-type--wsr{background:rgba(30,58,95,.4);color:#7db8f0}
+  .src-type--wsw{background:rgba(45,90,39,.4);color:#7dd87a}
+  .src-type--bs{background:rgba(90,30,45,.4);color:#f07090}
+}
