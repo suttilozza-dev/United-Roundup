@@ -11,7 +11,8 @@ code as rebuild_press_room.py, and writes to an output folder (default
   press-room-data.js       the question data the page's search/filter uses
   press-room-sections.json the four computed sections of press-room-watch.html
                            (hero scoreboard, findings, visual analysis,
-                           narratives), which the live page swaps in on load
+                           narratives), which the live page swaps in on load;
+                           also includes the manually-curated #now panel
   press-room-summary.js    headline numbers for the homepage promo
 
 Nothing in the repo is modified. Run from the repo root:
@@ -33,6 +34,11 @@ SECTIONS = {
     ".prw-visuals": "prw-visuals",
     "#narratives": "prw-narratives",
 }
+
+# The manually-curated #now panel lives in a separate source file so it can be
+# updated independently (editing automation/press_room_now.html triggers the
+# workflow without touching any of the computed sections above).
+NOW_SOURCE = Path(__file__).resolve().parent / "press_room_now.html"
 
 
 def extract_section(html, cls):
@@ -67,6 +73,13 @@ def main():
         encoding="utf-8")
 
     sections = {sel: extract_section(html, cls) for sel, cls in SECTIONS.items()}
+
+    # Add the manually-curated #now panel if the source file exists.
+    if NOW_SOURCE.exists():
+        sections["#now"] = NOW_SOURCE.read_text(encoding="utf-8").strip()
+    else:
+        print(f"WARNING: {NOW_SOURCE} not found — #now section omitted from JSON", file=sys.stderr)
+
     (out / "press-room-sections.json").write_text(json.dumps(sections, ensure_ascii=False), encoding="utf-8")
 
     summary = {
