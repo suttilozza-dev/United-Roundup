@@ -304,5 +304,11 @@
     "date": "2026-10-12",
     "context": "pre_match",
     "result": "not_applicable"
+  },
+  {
+    "fixture": "Leeds United",
+    "date": "2026-10-16",
+    "context": "pre_match",
+    "result": "not_applicable"
   }
 ]
