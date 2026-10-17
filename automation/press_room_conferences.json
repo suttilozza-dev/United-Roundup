@@ -298,5 +298,11 @@
     "date": "2026-10-10",
     "context": "post_match",
     "result": "draw"
+  },
+  {
+    "fixture": "Atlético Madrid",
+    "date": "2026-10-12",
+    "context": "pre_match",
+    "result": "not_applicable"
   }
 ]
