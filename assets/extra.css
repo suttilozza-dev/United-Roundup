@@ -1016,7 +1016,7 @@ footer .social-row{grid-column:1/-1;justify-content:center;gap:14px;margin-top:0
 .analysis-page .article-body li{margin-bottom:8px}
 .article-body blockquote.pull-quote{margin:0 0 20px;padding:4px 0 4px 18px;border-left:4px solid #d65432;font:italic 400 1.1rem/1.6 Georgia,serif;color:var(--ink)}
 .article-body blockquote.pull-quote p{margin:0}
-.article-body blockquote.pull-quote footer{margin-top:6px;font:700 .8rem/1.4 system-ui,sans-serif;font-style:normal;color:#78635c}
+.article-body blockquote.pull-quote p.quote-by{margin:6px 0 0;font:700 .8rem/1.4 system-ui,sans-serif;font-style:normal;color:#78635c}
 .social-embed figcaption{font-size:.8rem;color:var(--muted,#78635c);margin-top:6px}
 a.cite{font-size:.75em;font-weight:700;color:#b64027;text-decoration:none;white-space:nowrap}
 a.cite:hover{text-decoration:underline}
