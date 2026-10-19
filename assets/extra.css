@@ -1006,3 +1006,21 @@ footer .social-row{grid-column:1/-1;justify-content:center;gap:14px;margin-top:0
   .src-type--wsw{background:rgba(45,90,39,.4);color:#7dd87a}
   .src-type--bs{background:rgba(90,30,45,.4);color:#f07090}
 }
+
+/* Weekly Roundup 07: wide text tables, pull quotes, lists, numbered citations, numbered source list */
+.bs-table--wide td:nth-child(2){white-space:normal;font-weight:400}
+.bs-table--wide td:first-child{min-width:7rem}
+.bs-table--nums td:not(:first-child),.bs-table--nums th:not(:first-child){text-align:center;font-variant-numeric:tabular-nums}
+.analysis-page .article-body .table-note{font-size:.85rem;color:var(--muted,#78635c);margin:-14px 0 20px}
+.analysis-page .article-body ul{margin:0 0 20px;padding-left:1.3rem;line-height:1.7}
+.analysis-page .article-body li{margin-bottom:8px}
+.article-body blockquote.pull-quote{margin:0 0 20px;padding:4px 0 4px 18px;border-left:4px solid #d65432;font:italic 400 1.1rem/1.6 Georgia,serif;color:var(--ink)}
+.article-body blockquote.pull-quote p{margin:0}
+.article-body blockquote.pull-quote footer{margin-top:6px;font:700 .8rem/1.4 system-ui,sans-serif;font-style:normal;color:#78635c}
+.social-embed figcaption{font-size:.8rem;color:var(--muted,#78635c);margin-top:6px}
+a.cite{font-size:.75em;font-weight:700;color:#b64027;text-decoration:none;white-space:nowrap}
+a.cite:hover{text-decoration:underline}
+.article-sources .source-list{margin:12px 0 0;padding-left:2.2rem;font-size:.85rem;line-height:1.55;color:#78635c}
+.article-sources .source-list li{margin-bottom:8px;padding-left:4px}
+.article-sources .source-list li:target{background:#fbf1dc}
+.article-sources .source-list a{display:inline;color:#b64027;font-weight:700;overflow-wrap:anywhere}
