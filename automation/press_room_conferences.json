@@ -316,5 +316,11 @@
     "date": "2026-10-18",
     "context": "post_match",
     "result": "draw"
+  },
+  {
+    "fixture": "Como",
+    "date": "2026-10-20",
+    "context": "pre_match",
+    "result": "not_applicable"
   }
 ]
