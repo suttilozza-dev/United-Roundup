@@ -322,5 +322,11 @@
     "date": "2026-10-20",
     "context": "pre_match",
     "result": "not_applicable"
+  },
+  {
+    "fixture": "Como",
+    "date": "2026-10-21",
+    "context": "post_match",
+    "result": "loss"
   }
 ]
