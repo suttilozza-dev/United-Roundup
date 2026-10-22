@@ -8,7 +8,7 @@
 # If Netlify has no earlier build to compare with (CACHED_COMMIT_REF empty or equal
 # to COMMIT_REF, e.g. after an upload deploy or a cache clear), always build.
 [build]
-  ignore = "[ -n \"$CACHED_COMMIT_REF\" ] && [ \"$CACHED_COMMIT_REF\" != \"$COMMIT_REF\" ] && git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)automation' ':(exclude).github' ':(exclude)assets/press-room-data.js' ':(exclude)assets/latest-data.js' ':(exclude)CLAUDE.md' ':(exclude)README.md' ':(exclude).gitignore'"
+  ignore = "[ -n \"$CACHED_COMMIT_REF\" ] && [ \"$CACHED_COMMIT_REF\" != \"$COMMIT_REF\" ] && git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)automation' ':(exclude).github' ':(exclude)assets/press-room-data.js' ':(exclude)assets/latest-data.js' ':(exclude)CLAUDE.md' ':(exclude)README.md' ':(exclude).gitignore' ':(exclude)AGENTS.md' ':(exclude).claude'"
 
 # Send the .co.uk domain to the main .com site. These only run if both
 # unitedroundup.co.uk and www.unitedroundup.co.uk are added as custom domains
