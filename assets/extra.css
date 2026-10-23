@@ -1063,3 +1063,22 @@ a.cite:hover{text-decoration:underline}
   .ur-table--cards td::before{content:attr(data-label);display:block;font-size:.68rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#78635c;margin-bottom:2px}
 }
 .analysis-page .article-conclusion h3{margin:26px 0 10px;color:#fff;font:700 1.25rem/1.25 Georgia,serif}
+/* Reports compared pills: numbered pills (Como) and cite jump targets */
+.article-sources>.source-pill{scroll-margin-top:96px}
+.article-sources>.source-pill:target{background:#fbf1dc}
+.article-sources>.source-pill .ur-tag{font-size:.66rem;padding:0 6px}
+.article-sources>a i{font-weight:700}
+.analysis-page .article-body ul.ur-confirmed{list-style:disc;padding-left:1.4rem;margin:0 0 22px}
+.analysis-page .article-body ul.ur-confirmed li{margin-bottom:10px;padding-left:2px}
+.ur-table td b{font-weight:800}
+/* Reports compared pills: numbered pills (Como) and cite jump targets */
+.article-sources>.source-pill{scroll-margin-top:96px}
+.article-sources>.source-pill:target{background:#fbf1dc}
+.article-sources>.source-pill .ur-tag{font-size:.66rem;padding:0 6px}
+.article-sources>a i{font-weight:700}
+.analysis-page .article-body ul.ur-confirmed{list-style:disc;padding-left:1.4rem;margin:0 0 22px}
+.analysis-page .article-body ul.ur-confirmed li{margin-bottom:10px;padding-left:2px}
+.ur-table td b{font-weight:800}
+.article-sources>.source-pill.source-pill--ref{display:inline-block;text-align:left;line-height:1.55}
+.article-sources>.source-pill.source-pill--ref a{display:inline;color:#b64027;font-weight:800}
+.article-sources>.source-pill.source-pill--ref>b{color:#78635c;text-transform:none;letter-spacing:0;font-size:inherit;width:auto;margin-right:2px}
