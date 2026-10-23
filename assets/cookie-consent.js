@@ -79,6 +79,8 @@
     if (window.__urEmbedsLoaded) return;
     if (!document.querySelector(".twitter-tweet")) return;
     window.__urEmbedsLoaded = true;
+    // Swaps the "loads once you accept cookies" placeholders for the posts (see .ur-embeds-on in extra.css).
+    document.documentElement.classList.add("ur-embeds-on");
     var s = document.createElement("script");
     s.async = true;
     s.charset = "utf-8";
