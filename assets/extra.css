@@ -674,7 +674,7 @@ footer .social-row .hs-fb svg{width:38px;height:38px}
    two equal cards (same size, same structure) -- stacked on phones. */
 .feature-pair{max-width:1320px;margin:34px auto 0;padding:0 clamp(16px,3vw,40px);display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.2vw,28px);align-items:stretch}
 .pair-card{color:#fff;border-radius:22px;padding:clamp(28px,3.2vw,46px);display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:0 26px 60px -30px rgba(33,22,19,.7)}
-.pair-card:after{content:"";background:url(/assets/img/brand/ur-flame-128.png) no-repeat center/contain;opacity:.08;pointer-events:none;width:300px;height:300px;position:absolute;right:-60px;bottom:-40px}
+.pair-card:after{content:"";background:url(/assets/img/Flame-2-Red-Flame-Black-Arrows-White-Ball.svg) no-repeat center/contain;opacity:.08;pointer-events:none;width:300px;height:300px;position:absolute;right:-60px;bottom:-40px}
 .pair-card>*{position:relative;z-index:1}
 .pair-roundup{background:radial-gradient(circle at 90% 5%,#e85a3657,#0000 38%),linear-gradient(135deg,#241411 0%,#482017 54%,#7b2d1d 100%)}
 .pair-wsw{background:radial-gradient(circle at 90% 5%,#f6110c40,#0000 38%),linear-gradient(135deg,#141214 0%,#2e1215 54%,#6e1216 100%)}
@@ -1082,3 +1082,10 @@ a.cite:hover{text-decoration:underline}
 .article-sources>.source-pill.source-pill--ref{display:inline-block;text-align:left;line-height:1.55}
 .article-sources>.source-pill.source-pill--ref a{display:inline;color:#b64027;font-weight:800}
 .article-sources>.source-pill.source-pill--ref>b{color:#78635c;text-transform:none;letter-spacing:0;font-size:inherit;width:auto;margin-right:2px}
+
+/* Header brand button: horizontal lockup SVG replaces the badge + wordmarks +
+   "NEWS DESK" stack. The box keeps its old size (212x66, 214x68 on phones),
+   border, radius and background; only the contents changed. */
+.site-header a.brand{box-sizing:border-box;width:212px;height:66px;padding:8px 12px;align-items:center;justify-content:center}
+.site-header a.brand .brand-lockup{display:block;width:100%;height:100%;object-fit:contain}
+@media(width<=540px){.site-header a.brand{width:214px;height:68px}}
