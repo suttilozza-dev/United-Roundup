@@ -1095,3 +1095,6 @@ a.cite:hover{text-decoration:underline}
 .prw-header a.prw-brand{box-sizing:border-box;width:231px;height:70px;padding:8px 12px;display:flex;align-items:center;justify-content:center}
 .prw-header a.prw-brand .brand-lockup{display:block;width:100%;height:100%;object-fit:contain}
 @media(width<=540px){.prw-header a.prw-brand{width:222px;height:66px}}
+.analysis-page .article-body ul.ur-list{list-style:disc;padding-left:1.4rem;margin:0 0 22px}
+.analysis-page .article-body ul.ur-list li{margin-bottom:10px;padding-left:2px}
+.article-conclusion .ur-embed figcaption{color:#e8d8cc}
