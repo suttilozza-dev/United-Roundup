@@ -340,5 +340,11 @@
     "date": "2026-10-23",
     "context": "pre_match",
     "result": "not_applicable"
+  },
+  {
+    "fixture": "Bournemouth",
+    "date": "2026-10-25",
+    "context": "post_match",
+    "result": "loss"
   }
 ]
