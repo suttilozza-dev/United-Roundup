@@ -5,6 +5,7 @@
   // banner, then loads each third-party tool only for the categories the visitor has accepted:
   //   analytics     -> GA4
   //   advertisement -> Google Ads tag, AdSense (assets/ads.js), embedded X posts
+  //   functional    -> Kit checkout widget behind the "Support United Roundup" button
   // Nothing from Google or X is requested before the visitor has actively made a choice.
   var COOKIEYES_SRC = "https://cdn-cookieyes.com/client_data/fa25f16a8901fe6d829a765d049bd818/script.js";
 
@@ -17,6 +18,10 @@
   // Google Ads tag. Loaded only after consent, together with GA4 (see loadGoogleTag).
   var ADS_TAG_ID = "AW-18489674283";
 
+  // Kit checkout widget. It contacts Kit, Stripe and hCaptcha, so it loads only after consent.
+  // Without it the "Support" link (a[data-commerce] in the nav) is a plain link to Kit's page.
+  var KIT_COMMERCE_SRC = "https://unitedroundup.kit.com/commerce.js";
+
   // Links to the Kit newsletter landing page.
   var NEWSLETTER_LINK = 'a[href^="https://unitedroundup.kit.com/df3c9b9f5a"]';
 
@@ -27,12 +32,13 @@
   // What the visitor has accepted. Everything is false until they have actively chosen
   // (CookieYes can pre-accept categories for some regions, which we do not rely on).
   function getChoice() {
-    var choice = { analytics: false, advertisement: false };
+    var choice = { analytics: false, advertisement: false, functional: false };
     try {
       var c = typeof window.getCkyConsent === "function" ? window.getCkyConsent() : null;
       if (c && c.isUserActionCompleted && c.categories) {
         choice.analytics = !!c.categories.analytics;
         choice.advertisement = !!c.categories.advertisement;
+        choice.functional = !!c.categories.functional;
       }
     } catch (e) {
       /* CookieYes not ready: treat as no consent */
@@ -137,11 +143,24 @@
     document.body.appendChild(s);
   }
 
+  // The nav (with the Support link) arrives after the page loads, so wait for it.
+  function loadCommerce() {
+    if (window.__urCommerceLoaded) return;
+    if (!document.querySelector("a[data-commerce]")) return;
+    window.__urCommerceLoaded = true;
+    var s = document.createElement("script");
+    s.async = true;
+    s.defer = true;
+    s.src = KIT_COMMERCE_SRC;
+    document.head.appendChild(s);
+  }
+
   // Runs on page load and on every change of choice.
   function applyConsent() {
     var choice = getChoice();
     updateConsentSignals(choice);
     loadGoogleTag(choice);
+    if (choice.functional) loadCommerce();
     if (choice.advertisement) {
       loadEmbeds();
       loadAds();
@@ -160,6 +179,9 @@
     ensureGtag(); // queues the "denied" default before CookieYes can queue anything
     document.addEventListener("cookieyes_banner_load", applyConsent);
     document.addEventListener("cookieyes_consent_update", applyConsent);
+    document.addEventListener("partials:ready", function () {
+      if (getChoice().functional) loadCommerce();
+    });
     loadCookieYes();
     // If CookieYes was already there (e.g. loaded earlier in the page), catch up now.
     if (typeof window.getCkyConsent === "function") applyConsent();
