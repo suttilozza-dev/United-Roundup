@@ -822,7 +822,7 @@ footer .social-row{grid-column:1/-1;justify-content:center;gap:14px;margin-top:0
 /* ---- News Wire (homepage #latest) ----
    A soft full-width band, a white wire panel with a lead story, and a
    sidebar of three separate cards: how the wire works, who's reporting
-   most, and the advert. */
+   most, and the advert slot (.ur-ad). */
 .home #latest{padding-top:clamp(44px,5vw,72px);padding-bottom:clamp(44px,5vw,72px);border-image:linear-gradient(180deg,#f6e9df 0%,#fbf2ea 100%) fill 0/0/0 100vmax}
 .home #latest .section-heading{margin-bottom:22px}
 .home #latest .filters button{background:#fffdfa}
@@ -873,8 +873,6 @@ footer .social-row{grid-column:1/-1;justify-content:center;gap:14px;margin-top:0
 .wire-sources-list .ws-bar{grid-column:1/-1;height:6px;border-radius:99px;background:#f4e7de;overflow:hidden}
 .wire-sources-list .ws-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#c6371d,#fb3701)}
 .wire-sources-note{color:var(--muted);font-size:.7rem;line-height:1.5;margin:10px 0 0;border-top:1px solid var(--line);padding-top:10px}
-.wire-ad>small{display:block;text-align:center;color:#9a8177;font-size:.58rem;letter-spacing:.14em;margin-bottom:6px}
-.wire-ad .ad-box{margin-top:0;height:250px;border-radius:14px;background:#fffaf6}
 @media (width<=900px){
   .wire-side{position:static}
   .wire-main{padding:16px 16px 6px;border-radius:16px}
@@ -1098,3 +1096,16 @@ a.cite:hover{text-decoration:underline}
 .analysis-page .article-body ul.ur-list{list-style:disc;padding-left:1.4rem;margin:0 0 22px}
 .analysis-page .article-body ul.ur-list li{margin-bottom:10px;padding-left:2px}
 .article-conclusion .ur-embed figcaption{color:#e8d8cc}
+
+/* ---- Advertising slots (.ur-ad) ----
+   Markup is a bare <div class="ur-ad" data-ur-ad="name"></div>; assets/ads.js fills
+   it with the "Advertisement" caption and the AdSense <ins> after cookie consent.
+   Hidden until then, and again if AdSense leaves the unit unfilled. The generous
+   margins and overflow:hidden keep ads clear of buttons and links. */
+.ur-ad{display:none;max-width:1180px;margin:32px auto;padding:0 16px;overflow:hidden;text-align:center;clear:both}
+.ur-ads-on .ur-ad{display:block}
+.ur-ads-on .ur-ad:has(ins[data-ad-status="unfilled"]){display:none}
+.ur-ad-label{display:block;color:#9a8177;font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
+.ur-ad ins{max-width:100%}
+.article-body .ur-ad{max-width:none;padding:0;margin:36px 0}
+.ur-ad[data-ur-ad="sidebar"]{margin:0;padding:0}

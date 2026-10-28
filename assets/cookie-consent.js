@@ -88,6 +88,18 @@
     document.body.appendChild(s);
   }
 
+  // Google AdSense: the library and the slot markup (assets/ads.js) load only after
+  // consent. Without it the .ur-ad placeholders stay hidden.
+  function loadAds() {
+    if (window.__urAdsLoaded) return;
+    if (!document.querySelector(".ur-ad")) return;
+    window.__urAdsLoaded = true;
+    var s = document.createElement("script");
+    s.async = true;
+    s.src = "/assets/ads.js";
+    document.body.appendChild(s);
+  }
+
   function removeBanner() {
     var banner = document.getElementById("cookie-consent-banner");
     if (banner && banner.parentNode) banner.parentNode.removeChild(banner);
@@ -102,7 +114,8 @@
     banner.setAttribute("aria-label", "Cookie notice");
     banner.innerHTML =
       "<p>This site uses analytics cookies to understand how many people visit and which " +
-      "stories they read, and lets embedded posts from X load. No advertising cookies are set. " +
+      "stories they read, lets embedded posts from X load, and lets Google show advertising, which uses its own cookies. " +
+      "Nothing from Google loads unless you accept. " +
       'See our <a href="' + relativePrefix() + 'privacy.html">privacy &amp; cookies page</a>.</p>' +
       '<div class="cookie-consent-actions">' +
       '<button type="button" id="cookie-consent-decline">Decline</button>' +
@@ -114,6 +127,7 @@
       removeBanner();
       loadAnalytics();
       loadEmbeds();
+      loadAds();
     });
     document.getElementById("cookie-consent-decline").addEventListener("click", function () {
       setConsent("declined");
@@ -126,6 +140,7 @@
     if (consent === "accepted") {
       loadAnalytics();
       loadEmbeds();
+      loadAds();
       return;
     }
     if (consent === "declined") {
