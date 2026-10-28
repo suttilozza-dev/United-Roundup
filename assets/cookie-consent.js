@@ -1,15 +1,20 @@
 (function () {
   "use strict";
 
-  var CONSENT_KEY = "ur_cookie_consent"; // 'accepted' | 'declined'
+  // Consent is collected by CookieYes (a Google-certified CMP). This file loads the CookieYes
+  // banner, then loads each third-party tool only for the categories the visitor has accepted:
+  //   analytics     -> GA4
+  //   advertisement -> Google Ads tag, AdSense (assets/ads.js), embedded X posts
+  // Nothing from Google or X is requested before the visitor has actively made a choice.
+  var COOKIEYES_SRC = "https://cdn-cookieyes.com/client_data/fa25f16a8901fe6d829a765d049bd818/script.js";
 
   // TODO: replace with the real GA4 Measurement ID once created, e.g. "G-ABC1234XYZ".
-  // Left as a placeholder on purpose -- loadAnalytics() below refuses to fire while
+  // Left as a placeholder on purpose -- loadGoogleTag() below refuses to configure GA4 while
   // this still looks like a placeholder, so nothing calls out to Google until a real
   // ID is dropped in here.
   var GA_MEASUREMENT_ID = "G-81QGG9136Z";
 
-  // Google Ads tag. Loaded only after consent, together with GA4 (see loadAnalytics).
+  // Google Ads tag. Loaded only after consent, together with GA4 (see loadGoogleTag).
   var ADS_TAG_ID = "AW-18489674283";
 
   // Links to the Kit newsletter landing page.
@@ -19,88 +24,77 @@
     return typeof GA_MEASUREMENT_ID === "string" && GA_MEASUREMENT_ID.indexOf("XXXX") === -1;
   }
 
-  function getConsent() {
+  // What the visitor has accepted. Everything is false until they have actively chosen
+  // (CookieYes can pre-accept categories for some regions, which we do not rely on).
+  function getChoice() {
+    var choice = { analytics: false, advertisement: false };
     try {
-      return localStorage.getItem(CONSENT_KEY);
+      var c = typeof window.getCkyConsent === "function" ? window.getCkyConsent() : null;
+      if (c && c.isUserActionCompleted && c.categories) {
+        choice.analytics = !!c.categories.analytics;
+        choice.advertisement = !!c.categories.advertisement;
+      }
     } catch (e) {
-      return null;
+      /* CookieYes not ready: treat as no consent */
     }
+    return choice;
   }
 
-  function setConsent(value) {
-    try {
-      localStorage.setItem(CONSENT_KEY, value);
-    } catch (e) {
-      /* ignore - storage unavailable, treat as session-only */
-    }
-  }
-
-  function clearConsent() {
-    try {
-      localStorage.removeItem(CONSENT_KEY);
-    } catch (e) {
-      /* ignore */
-    }
-  }
-
-  // Works out how many directory levels deep the current page is, so the banner's
-  // privacy-policy link and any other relative link stay correct on article pages
-  // (e.g. /briefings/derby-apology/) as well as root pages (e.g. /about.html).
-  function relativePrefix() {
-    var path = window.location.pathname;
-    var segments = path.split("/").filter(Boolean);
-    var depth;
-    if (path.charAt(path.length - 1) === "/") {
-      depth = segments.length; // directory-style URL, e.g. /briefings/derby-apology/
-    } else {
-      depth = Math.max(segments.length - 1, 0); // file URL, e.g. /about.html or /
-    }
-    var prefix = "";
-    for (var i = 0; i < depth; i++) prefix += "../";
-    return prefix;
-  }
-
-  // Google tags (GA4 + Google Ads). One gtag.js request, made only after Accept.
-  // Nothing from googletagmanager.com is requested before that or after Decline.
-  function loadAnalytics() {
-    if (window.__urGaLoaded) return;
-    window.__urGaLoaded = true;
-
+  // One gtag for GA4 and Google Ads. Defining it only queues data locally, it makes no
+  // request. The default of "denied" is queued before CookieYes loads.
+  function ensureGtag() {
     window.dataLayer = window.dataLayer || [];
     if (typeof window.gtag !== "function") {
       window.gtag = function () {
         window.dataLayer.push(arguments);
       };
     }
-    var gtag = window.gtag;
+    if (!window.__urConsentDefaultSet) {
+      window.__urConsentDefaultSet = true;
+      window.gtag("consent", "default", {
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        analytics_storage: "denied",
+        wait_for_update: 500,
+      });
+    }
+    return window.gtag;
+  }
 
-    // Consent Mode v2 signals for UK/EU visitors. The tag only exists once the visitor
-    // has accepted, so the default is set to denied and then updated to granted
-    // straight away, before js/config are queued.
-    var granted = {
-      ad_storage: "granted",
-      ad_user_data: "granted",
-      ad_personalization: "granted",
-      analytics_storage: "granted",
-    };
-    gtag("consent", "default", {
-      ad_storage: "denied",
-      ad_user_data: "denied",
-      ad_personalization: "denied",
-      analytics_storage: "denied",
-      wait_for_update: 500,
+  // Consent Mode v2 signals, in step with the visitor's choice (also covers withdrawal).
+  function updateConsentSignals(choice) {
+    var ads = choice.advertisement ? "granted" : "denied";
+    ensureGtag()("consent", "update", {
+      ad_storage: ads,
+      ad_user_data: ads,
+      ad_personalization: ads,
+      analytics_storage: choice.analytics ? "granted" : "denied",
     });
-    gtag("consent", "update", granted);
+  }
 
-    gtag("js", new Date());
-    if (isConfigured()) gtag("config", GA_MEASUREMENT_ID);
-    gtag("config", ADS_TAG_ID);
+  // Google tags (GA4 + Google Ads). One gtag.js request, made only once a category that
+  // needs it has been accepted. Each tag is configured only for its own category.
+  function loadGoogleTag(choice) {
+    if (!choice.analytics && !choice.advertisement) return;
+    var gtag = ensureGtag();
 
-    var s = document.createElement("script");
-    s.async = true;
-    s.src = "https://www.googletagmanager.com/gtag/js?id=" + ADS_TAG_ID;
-    document.head.appendChild(s);
-
+    if (!window.__urGtagLoaded) {
+      window.__urGtagLoaded = true;
+      gtag("js", new Date());
+      var s = document.createElement("script");
+      s.async = true;
+      s.src = "https://www.googletagmanager.com/gtag/js?id=" + ADS_TAG_ID;
+      document.head.appendChild(s);
+    }
+    if (choice.analytics && isConfigured() && !window.__urGaConfigured) {
+      window.__urGaConfigured = true;
+      gtag("config", GA_MEASUREMENT_ID);
+    }
+    if (choice.advertisement && !window.__urAdsConfigured) {
+      window.__urAdsConfigured = true;
+      gtag("config", ADS_TAG_ID);
+    }
     trackNewsletterClicks();
   }
 
@@ -143,71 +137,38 @@
     document.body.appendChild(s);
   }
 
-  function removeBanner() {
-    var banner = document.getElementById("cookie-consent-banner");
-    if (banner && banner.parentNode) banner.parentNode.removeChild(banner);
-  }
-
-  function buildBanner() {
-    if (document.getElementById("cookie-consent-banner")) return;
-    var banner = document.createElement("div");
-    banner.id = "cookie-consent-banner";
-    banner.className = "cookie-consent";
-    banner.setAttribute("role", "region");
-    banner.setAttribute("aria-label", "Cookie notice");
-    banner.innerHTML =
-      "<p>This site uses analytics cookies to understand how many people visit and which " +
-      "stories they read, lets embedded posts from X load, and lets Google show and measure advertising, which uses its own cookies. " +
-      "Nothing from Google loads unless you accept. " +
-      'See our <a href="' + relativePrefix() + 'privacy.html">privacy &amp; cookies page</a>.</p>' +
-      '<div class="cookie-consent-actions">' +
-      '<button type="button" id="cookie-consent-decline">Decline</button>' +
-      '<button type="button" id="cookie-consent-accept">Accept</button>' +
-      "</div>";
-    document.body.appendChild(banner);
-    document.getElementById("cookie-consent-accept").addEventListener("click", function () {
-      setConsent("accepted");
-      removeBanner();
-      loadAnalytics();
+  // Runs on page load and on every change of choice.
+  function applyConsent() {
+    var choice = getChoice();
+    updateConsentSignals(choice);
+    loadGoogleTag(choice);
+    if (choice.advertisement) {
       loadEmbeds();
       loadAds();
-    });
-    document.getElementById("cookie-consent-decline").addEventListener("click", function () {
-      setConsent("declined");
-      removeBanner();
-      // Only matters if the visitor accepted earlier this page view and has now changed their mind.
-      if (typeof window.gtag === "function") {
-        window.gtag("consent", "update", {
-          ad_storage: "denied",
-          ad_user_data: "denied",
-          ad_personalization: "denied",
-          analytics_storage: "denied",
-        });
-      }
-    });
+    }
+  }
+
+  function loadCookieYes() {
+    if (document.getElementById("cookieyes")) return;
+    var s = document.createElement("script");
+    s.id = "cookieyes";
+    s.src = COOKIEYES_SRC;
+    document.head.appendChild(s);
   }
 
   function init() {
-    var consent = getConsent();
-    if (consent === "accepted") {
-      loadAnalytics();
-      loadEmbeds();
-      loadAds();
-      return;
-    }
-    if (consent === "declined") {
-      return;
-    }
-    // No decision yet: show the banner and wait.
-    buildBanner();
+    ensureGtag(); // queues the "denied" default before CookieYes can queue anything
+    document.addEventListener("cookieyes_banner_load", applyConsent);
+    document.addEventListener("cookieyes_consent_update", applyConsent);
+    loadCookieYes();
+    // If CookieYes was already there (e.g. loaded earlier in the page), catch up now.
+    if (typeof window.getCkyConsent === "function") applyConsent();
   }
 
   // Exposed so a "Cookie settings" link (in the footer, or the privacy page's own
-  // button) can reopen the prompt and let a visitor change their mind.
+  // button) can reopen the CookieYes preferences and let a visitor change their mind.
   window.UR_openCookieChoice = function () {
-    clearConsent();
-    removeBanner();
-    buildBanner();
+    if (typeof window.revisitCkyConsent === "function") window.revisitCkyConsent();
   };
 
   if (document.readyState === "loading") {
