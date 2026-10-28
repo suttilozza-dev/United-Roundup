@@ -9,6 +9,12 @@
   // ID is dropped in here.
   var GA_MEASUREMENT_ID = "G-81QGG9136Z";
 
+  // Google Ads tag. Loaded only after consent, together with GA4 (see loadAnalytics).
+  var ADS_TAG_ID = "AW-18489674283";
+
+  // Links to the Kit newsletter landing page.
+  var NEWSLETTER_LINK = 'a[href^="https://unitedroundup.kit.com/df3c9b9f5a"]';
+
   function isConfigured() {
     return typeof GA_MEASUREMENT_ID === "string" && GA_MEASUREMENT_ID.indexOf("XXXX") === -1;
   }
@@ -54,23 +60,60 @@
     return prefix;
   }
 
+  // Google tags (GA4 + Google Ads). One gtag.js request, made only after Accept.
+  // Nothing from googletagmanager.com is requested before that or after Decline.
   function loadAnalytics() {
-    if (!isConfigured()) return; // no real Measurement ID yet -- do nothing
     if (window.__urGaLoaded) return;
     window.__urGaLoaded = true;
 
     window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      window.dataLayer.push(arguments);
+    if (typeof window.gtag !== "function") {
+      window.gtag = function () {
+        window.dataLayer.push(arguments);
+      };
     }
-    window.gtag = gtag;
+    var gtag = window.gtag;
+
+    // Consent Mode v2 signals for UK/EU visitors. The tag only exists once the visitor
+    // has accepted, so the default is set to denied and then updated to granted
+    // straight away, before js/config are queued.
+    var granted = {
+      ad_storage: "granted",
+      ad_user_data: "granted",
+      ad_personalization: "granted",
+      analytics_storage: "granted",
+    };
+    gtag("consent", "default", {
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied",
+      analytics_storage: "denied",
+      wait_for_update: 500,
+    });
+    gtag("consent", "update", granted);
+
     gtag("js", new Date());
-    gtag("config", GA_MEASUREMENT_ID);
+    if (isConfigured()) gtag("config", GA_MEASUREMENT_ID);
+    gtag("config", ADS_TAG_ID);
 
     var s = document.createElement("script");
     s.async = true;
-    s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_MEASUREMENT_ID;
+    s.src = "https://www.googletagmanager.com/gtag/js?id=" + ADS_TAG_ID;
     document.head.appendChild(s);
+
+    trackNewsletterClicks();
+  }
+
+  // Kit landing page links (the sign-up buttons and the footer link). Delegated, so
+  // links added later by the shared nav/footer partials are covered too. Registered
+  // only after consent, so nothing is sent without it.
+  function trackNewsletterClicks() {
+    if (window.__urNewsletterTracked) return;
+    window.__urNewsletterTracked = true;
+    document.addEventListener("click", function (e) {
+      var link = e.target && e.target.closest ? e.target.closest(NEWSLETTER_LINK) : null;
+      if (link && typeof window.gtag === "function") window.gtag("event", "newsletter_click");
+    });
   }
 
   // Embedded X posts: widgets.js is third-party and sets its own cookies, so it
@@ -114,7 +157,7 @@
     banner.setAttribute("aria-label", "Cookie notice");
     banner.innerHTML =
       "<p>This site uses analytics cookies to understand how many people visit and which " +
-      "stories they read, lets embedded posts from X load, and lets Google show advertising, which uses its own cookies. " +
+      "stories they read, lets embedded posts from X load, and lets Google show and measure advertising, which uses its own cookies. " +
       "Nothing from Google loads unless you accept. " +
       'See our <a href="' + relativePrefix() + 'privacy.html">privacy &amp; cookies page</a>.</p>' +
       '<div class="cookie-consent-actions">' +
@@ -132,6 +175,15 @@
     document.getElementById("cookie-consent-decline").addEventListener("click", function () {
       setConsent("declined");
       removeBanner();
+      // Only matters if the visitor accepted earlier this page view and has now changed their mind.
+      if (typeof window.gtag === "function") {
+        window.gtag("consent", "update", {
+          ad_storage: "denied",
+          ad_user_data: "denied",
+          ad_personalization: "denied",
+          analytics_storage: "denied",
+        });
+      }
     });
   }
 
