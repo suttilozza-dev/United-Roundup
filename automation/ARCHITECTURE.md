@@ -46,6 +46,20 @@ Every top-level page and nested article page (`briefings/*/index.html`, `whos-sa
 
 `index.html`'s `<body>` carries a `class="home"` that nothing else has. It gates CSS in `assets/extra.css` that hides the UR nameplate while the hero banner is on screen and slides it in (as a "back to top" button) once the banner scrolls out of view, via an `IntersectionObserver` in `assets/main.js` that adds `.past-banner` to `<body>`. Don't drop that class when editing the homepage. The X/Facebook/Instagram icons and the "Support United Roundup" (Kit) button live at the end of the nav bar on every page (`.nav-extras` in `nav.html`); because of them the nav folds into the menu button below 1240px (see the "Top nav bar" block in `extra.css`), not style.css's 900px.
 
+### Cookie consent and third-party scripts
+
+Consent is collected by **CookieYes** (free plan, a Google-certified CMP, banner set to Worldwide). Its dashboard is where the banner wording, the cookie lists per category and the Google Consent Mode setting live; CookieYes only runs on the domain registered in its account, so the banner does not appear on `localhost` or Netlify deploy previews (and nothing from Google loads there either).
+
+`assets/cookie-consent.js` (loaded by every page) is the only place third-party scripts are switched on. It queues a Google Consent Mode default of "denied", injects the CookieYes script, and listens for the `cookieyes_banner_load` and `cookieyes_consent_update` events. Nothing loads until the visitor has actively chosen, and each tool needs its own category:
+
+- `analytics` -> GA4 (`G-81QGG9136Z`).
+- `advertisement` -> the Google Ads tag (`AW-18489674283`), AdSense (`assets/ads.js`, which is never in a page's `<script>` tags) and embedded X posts (`widgets.js`).
+- `functional` -> Kit's checkout script (`commerce.js`) behind the "Support United Roundup" button. Without it that button is a plain link to Kit's page.
+
+GA4 and the Ads tag share one `gtag.js` request (loaded with the AW id once either category is accepted) and one `gtag`. The Consent Mode signals are updated from the categories on every change, including withdrawal. A click on any `a[href^="https://unitedroundup.kit.com/df3c9b9f5a"]` link sends `gtag('event', 'newsletter_click')`, only after consent. Rejecting after accepting does not unload scripts that already ran; a reload does.
+
+**Rules when editing:** never add a Google, X, Kit or other third-party script to a page's `<head>` or to a partial; add it to `cookie-consent.js` under the right category. Keep `privacy.html` and the CookieYes cookie lists in step with what is actually loaded. CookieYes's "Check GCM status" reports "Default consent not set" because we deliberately load no Google tag before consent; Google's own consent state (`google_tag_data.ics`) shows the default and update correctly after Accept. IAB TCF is not on the free plan, so UK/EEA AdSense ads are expected to be limited.
+
 ### Homepage sections built from the data feed
 
 `assets/home-latest.js` fills the lead card, the news wire, **"United on Screen"** (`#videos .video-grid`, newest videos, max 2 per channel) and **"The Next Generation"** (`#academy .academy-grid`, newest `academy` items) from `LATEST_ITEMS`, using each item's `image` thumbnail. The hand-written cards in `index.html` are only a fallback. The Weekly Roundup and Who's Saying What cards (`.feature-pair`) are hand-edited: update them in `index.html` when a new edition/analysis is published.
