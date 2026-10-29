@@ -25,6 +25,9 @@
   // Links to the Kit newsletter landing page.
   var NEWSLETTER_LINK = 'a[href^="https://unitedroundup.kit.com/df3c9b9f5a"]';
 
+  // Google Ads conversion action "Newsletter click" (a click through to the sign-up page).
+  var NEWSLETTER_CONVERSION = "AW-18489674283/PsRJCMSquK0dEKuUyPBE";
+
   function isConfigured() {
     return typeof GA_MEASUREMENT_ID === "string" && GA_MEASUREMENT_ID.indexOf("XXXX") === -1;
   }
@@ -112,7 +115,10 @@
     window.__urNewsletterTracked = true;
     document.addEventListener("click", function (e) {
       var link = e.target && e.target.closest ? e.target.closest(NEWSLETTER_LINK) : null;
-      if (link && typeof window.gtag === "function") window.gtag("event", "newsletter_click");
+      if (!link || typeof window.gtag !== "function") return;
+      window.gtag("event", "newsletter_click");
+      // The conversion goes to Google Ads, so it needs the advertisement category as well.
+      if (getChoice().advertisement) window.gtag("event", "conversion", { send_to: NEWSLETTER_CONVERSION });
     });
   }
 
