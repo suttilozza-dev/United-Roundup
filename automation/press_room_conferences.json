@@ -346,5 +346,11 @@
     "date": "2026-10-25",
     "context": "post_match",
     "result": "loss"
+  },
+  {
+    "fixture": "Chelsea",
+    "date": "2026-10-29",
+    "context": "pre_match",
+    "result": "not_applicable"
   }
 ]
