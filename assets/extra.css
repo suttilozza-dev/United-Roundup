@@ -1086,3 +1086,31 @@ a.cite:hover{text-decoration:underline}
 .ur-ad ins{max-width:100%}
 .article-body .ur-ad{max-width:none;padding:0;margin:36px 0}
 .ur-ad[data-ur-ad="sidebar"]{margin:0;padding:0}
+
+/* Weekly Roundup 31 Oct 2026: labels box, UR badge placements, part heading, sub-heads */
+.article-body .ur-labels{margin:6px 0 34px;padding:20px 24px 22px;background:#fff8ef;border:2px solid #d65432;border-radius:14px}
+.ur-labels__title{display:block;margin:0 0 14px;color:#b23d25;text-transform:uppercase;letter-spacing:.1em;font:900 .72rem/1.2 system-ui,sans-serif}
+.ur-labels__list{display:grid;gap:12px;margin:0;padding:0}
+.ur-labels__list>div{display:grid;grid-template-columns:7.6rem minmax(0,1fr);gap:4px 14px;align-items:baseline}
+.ur-labels__list dt{margin:0}
+.ur-labels__list dd{margin:0;color:#3f302b;font:400 .98rem/1.55 Arial,sans-serif}
+@media (max-width:520px){.ur-labels__list>div{grid-template-columns:1fr}}
+.article-sign{margin-top:22px}
+.article-sign .ur-seal,.ur-seal--view{display:none}
+body.ur-a .article-sign{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:28px;padding-top:20px;border-top:1px solid #eadbd0}
+body.ur-a .article-sign .ur-seal{display:block;flex:none;width:76px;height:76px}
+.article-conclusion{position:relative}
+body.ur-b .article-conclusion{margin-top:84px}
+body.ur-b .ur-seal--view{display:block;position:absolute;top:-44px;right:34px;width:92px;height:92px;border-radius:50%;box-shadow:0 0 0 6px #fffdfa,0 12px 26px rgba(33,22,19,.24)}
+@media (max-width:650px){
+  body.ur-a .article-sign .ur-seal{width:56px;height:56px}
+  body.ur-b .article-conclusion{margin-top:70px;padding-top:46px}
+  body.ur-b .ur-seal--view{width:68px;height:68px;top:-32px;right:18px;box-shadow:0 0 0 5px #fffdfa,0 10px 20px rgba(33,22,19,.22)}
+}
+.article-body h2.ur-part{margin:68px 0 -14px;padding-top:16px;border-top:3px solid #211613;color:#b23d25;text-transform:uppercase;letter-spacing:.12em;font:900 .8rem/1.3 system-ui,sans-serif}
+.ur-subhead{margin:30px 0 12px;color:#b23d25;text-transform:uppercase;letter-spacing:.09em;font:900 .74rem/1.35 system-ui,sans-serif}
+.article-body h3+.ur-subhead,.article-body p+.ur-subhead:first-child{margin-top:18px}
+.article-body aside ul{margin:8px 0 0}
+.ur-tag--speculation{background:#fff;color:#78635c;border-style:dashed}
+.ur-tag--speculation::before{content:"?"}
+.ur-sources-note{width:100%;margin:0;color:#78635c;font:400 .85rem/1.5 Arial,sans-serif}
