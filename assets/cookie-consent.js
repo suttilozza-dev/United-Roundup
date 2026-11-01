@@ -28,6 +28,11 @@
   // Google Ads conversion action "Newsletter click" (a click through to the sign-up page).
   var NEWSLETTER_CONVERSION = "AW-18489674283/PsRJCMSquK0dEKuUyPBE";
 
+  // Google Ads conversion action "Sign-up": fired on the thank-you page Kit redirects to
+  // after a subscriber confirms (a confirmed sign-up, unlike the click above).
+  var SIGNUP_CONVERSION = "AW-18489674283/UnN5CJ226K8dEKuUyPBE";
+  var SIGNUP_PATH = /^\/subscribed(\.html)?\/?$/;
+
   function isConfigured() {
     return typeof GA_MEASUREMENT_ID === "string" && GA_MEASUREMENT_ID.indexOf("XXXX") === -1;
   }
@@ -105,6 +110,11 @@
       gtag("config", ADS_TAG_ID);
     }
     trackNewsletterClicks();
+    // Needs the advertisement category, like the click conversion. Once per page view.
+    if (choice.advertisement && SIGNUP_PATH.test(window.location.pathname) && !window.__urSignupFired) {
+      window.__urSignupFired = true;
+      gtag("event", "conversion", { send_to: SIGNUP_CONVERSION });
+    }
   }
 
   // Kit landing page links (the sign-up buttons and the footer link). Delegated, so
