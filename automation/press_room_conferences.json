@@ -358,5 +358,11 @@
     "date": "2026-10-31",
     "context": "post_match",
     "result": "loss"
+  },
+  {
+    "fixture": "Roma",
+    "date": "2026-11-02",
+    "context": "pre_match",
+    "result": "not_applicable"
   }
 ]
