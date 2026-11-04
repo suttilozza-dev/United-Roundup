@@ -170,16 +170,21 @@ def compute_stats(records):
         key = f"{fixture}|{date}|{context}"
         ctx_counts[bucket] += resp_counts.get(key, 0)
 
+    # The narrative register is grouped by primary TOPIC, the same basis as the
+    # Findings ranking and the Visual Analysis chart. It used to group by
+    # narrative_tag and label each group with its most common topic, so a topic
+    # that spans several tags (e.g. "Targets and expectations") showed different
+    # totals in different sections under the same label.
     narr = defaultdict(list)
     for r in records:
-        narr[r["narrative_tag"]].append(r)
+        narr[r["topic"]].append(r)
     narr_rows = []
-    for tag, rows in narr.items():
+    for topic, rows in narr.items():
         confs = set((r["fixture"], r["date"]) for r in rows)
         dates = sorted(r["date"] for r in rows)
         narr_rows.append({
-            "tag": tag,
-            "topic": Counter(r["topic"] for r in rows).most_common(1)[0][0],
+            "tag": Counter(r["narrative_tag"] for r in rows).most_common(1)[0][0],
+            "topic": topic,
             "count": len(rows),
             "conferences": len(confs),
             "date_min": dates[0],
