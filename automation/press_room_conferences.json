@@ -364,5 +364,11 @@
     "date": "2026-11-02",
     "context": "pre_match",
     "result": "not_applicable"
+  },
+  {
+    "fixture": "Roma",
+    "date": "2026-11-03",
+    "context": "post_match",
+    "result": "win"
   }
 ]
