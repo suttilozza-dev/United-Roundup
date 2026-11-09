@@ -376,5 +376,11 @@
     "date": "2026-11-06",
     "context": "pre_match",
     "result": "not_applicable"
+  },
+  {
+    "fixture": "Aston Villa",
+    "date": "2026-11-08",
+    "context": "post_match",
+    "result": "draw"
   }
 ]
