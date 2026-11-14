@@ -1114,3 +1114,63 @@ body.ur-b .ur-seal--view{display:block;position:absolute;top:-44px;right:34px;wi
 .ur-tag--speculation{background:#fff;color:#78635c;border-style:dashed}
 .ur-tag--speculation::before{content:"?"}
 .ur-sources-note{width:100%;margin:0;color:#78635c;font:400 .85rem/1.5 Arial,sans-serif}
+
+/* ── THE BIG STORY label (brand spec approved 15 Nov 2026; master canvas claude.ai/artifact/VUUZ8brasEJjujSdRxHHbN)
+   Styled HTML text, never an image. One label per article. Don't recolour, stretch, or add shadows/gradients/emoji to the pill.
+   01 .bs-pill                 primary pill: blood fill, cream text, flame dot (article size 12px, dot 8px)
+   02 .bs-pill.bs-pill--dark   pill on dark: cream fill, blood text, flame dot (dark cards, hero)
+   03 .bs-pill.bs-pill--outline outline: #b8401f text + 1.5px border, terracotta dot, no fill (lists, archives, related links)
+   04 .bs-kicker               pill 01 + "· WEEKLY ROUNDUP" (or "· WHO'S SAYING WHAT") eyebrow above the H1
+   05 .bs-stamp                hero stamp (Anton; load Anton from Google Fonts on any page that uses it, falls back to Impact)
+   Sizes: default = article (12px). --md = list (11px, dot 7px). --sm = card (10px, dot 6px). */
+.bs-pill{display:inline-flex;align-items:center;gap:.72em;vertical-align:middle;background:#9b0506;color:#fff8ef;border:0;border-radius:99px;padding:.67em 1.33em .67em 1em;font:900 12px/1 Arial,Helvetica,sans-serif;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap}
+.bs-pill::before{content:"";flex:none;width:8px;height:8px;border-radius:99px;background:#fb3701}
+.bs-pill--md{font-size:11px;gap:8px;padding:7px 14px 7px 11px}
+.bs-pill--md::before{width:7px;height:7px}
+.bs-pill--sm{font-size:10px;gap:6px;letter-spacing:.16em;padding:5px 11px 5px 9px}
+.bs-pill--sm::before{width:6px;height:6px}
+.bs-pill--dark{background:#fff8ef;color:#9b0506}
+.bs-pill--outline{background:transparent;color:#b8401f;border:1.5px solid #b8401f;padding-top:calc(.67em - 1.5px);padding-bottom:calc(.67em - 1.5px)}
+.bs-pill--outline::before{background:#d65432}
+.bs-pill--outline.bs-pill--sm{padding:3.5px 9.5px 3.5px 7.5px}
+.bs-pill--outline.bs-pill--md{padding:5.5px 12.5px 5.5px 9.5px}
+.bs-kicker{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:0 0 18px}
+.bs-kicker__franchise{color:#b8401f;font:800 12px/1.2 Arial,Helvetica,sans-serif;letter-spacing:.18em;text-transform:uppercase}
+.bs-stamp{display:flex;flex-direction:column;gap:14px;color:#fff8ef}
+.bs-stamp__word{font:400 96px/.86 Anton,Impact,"Arial Narrow",sans-serif;letter-spacing:.01em;text-transform:uppercase}
+.bs-stamp__sub{display:flex;align-items:center;gap:14px;font:900 12px/1 Arial,Helvetica,sans-serif;letter-spacing:.24em;text-transform:uppercase}
+.bs-stamp__sub::before{content:"";width:64px;height:5px;border-radius:99px;background:#ef6a38}
+/* Warm dark gradient for the stamp and dark Big Story cards */
+.bs-dark{background-color:#0a0a0c;background-image:radial-gradient(circle at 88% 12%,rgba(251,55,1,.38),rgba(251,55,1,0) 46%),linear-gradient(135deg,#0a0a0c 0%,#2b0800 62%,#5a1a0a 100%)}
+/* CTA on dark cards: "Read The Big Story →" in ember */
+.bs-cta{display:inline-flex;align-items:center;gap:8px;color:#ef6a38;font:800 13px/1.2 Arial,Helvetica,sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:12px 0}
+.bs-cta:hover{color:#ff8a5c;text-decoration:underline;text-underline-offset:4px}
+.bs-cta svg{width:16px;height:16px}
+/* Homepage feature card: label 02 replaces the text eyebrow */
+.pair-big.bs-dark .pair-head .bs-pill{margin:0 0 10px}
+/* Talking-point headings that carry the small pill marker (TP4/TP5) */
+.article-body h3 .bs-pill{position:relative;top:-.12em;margin:0 .1em}
+/* List rows: pill sits above the row title */
+.src-card .bs-pill{margin:0 0 .45rem}
+
+/* "In this piece" jump links under the byline */
+.ur-toc{margin:26px 0 0;padding:18px 22px 16px;background:#fffaf5;border:1px solid #eadbd0;border-radius:14px}
+.ur-toc__title{display:block;margin:0 0 10px;color:#b23d25;text-transform:uppercase;letter-spacing:.1em;font:900 .72rem/1.2 system-ui,sans-serif}
+.ur-toc ul{margin:0;padding:0;list-style:none;columns:2 16rem;column-gap:2rem;font:400 .92rem/1.5 Arial,sans-serif}
+.ur-toc li{break-inside:avoid;margin:0 0 5px;padding:0}
+.ur-toc a{color:#b64027;font-weight:700;text-decoration:none}
+.ur-toc a:hover{text-decoration:underline;text-underline-offset:3px}
+.article-body h2[id],.article-body h3[id],.article-conclusion[id],.article-sources[id]{scroll-margin-top:96px}
+
+/* Labels key as a real table inside the existing labels box */
+.ur-vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ur-labels__table{border-collapse:collapse;width:100%}
+.ur-labels__table th,.ur-labels__table td{padding:6px 0;text-align:left;vertical-align:baseline}
+.ur-labels__table th{width:7.6rem;padding-right:14px;font-weight:400}
+.ur-labels__table td{color:#3f302b;font:400 .98rem/1.55 Arial,sans-serif}
+@media (max-width:520px){.ur-labels__table tr{display:block;padding:4px 0}.ur-labels__table th,.ur-labels__table td{display:block;width:auto;padding:2px 0}}
+/* keep site-wide nav styles out of the jump-link box */
+nav.ur-toc{display:block;position:static;height:auto;width:auto;gap:0}
+nav.ur-toc ul{display:block;list-style:none}
+nav.ur-toc li{display:block}
+nav.ur-toc a{display:inline;text-transform:none;letter-spacing:normal;font:700 .92rem/1.5 Arial,sans-serif;padding:0;background:none}
