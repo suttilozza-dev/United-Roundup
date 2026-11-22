@@ -3,384 +3,455 @@
     "fixture": "Manchester City",
     "date": "2026-01-15",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Manchester City",
     "date": "2026-01-17",
     "context": "post_match",
-    "result": "win"
+    "result": "win",
+    "manager": "Carrick"
   },
   {
     "fixture": "Arsenal",
     "date": "2026-01-23",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Arsenal",
     "date": "2026-01-25",
     "context": "post_match",
-    "result": "win"
+    "result": "win",
+    "manager": "Carrick"
   },
   {
     "fixture": "Fulham",
     "date": "2026-01-30",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Fulham",
     "date": "2026-02-01",
     "context": "post_match",
-    "result": "win"
+    "result": "win",
+    "manager": "Carrick"
   },
   {
     "fixture": "Tottenham Hotspur",
     "date": "2026-02-06",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Tottenham Hotspur",
     "date": "2026-02-07",
     "context": "post_match",
-    "result": "win"
+    "result": "win",
+    "manager": "Carrick"
   },
   {
     "fixture": "West Ham United",
     "date": "2026-02-10",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "West Ham United",
     "date": "2026-02-11",
     "context": "post_match",
-    "result": "draw"
+    "result": "draw",
+    "manager": "Carrick"
   },
   {
     "fixture": "Everton",
     "date": "2026-02-22",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Everton",
     "date": "2026-02-23",
     "context": "post_match",
-    "result": "win"
+    "result": "win",
+    "manager": "Carrick"
   },
   {
     "fixture": "Crystal Palace",
     "date": "2026-02-27",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Crystal Palace",
     "date": "2026-03-01",
     "context": "post_match",
-    "result": "win"
+    "result": "win",
+    "manager": "Carrick"
   },
   {
     "fixture": "Newcastle United",
     "date": "2026-03-03",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Newcastle United",
     "date": "2026-03-04",
     "context": "post_match",
-    "result": "loss"
+    "result": "loss",
+    "manager": "Carrick"
   },
   {
     "fixture": "Aston Villa",
     "date": "2026-03-13",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Aston Villa",
     "date": "2026-03-15",
     "context": "post_match",
-    "result": "win"
+    "result": "win",
+    "manager": "Carrick"
   },
   {
     "fixture": "Bournemouth",
     "date": "2026-03-18",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Bournemouth",
     "date": "2026-03-20",
     "context": "post_match",
-    "result": "draw"
+    "result": "draw",
+    "manager": "Carrick"
   },
   {
     "fixture": "Leeds United",
     "date": "2026-04-11",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Leeds United",
     "date": "2026-04-13",
     "context": "post_match",
-    "result": "loss"
+    "result": "loss",
+    "manager": "Carrick"
   },
   {
     "fixture": "Chelsea",
     "date": "2026-04-17",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Chelsea",
     "date": "2026-04-19",
     "context": "post_match",
-    "result": "win"
+    "result": "win",
+    "manager": "Carrick"
   },
   {
     "fixture": "Brentford",
     "date": "2026-04-24",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Brentford",
     "date": "2026-04-27",
     "context": "post_match",
-    "result": "win"
+    "result": "win",
+    "manager": "Carrick"
   },
   {
     "fixture": "Liverpool",
     "date": "2026-05-01",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Liverpool",
     "date": "2026-05-03",
     "context": "post_match",
-    "result": "win"
+    "result": "win",
+    "manager": "Carrick"
   },
   {
     "fixture": "Sunderland",
     "date": "2026-05-07",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Sunderland",
     "date": "2026-05-09",
     "context": "post_match",
-    "result": "draw"
+    "result": "draw",
+    "manager": "Carrick"
   },
   {
     "fixture": "Nottingham Forest",
     "date": "2026-05-15",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Nottingham Forest",
     "date": "2026-05-17",
     "context": "post_match",
-    "result": "win"
+    "result": "win",
+    "manager": "Carrick"
   },
   {
     "fixture": "Brighton and Hove Albion",
     "date": "2026-05-21",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Brighton and Hove Albion",
     "date": "2026-05-24",
     "context": "post_match",
-    "result": "win"
+    "result": "win",
+    "manager": "Carrick"
   },
   {
     "fixture": "Hull City",
     "date": "2026-08-20",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Hull City",
     "date": "2026-08-22",
     "context": "post_match",
-    "result": "loss"
+    "result": "loss",
+    "manager": "Carrick"
   },
   {
     "fixture": "Ipswich Town",
     "date": "2026-08-28",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Ipswich Town",
     "date": "2026-08-30",
     "context": "post_match",
-    "result": "win"
+    "result": "win",
+    "manager": "Carrick"
   },
   {
     "fixture": "Everton",
     "date": "2026-09-04",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Everton",
     "date": "2026-09-06",
     "context": "post_match",
-    "result": "draw"
+    "result": "draw",
+    "manager": "Carrick"
   },
   {
     "fixture": "Sabah FK",
     "date": "2026-09-09",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Sabah FK",
     "date": "2026-09-10",
     "context": "post_match",
-    "result": "win"
+    "result": "win",
+    "manager": "Carrick"
   },
   {
     "fixture": "Manchester City",
     "date": "2026-09-11",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Manchester City",
     "date": "2026-09-13",
     "context": "post_match",
-    "result": "loss"
+    "result": "loss",
+    "manager": "Carrick"
   },
   {
     "fixture": "Brighton and Hove Albion",
     "date": "2026-09-15",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Brighton and Hove Albion",
     "date": "2026-09-16",
     "context": "post_match",
-    "result": "loss"
+    "result": "loss",
+    "manager": "Carrick"
   },
   {
     "fixture": "Fulham",
     "date": "2026-09-18",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Fulham",
     "date": "2026-09-20",
     "context": "post_match",
-    "result": "draw"
+    "result": "draw",
+    "manager": "Carrick"
   },
   {
     "fixture": "Tottenham Hotspur",
     "date": "2026-10-09",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Tottenham Hotspur",
     "date": "2026-10-10",
     "context": "post_match",
-    "result": "draw"
+    "result": "draw",
+    "manager": "Carrick"
   },
   {
     "fixture": "Atlético Madrid",
     "date": "2026-10-12",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Atlético Madrid",
     "date": "2026-10-13",
     "context": "post_match",
-    "result": "loss"
+    "result": "loss",
+    "manager": "Carrick"
   },
   {
     "fixture": "Leeds United",
     "date": "2026-10-16",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Leeds United",
     "date": "2026-10-18",
     "context": "post_match",
-    "result": "draw"
+    "result": "draw",
+    "manager": "Carrick"
   },
   {
     "fixture": "Como",
     "date": "2026-10-20",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Como",
     "date": "2026-10-21",
     "context": "post_match",
-    "result": "loss"
+    "result": "loss",
+    "manager": "Carrick"
   },
   {
     "fixture": "Bournemouth",
     "date": "2026-10-23",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Bournemouth",
     "date": "2026-10-25",
     "context": "post_match",
-    "result": "loss"
+    "result": "loss",
+    "manager": "Carrick"
   },
   {
     "fixture": "Chelsea",
     "date": "2026-10-29",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Chelsea",
     "date": "2026-10-31",
     "context": "post_match",
-    "result": "loss"
+    "result": "loss",
+    "manager": "Carrick"
   },
   {
     "fixture": "Roma",
     "date": "2026-11-02",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Roma",
     "date": "2026-11-03",
     "context": "post_match",
-    "result": "win"
+    "result": "win",
+    "manager": "Carrick"
   },
   {
     "fixture": "Aston Villa",
     "date": "2026-11-06",
     "context": "pre_match",
-    "result": "not_applicable"
+    "result": "not_applicable",
+    "manager": "Carrick"
   },
   {
     "fixture": "Aston Villa",
     "date": "2026-11-08",
     "context": "post_match",
-    "result": "draw"
+    "result": "draw",
+    "manager": "Carrick"
+  },
+  {
+    "fixture": "Liverpool",
+    "date": "2026-11-22",
+    "context": "post_match",
+    "result": "loss",
+    "manager": "Pochettino"
   }
 ]

@@ -9,11 +9,13 @@ code as rebuild_press_room.py, and writes to an output folder (default
 "public/"):
 
   press-room-data.js       the question data the page's search/filter uses
-  press-room-sections.json the four computed sections of press-room-watch.html
+  press-room-sections.json the computed sections of press-room-watch.html
                            (hero scoreboard, findings, visual analysis,
-                           narratives), which the live page swaps in on load;
+                           narratives, 2026-27 season, Carrick final record),
+                           which the live page swaps in on load;
                            also includes the manually-curated #now panel
   press-room-summary.js    headline numbers for the homepage promo
+                           (the live manager's count: Pochettino)
 
 Nothing in the repo is modified. Run from the repo root:
   python3 automation/build_press_room_pages.py [output_dir]
@@ -33,6 +35,8 @@ SECTIONS = {
     "#findings": "prw-findings",
     ".prw-visuals": "prw-visuals",
     "#narratives": "prw-narratives",
+    "#season": "prw-season",
+    "#carrick-record": "prw-carrick-record",
 }
 
 # The manually-curated #now panel lives in a separate source file so it can be
@@ -61,9 +65,10 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
 
     records = prw.normalize(prw.load_questions())
-    stats = prw.compute_stats(records)
-    frags = prw.build_fragments(stats)
-    html = prw.splice_html(prw.HTML_PATH.read_text(encoding="utf-8"), stats, frags)
+    a = prw.compute_all(records)
+    stats, frags = a["p"]          # the live count: Pochettino
+    html = prw.splice_html(prw.HTML_PATH.read_text(encoding="utf-8"), stats, frags,
+                           all_records=records, carrick=a["c"])
 
     now = datetime.now(timezone.utc).isoformat()
     (out / "press-room-data.js").write_text(
@@ -83,11 +88,12 @@ def main():
     (out / "press-room-sections.json").write_text(json.dumps(sections, ensure_ascii=False), encoding="utf-8")
 
     summary = {
+        "manager": "Pochettino",
         "conferences": stats["n_conf"],
         "questions": stats["n_questions"],
         "responses": sum(stats["ctx_counts"].values()),
         "narratives": len(frags["established"]),
-        "latest": stats["date_max"],
+        "latest": stats["date_max"] or prw.POCHETTINO_FIRST_CONFERENCE,
         "built": now,
     }
     (out / "press-room-summary.js").write_text(
