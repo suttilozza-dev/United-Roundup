@@ -63,6 +63,13 @@ Work out which press conference each article belongs to:
 ## Step 4 — Draft each conference as JSON
 One file per conference, in the format documented at the top of
 `automation/add_press_conference.py`. For each question:
+- **manager** (required, on the `conference` object): `Carrick`, `Pochettino` or a named caretaker's
+  surname. Pochettino's count starts with his first United press conference, Liverpool pre-match on
+  20 November 2026; nothing earlier counts for him (not the 13 November appointment-reaction presser,
+  not the 19 November club-media "first interview"). Michael Carrick's record is final: only
+  `--add-to-existing` additions to Carrick's existing conferences are allowed, never new Carrick conferences.
+  The old tags `carrick_future` and `carrick_appointment` are now `manager_future` and
+  `manager_appointment`; the old names still resolve if they turn up in a draft.
 - **section**: `early` = the club's same-day early release; `embargoed` = the club's later
   (embargoed) release of the rest of the presser; `post` = post-match; `combined` = one
   article with the whole presser; `combined_partial` = one article with an unclear or
@@ -71,7 +78,7 @@ One file per conference, in the format documented at the top of
   answer paragraphs, join them with a single space. If no answer is published, use "".
 - **topic** + **narrative_tag**: use one of these approved pairs (the script refuses others):
   Performance and standards → performance_standards · Fitness and availability →
-  fitness_availability · Manager future → carrick_future · Opposition and match plan →
+  fitness_availability · Manager future → manager_future · Opposition and match plan →
   opposition_match_plan · Tactics and selection → tactics_selection · Targets and Europe →
   champions_league_target · Targets and expectations → champions_league_target /
   board_expectations / pressure_mentality · Pressure and mentality → pressure_mentality ·
@@ -79,7 +86,7 @@ One file per conference, in the format documented at the top of
   transfer_strategy · Leadership → leadership · Academy and development → academy_pathway ·
   Officials and decisions → officials_decisions · Ownership and club governance →
   ownership_governance · Ownership and hierarchy → hierarchy_relationship · External
-  pressure → ex_player_commentary_pressure · Appointment and role → carrick_appointment.
+  pressure → ex_player_commentary_pressure · Appointment and role → manager_appointment.
   Most questions are Performance and standards; use a specific topic when the question
   is clearly about it.
 - **framing**: `neutral` (plain question), `critical` (challenges Carrick/the team or implies

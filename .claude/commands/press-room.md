@@ -3,7 +3,7 @@ description: Read the "Press Room Watch review" artifact, copy the club's Q&A ex
 argument-hint: [optional: name any "possibly missing" items to add]
 ---
 
-Add new Carrick press conferences to Press Room Watch. Read `automation/PRESS_ROOM_PLAYBOOK.md` for the field rules and `automation/add_press_conference.py` for the JSON schema and the approved topic to narrative_tag pairs.
+Add new press conferences to Press Room Watch (Mauricio Pochettino's from 20 November 2026; Michael Carrick's record is final, so Carrick only gets `--add-to-existing` additions). Read `automation/PRESS_ROOM_PLAYBOOK.md` for the field rules and `automation/add_press_conference.py` for the JSON schema and the approved topic to narrative_tag pairs.
 
 Hard rules: **never `git push`**; never edit `press-room-watch.html`; never run `rebuild_press_room.py`; only `automation/add_press_conference.py` changes the data. Never log in to anything. Never paraphrase, tidy, reorder or fill gaps in the club's wording. Do not enable or change any hook.
 
@@ -22,7 +22,7 @@ Arguments from Laurie: `$ARGUMENTS`
 - Copy each question and answer **exactly** as published: punctuation, curly quotes, square brackets, spelling. If one question has several answer paragraphs, join them with a single space. If no answer is published, use `""`.
 - If you cannot read an article, **stop for that conference**, tell Laurie which one and why, and do not guess. Carry on with the others.
 
-**c) Build the JSON and ask for the OK.** Build one JSON per conference in the format `add_press_conference.py` accepts (conference object, `response_count`, `questions`). Use only the approved topic/narrative_tag pairs from the script. `framing` is one of `neutral`, `critical`, `premise-led`, `follow-up`, `positive`. `wording_status` is `article-verbatim` for manutd.com text. Then show Laurie a table, one line per question: **question | topic | framing**, with the fixture, date, context and result above it, and flag anything uncertain (section, tag, framing, a part of a pre-match presser that may be missing). **Stop and wait for Laurie's OK before saving anything.**
+**c) Build the JSON and ask for the OK.** Build one JSON per conference in the format `add_press_conference.py` accepts (conference object, `response_count`, `questions`). The `conference` object must include `manager` (`Pochettino`, `Carrick` or a named caretaker). Tags: `manager_future` and `manager_appointment` replace the old `carrick_future` and `carrick_appointment` (the old names still resolve). Use only the approved topic/narrative_tag pairs from the script. `framing` is one of `neutral`, `critical`, `premise-led`, `follow-up`, `positive`. `wording_status` is `article-verbatim` for manutd.com text. Then show Laurie a table, one line per question: **question | topic | framing**, with the fixture, date, context and result above it, and flag anything uncertain (section, tag, framing, a part of a pre-match presser that may be missing). **Stop and wait for Laurie's OK before saving anything.**
 
 **d) After the OK.** For each conference:
 1. Save the JSON to a temp file outside the repo (`mktemp -d`).

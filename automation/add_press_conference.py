@@ -4,7 +4,7 @@ Adds ONE press conference to Press Room Watch's source data, safely.
 
 Input is a JSON file:
 {
-  "conference": {"fixture": "Tottenham Hotspur", "date": "2026-10-09",
+  "conference": {"manager": "Carrick", "fixture": "Tottenham Hotspur", "date": "2026-10-09",
                  "context": "pre_match", "result": "not_applicable"},
   "response_count": 18,
   "questions": [
@@ -40,7 +40,7 @@ import rebuild_press_room as prw  # noqa: E402
 TOPIC_TAGS = {
     "Performance and standards": ["performance_standards"],
     "Fitness and availability": ["fitness_availability"],
-    "Manager future": ["carrick_future"],
+    "Manager future": ["manager_future"],
     "Opposition and match plan": ["opposition_match_plan"],
     "Tactics and selection": ["tactics_selection"],
     "Targets and Europe": ["champions_league_target"],
@@ -54,8 +54,10 @@ TOPIC_TAGS = {
     "Ownership and club governance": ["ownership_governance"],
     "Ownership and hierarchy": ["hierarchy_relationship"],
     "External pressure": ["ex_player_commentary_pressure"],
-    "Appointment and role": ["carrick_appointment"],
+    "Appointment and role": ["manager_appointment"],
 }
+# Old tag names still resolve (see rebuild_press_room.TAG_ALIASES).
+TAG_ALIASES = prw.TAG_ALIASES
 FRAMINGS = {"neutral", "critical", "premise-led", "follow-up", "positive"}
 SECTIONS = {"early", "embargoed", "post", "combined", "combined_partial"}
 WORDING = {"article-verbatim", "transcript-derived"}
@@ -74,9 +76,12 @@ def main():
         fail("usage: add_press_conference.py [--add-to-existing] draft.json")
     draft = json.loads(Path(args[0]).read_text(encoding="utf-8"))
     conf = draft.get("conference") or fail("missing 'conference'")
-    for k in ("fixture", "date", "context", "result"):
+    for k in ("manager", "fixture", "date", "context", "result"):
         if not conf.get(k):
-            fail(f"conference is missing '{k}'")
+            fail(f"conference is missing '{k}'" + (" (Carrick, Pochettino or a named caretaker)" if k == "manager" else ""))
+    if not isinstance(conf["manager"], str) or not conf["manager"].strip().isalpha():
+        fail("manager must be a single name, e.g. Carrick, Pochettino or a named caretaker's surname")
+    conf["manager"] = conf["manager"].strip()
     if conf["context"] not in RESULTS:
         fail(f"context must be pre_match or post_match, not {conf['context']!r}")
     if conf["result"] not in RESULTS[conf["context"]]:
@@ -90,6 +95,8 @@ def main():
         if not match:
             fail(f"{conf['fixture']} {conf['date']} {conf['context']} isn't in Press Room Watch yet "
                  "(run without --add-to-existing to add it as a new conference)")
+        if match[0].get("manager") != conf["manager"]:
+            fail(f"manager {conf['manager']!r} doesn't match the existing entry ({match[0].get('manager')!r})")
         if match[0]["result"] != conf["result"]:
             fail(f"result {conf['result']!r} doesn't match the existing entry ({match[0]['result']!r})")
     elif match:
@@ -108,6 +115,7 @@ def main():
         for k in ("section", "question", "topic", "narrative_tag", "framing", "wording_status", "source_url"):
             if not q.get(k):
                 fail(f"question {i} is missing '{k}'")
+        q["narrative_tag"] = TAG_ALIASES.get(q["narrative_tag"], q["narrative_tag"])
         if q["topic"] not in TOPIC_TAGS:
             fail(f"question {i}: unknown topic {q['topic']!r}")
         if q["narrative_tag"] not in TOPIC_TAGS[q["topic"]]:
@@ -122,7 +130,7 @@ def main():
             fail(f"question {i}: source_url must be a full https link")
         if (q["question"].strip(), conf["date"]) in seen:
             fail(f"question {i} is already in the data: {q['question'][:60]!r}")
-        rec = {"fixture": conf["fixture"], "date": conf["date"], "context": conf["context"],
+        rec = {"manager": conf["manager"], "fixture": conf["fixture"], "date": conf["date"], "context": conf["context"],
                "result": conf["result"], "section": q["section"], "question": q["question"].strip(),
                "topic": q["topic"], "framing": q["framing"], "narrative_tag": q["narrative_tag"],
                "wording_status": q["wording_status"], "source_url": q["source_url"],
@@ -134,7 +142,8 @@ def main():
 
     if not add_to_existing:
         registry.append({"fixture": conf["fixture"], "date": conf["date"],
-                         "context": conf["context"], "result": conf["result"]})
+                         "context": conf["context"], "result": conf["result"],
+                         "manager": conf["manager"]})
         registry.sort(key=lambda c: (c["date"], c["context"] != "pre_match"))
         prw.CONF_REGISTRY_PATH.write_text(json.dumps(registry, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
