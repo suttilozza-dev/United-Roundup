@@ -449,6 +449,13 @@
   },
   {
     "fixture": "Liverpool",
+    "date": "2026-11-20",
+    "context": "pre_match",
+    "result": "not_applicable",
+    "manager": "Pochettino"
+  },
+  {
+    "fixture": "Liverpool",
     "date": "2026-11-22",
     "context": "post_match",
     "result": "loss",
