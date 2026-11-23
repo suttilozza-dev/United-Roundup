@@ -1169,3 +1169,10 @@ nav.ur-toc{display:block;position:static;height:auto;width:auto;gap:0}
 nav.ur-toc ul{display:block;list-style:none}
 nav.ur-toc li{display:block}
 nav.ur-toc a{display:inline;text-transform:none;letter-spacing:normal;font:700 .92rem/1.5 Arial,sans-serif;padding:0;background:none}
+
+/* A single Weekly Roundup card on the homepage (no Big Story beside it) takes the full row. */
+.feature-pair>.pair-roundup:only-child{grid-column:1/-1}
+
+/* YouTube embeds (consent-gated, see cookie-consent.js): same figure as an X embed, with a 16:9 player. */
+.ur-embed--video{max-width:640px}
+.ur-embed--video iframe{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#000}
