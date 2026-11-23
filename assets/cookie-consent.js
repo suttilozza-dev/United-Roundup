@@ -4,7 +4,7 @@
   // Consent is collected by CookieYes (a Google-certified CMP). This file loads the CookieYes
   // banner, then loads each third-party tool only for the categories the visitor has accepted:
   //   analytics     -> GA4
-  //   advertisement -> Google Ads tag, AdSense (assets/ads.js), embedded X posts
+  //   advertisement -> Google Ads tag, AdSense (assets/ads.js), embedded X posts and YouTube videos
   //   functional    -> Kit checkout widget behind the "Support United Roundup" button
   // Nothing from Google or X is requested before the visitor has actively made a choice.
   var COOKIEYES_SRC = "https://cdn-cookieyes.com/client_data/fa25f16a8901fe6d829a765d049bd818/script.js";
@@ -132,14 +132,35 @@
     });
   }
 
-  // Embedded X posts: widgets.js is third-party and sets its own cookies, so it
-  // loads only after consent. Without consent the <blockquote> shows as plain text.
+  // Embedded X posts and YouTube videos: both are third-party and set their own cookies, so
+  // they load only after consent (advertisement). Without consent the X <blockquote> stays
+  // hidden and each embed shows a "loads once you accept cookies" placeholder with a link.
+  // YouTube uses the privacy-enhanced youtube-nocookie.com player, added only now.
+  function loadVideos() {
+    var figs = document.querySelectorAll("figure[data-youtube]");
+    for (var i = 0; i < figs.length; i++) {
+      var fig = figs[i];
+      if (fig.querySelector("iframe")) continue;
+      var id = fig.getAttribute("data-youtube");
+      if (!/^[A-Za-z0-9_-]{6,20}$/.test(id)) continue;
+      var f = document.createElement("iframe");
+      f.src = "https://www.youtube-nocookie.com/embed/" + id;
+      f.title = fig.getAttribute("data-title") || "YouTube video";
+      f.loading = "lazy";
+      f.allow = "accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen";
+      f.referrerPolicy = "strict-origin-when-cross-origin";
+      f.setAttribute("allowfullscreen", "");
+      fig.appendChild(f);
+    }
+  }
+
   function loadEmbeds() {
+    // Swaps the "loads once you accept cookies" placeholders for the posts and videos (see .ur-embeds-on in extra.css).
+    document.documentElement.classList.add("ur-embeds-on");
+    loadVideos();
     if (window.__urEmbedsLoaded) return;
     if (!document.querySelector(".twitter-tweet")) return;
     window.__urEmbedsLoaded = true;
-    // Swaps the "loads once you accept cookies" placeholders for the posts (see .ur-embeds-on in extra.css).
-    document.documentElement.classList.add("ur-embeds-on");
     var s = document.createElement("script");
     s.async = true;
     s.charset = "utf-8";
