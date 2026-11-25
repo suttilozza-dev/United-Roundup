@@ -460,5 +460,12 @@
     "context": "post_match",
     "result": "loss",
     "manager": "Pochettino"
+  },
+  {
+    "fixture": "Sporting CP",
+    "date": "2026-11-24",
+    "context": "pre_match",
+    "result": "not_applicable",
+    "manager": "Pochettino"
   }
 ]
