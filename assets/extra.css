@@ -94,6 +94,27 @@ footer>div{font-size:.75rem}
 /* At 12px the "Questions" header is wider than its 54px phone column; let it
    extend left into the empty space instead of pushing the page sideways. */
 @media (width<=560px){.prw-leaderboard-columns span:nth-child(3){justify-self:end;white-space:nowrap}}
+/* Text-size floor, pass 2 (2026-11-27): sizes written as .6rem/.7rem/px that the first pass missed. */
+.story-source>span{font-size:.75rem}
+.ad-slot span{font-size:.75rem}
+.briefing-number{font-size:.75rem}
+.archive-intro .eyebrow{font-size:.75rem}
+.article-status{font-size:.75rem!important}
+.queue-meta{font-size:.75rem}
+.brief-item>div{font-size:.75rem}
+.press-register button>span{font-size:.75rem}
+.press-record-head p{font-size:.75rem}
+.prw-topic-panel li>span{font:italic 700 .75rem Georgia}
+.prw-context-list i{font-size:.75rem}
+.prw-editorial-read>span{font-size:.75rem}
+.prw-watchlist article span{font-size:.75rem}
+.prw-watchlist article i{font-size:.75rem}
+.prw-answer blockquote a,.prw-no-answer a{font-size:.75rem}
+.prw-answer aside dd{font-size:.75rem}
+.directory header>p{font-size:.75rem}
+@media (width<=560px){
+.prw-method-tabs [data-slot=tabs-trigger]{font-size:.75rem}
+}
 /* ==== end Impeccable overrides ==== */
 
 /* Extra styles for pages beyond the ChatGPT-captured homepage */
@@ -286,7 +307,7 @@ footer>div{font-size:.75rem}
 }
 .ab-card p{font-size:.85rem;color:var(--muted);margin:0;max-width:none}
 .ab-dark .ab-card p{color:#c9b9b0}
-.ab-card-num{font-size:.7rem;color:var(--terra);font-weight:700}
+.ab-card-num{font-size:.75rem;color:var(--terra);font-weight:700}
 
 .ab-founder{
   display:flex;gap:1rem;align-items:flex-start;margin-top:1.5rem;
@@ -351,7 +372,7 @@ footer>div{font-size:.75rem}
 .prw-now-lead>aside>span{color:#ff9b78;font-size:.75rem;font-weight:900;letter-spacing:.13em}
 .prw-now-lead blockquote{margin:18px 0 15px;color:#fff;font:italic 700 2rem/1.12 Georgia,serif}
 .prw-now-lead>aside p{color:#aeb1b7;font-size:.8rem;line-height:1.65}
-.prw-now-lead>aside a{display:inline-flex;align-items:center;gap:5px;margin-top:13px;color:#ff9b78;font-size:.7rem;font-weight:900}
+.prw-now-lead>aside a{display:inline-flex;align-items:center;gap:5px;margin-top:13px;color:#ff9b78;font-size:.75rem;font-weight:900}
 .prw-now-lead>aside a svg{width:13px}
 .prw-now-grid{max-width:1240px;margin:18px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .prw-now-card{min-height:285px;padding:25px;display:flex;flex-direction:column;border:1px solid #3a404b;border-radius:17px;background:#202630}
@@ -370,7 +391,7 @@ footer>div{font-size:.75rem}
 .prw-now-read{max-width:1240px;margin:18px auto 0;padding:28px 32px;display:grid;grid-template-columns:170px 1fr;gap:5px 28px;border-radius:15px;background:#f2e3d4;color:var(--ink)}
 .prw-now-read>b{padding-top:5px;color:var(--red);font-size:.75rem;letter-spacing:.13em}
 .prw-now-read p{margin:0;font:400 1.08rem/1.65 Georgia,serif}
-.prw-now-read>span{grid-column:2;color:#7b665c;font-size:.7rem;line-height:1.5}
+.prw-now-read>span{grid-column:2;color:#7b665c;font-size:.75rem;line-height:1.5}
 .prw-visuals{padding:100px clamp(20px,6vw,90px);background:#f1e5db}
 .prw-chart-grid{max-width:1240px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .prw-chart-grid>article{padding:30px;border:1px solid #decfc5;border-radius:20px;background:#fff;box-shadow:0 13px 30px rgba(61,37,27,.06)}
@@ -385,7 +406,7 @@ footer>div{font-size:.75rem}
 .prw-donut-layout ol{list-style:none;margin:0;padding:0}
 .prw-donut-layout li{display:grid;grid-template-columns:10px 1fr auto 34px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #eee5df}
 .prw-donut-layout li i{width:9px;height:9px;border-radius:3px}
-.prw-donut-layout li span{font-size:.7rem}
+.prw-donut-layout li span{font-size:.75rem}
 .prw-donut-layout li b{font:700 .9rem Georgia,serif}
 .prw-donut-layout li small{color:var(--muted);font-size:.75rem;text-align:right}
 .prw-chart-grid article>p{margin:25px 0 0;padding-top:19px;border-top:1px solid #e8ddd5;color:var(--muted);font-size:.76rem;line-height:1.6}
@@ -399,7 +420,7 @@ footer>div{font-size:.75rem}
 .prw-columns small{margin-top:3px;color:var(--muted);font-size:.75rem}
 .prw-style-card{grid-column:2}
 .prw-style-legend{display:flex;flex-wrap:wrap;gap:8px 13px;margin:22px 0}
-.prw-style-legend span{display:flex;align-items:center;gap:5px;color:#66534b;font-size:.6rem}
+.prw-style-legend span{display:flex;align-items:center;gap:5px;color:#66534b;font-size:.75rem}
 .prw-style-legend i{width:8px;height:8px;border-radius:2px}
 .prw-style-bars{display:grid;gap:17px}
 .prw-style-bars>div{display:grid;grid-template-columns:68px 1fr 28px;gap:10px;align-items:center}
@@ -593,7 +614,7 @@ footer .social-row{
   background:var(--cream);
   border:1px solid var(--line);
   color:var(--muted);
-  font-size:.7rem;
+  font-size:.75rem;
   font-weight:800;
   letter-spacing:.03em;
   text-decoration:none;
@@ -837,7 +858,7 @@ footer .social-row{grid-column:1/-1;justify-content:center;gap:14px;margin-top:0
 .acc-table tbody th{position:sticky;left:0;z-index:1;background:#fff;min-width:170px;max-width:200px;font-weight:400;border-right:1px solid #eadbd0}
 .acc-table tbody th a{color:#211613;font-weight:800;text-decoration:none;border-bottom:1px solid #eadbd0}
 .acc-table tbody th a:hover{border-bottom-color:#c04527}
-.acc-table tbody th small{display:block;color:#78635c;font-size:.7rem;line-height:1.35;margin-top:3px}
+.acc-table tbody th small{display:block;color:#78635c;font-size:.75rem;line-height:1.35;margin-top:3px}
 .acc-table tr.bench td,.acc-table tr.bench th{background:#fff4f1}
 .acc-table tr.bench th a{color:#b23d25}
 .acc-table tr.grp th{position:static;background:#f6ede6;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:#78635c;font-weight:900;max-width:none}
@@ -915,7 +936,7 @@ footer .social-row{grid-column:1/-1;justify-content:center;gap:14px;margin-top:0
 .wire-lead .story-thumb:after{width:120px;height:120px;inset:auto -20px -24px auto}
 .wire-lead-body p{color:var(--muted);font-size:.75rem;margin:0 0 10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .wire-lead-body p b{color:var(--terra);text-transform:uppercase;letter-spacing:.08em}
-.wire-lead-flag{background:var(--terra);color:#fff;border-radius:99px;padding:3px 9px;font-size:.6rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+.wire-lead-flag{background:var(--terra);color:#fff;border-radius:99px;padding:3px 9px;font-size:.75rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
 .wire-lead h3{font:700 clamp(1.45rem,2.1vw,2.05rem)/1.14 Georgia,serif;margin:0 0 14px;letter-spacing:-.01em}
 .wire-lead:hover h3{color:var(--terra)}
 .wire-side{display:flex;flex-direction:column;gap:18px;align-self:start;position:sticky;top:104px;min-width:0}
@@ -942,7 +963,7 @@ footer .social-row{grid-column:1/-1;justify-content:center;gap:14px;margin-top:0
 .wire-sources-list b{font:700 .95rem Georgia,serif;color:var(--terra)}
 .wire-sources-list .ws-bar{grid-column:1/-1;height:6px;border-radius:99px;background:#f4e7de;overflow:hidden}
 .wire-sources-list .ws-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#c6371d,#fb3701)}
-.wire-sources-note{color:var(--muted);font-size:.7rem;line-height:1.5;margin:10px 0 0;border-top:1px solid var(--line);padding-top:10px}
+.wire-sources-note{color:var(--muted);font-size:.75rem;line-height:1.5;margin:10px 0 0;border-top:1px solid var(--line);padding-top:10px}
 @media (width<=900px){
   .wire-side{position:static}
   .wire-main{padding:16px 16px 6px;border-radius:16px}
@@ -1315,3 +1336,58 @@ nav.ur-toc a{display:inline;text-transform:none;letter-spacing:normal;font:700 .
 .pair-big .pair-read{background:#c42d00}
 .pair-big .pair-read:hover{background:#a32600}
 .pair-card .eyebrow,.pair-number{color:#ffa27c}
+
+/* ==== Homepage critique fixes (2026-11-27) ==== */
+/* Masthead: the image banner above stays as it is; the hero below it is now
+   the h1 on the left and the intro, label legend and search on the right.
+   No automatic "Top story" card here any more. */
+@media (width>900px){
+  .home .masthead{align-items:end;min-height:0;padding-top:56px;padding-bottom:56px}
+  .home .mast-copy h1{font-size:clamp(3.4rem,6vw,5.75rem)}
+}
+.home .mast-side .dek{margin-top:0;color:#d9c7ba}
+.ur-legend{margin:0 0 26px;color:#d9c7ba}
+.ur-legend p{margin:0 0 10px;font-size:.9rem}
+.ur-legend dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 20px;margin:0}
+.ur-legend dl>div{display:grid;grid-template-columns:8.25rem minmax(0,1fr);align-items:center;gap:10px;min-width:0}
+.ur-legend dt{min-width:0}
+.ur-legend dd{margin:0;font-size:.85rem;line-height:1.35}
+@media (width<=540px){.ur-legend dl{grid-template-columns:1fr}}
+/* Solid search field on the dark masthead so the placeholder reads (7.5:1) */
+.home .masthead .search{background:#fff;border-color:#fff}
+.search input::placeholder{color:#5f524c;opacity:1}
+@media (hover:none){.search kbd{display:none}}
+
+/* Wire labels: who published each headline */
+.ur-tag--independent{background:#f3efec;color:#5c4f49}
+.ur-tag--independent::before{content:"\25CB"}
+.story p .ur-tag,.wire-lead-body p .ur-tag{margin-right:8px;vertical-align:1px}
+.wire-sources-when{margin:2px 0 6px;color:var(--muted);font-size:.85rem}
+.wire-empty{margin:0;padding:28px 4px;color:var(--muted);font-size:.95rem}
+.wire-empty button{margin-left:6px;border:0;background:none;padding:0;color:#a63a21;font:inherit;font-weight:800;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+
+/* Phones: no scroll box inside the page; show 12 stories, then a button */
+.wire-more{display:none}
+@media (width<=900px){
+  .wire-main .story-scroll{max-height:none;overflow:visible;padding-right:0}
+  .story-scroll:not(.expanded)>.story:nth-child(n+13){display:none}
+  .wire-more:not([hidden]){display:block;width:100%;margin:14px 0 6px;padding:13px 16px;border:1px solid var(--line);border-radius:99px;background:#fff;color:var(--ink);font:800 .9rem/1.2 Arial,sans-serif;cursor:pointer}
+  .wire-more:hover{border-color:#a63a21;color:#a63a21}
+}
+
+/* Weekly Roundup card: newsletter sign-up beside the read button */
+.pair-subscribe{color:#ffe0d4;align-items:center;gap:6px;font-size:.8rem;font-weight:900;display:inline-flex;margin-left:auto}
+.pair-subscribe svg{width:17px;height:17px}
+.pair-subscribe:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}
+@media (width<=540px){.pair-subscribe{margin-left:0}}
+/* ==== end homepage critique fixes ==== */
+
+/* Press Room Watch on the homepage: the same card as the Weekly Roundup
+   (shape, width, type, actions), in Press Room Watch's own navy. */
+.feature-pair>.pair-prw:only-child{grid-column:1/-1}
+.home .prw-feature{margin-top:0}
+.pair-prw{background:radial-gradient(circle at 90% 5%,#c045273d,#0000 38%),linear-gradient(135deg,#141821 0%,#1a2030 54%,#232a3a 100%)}
+.pair-prw h2{margin-top:26px}
+.pair-prw .pair-date{color:#c9ccd4}
+.prw-feature-count{margin:0 0 22px;color:#ffa27c;font-size:.8rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.pair-prw .pair-dek{max-width:68ch}

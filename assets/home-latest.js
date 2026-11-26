@@ -88,38 +88,25 @@ document.addEventListener('DOMContentLoaded', function () {
     if (img.naturalWidth && img.naturalWidth <= 120 && img.getAttribute('data-fallback')) window.urImgFallback(img);
   };
 
-  var heroUrl = null;
-  var lead = document.getElementById('lead-card');
-  if (lead && items.length) {
-    var eligible = items.filter(function (i) {
-      return i.type !== 'video' && (isNationalOrRegional(i.source) || isBigClubAnnouncement(i));
-    });
-    // Falls back to the previous "most recent, non-video" behaviour only
-    // if nothing in the wire currently qualifies, so the card never ends
-    // up empty.
-    var top = eligible[0] || items.find(function (i) { return i.type !== 'video'; }) || items[0];
-    lead.href = top.url;
-    var leadTime = document.getElementById('lead-time');
-    var leadTitle = document.getElementById('lead-title');
-    var leadInitials = document.getElementById('lead-initials');
-    var leadSource = document.getElementById('lead-source');
-    if (leadTime) leadTime.textContent = timeAgo(top.published);
-    if (leadTitle) leadTitle.textContent = top.title;
-    if (leadInitials) leadInitials.textContent = initials(top.source);
-    if (leadSource) leadSource.textContent = top.source;
-    var leadArt = document.getElementById('lead-art');
-    var heroImg = /^https:\/\//i.test(top.image || '') ? top.image : '';
-    if (leadArt && heroImg) {
-      var ph = document.createElement('img');
-      ph.className = 'lead-art-photo'; ph.alt = ''; ph.referrerPolicy = 'no-referrer';
-      var heroBig = largeImage(heroImg);
-      if (heroBig !== heroImg) ph.setAttribute('data-fallback', heroImg);
-      ph.onerror = function () { window.urImgFallback(ph, function () { leadArt.classList.remove('has-image'); ph.remove(); }); };
-      ph.onload = function () { window.urImgCheck(ph); };
-      ph.src = heroBig;
-      leadArt.appendChild(ph); leadArt.classList.add('has-image');
-    }
-    heroUrl = top.url;
+  // The homepage no longer has an automatic "Top story" card: the Weekly
+  // Roundup (hand-edited in index.html) is the editor's pick at the top.
+
+  // Every wire item is labelled by who published it, using the house labels
+  // where they apply to a source as a whole: the club is a primary source
+  // (Confirmed), a listed newsroom is a named credible outlet (Reported).
+  // Everything else (blogs, fanzines, forums, YouTube channels) is shown as
+  // Independent rather than guessed at. Attributed and Speculation are only
+  // used inside our own articles, claim by claim.
+  function isClub(source) {
+    return CLUB_SOURCES.indexOf((source || '').trim().toLowerCase()) !== -1;
+  }
+  function sourceTag(item) {
+    if (isClub(item.source)) return '<span class="ur-tag ur-tag--confirmed" title="From the club: a primary source">Confirmed</span>';
+    if (isNationalOrRegional(item.source)) return '<span class="ur-tag ur-tag--reported" title="From a named newsroom">Reported</span>';
+    return '<span class="ur-tag ur-tag--independent" title="From an independent blog, fanzine or channel">Independent</span>';
+  }
+  function isLeadEligible(i) {
+    return i.type !== 'video' && (isNationalOrRegional(i.source) || isBigClubAnnouncement(i));
   }
 
   // ---- Wire list ----
@@ -157,37 +144,59 @@ document.addEventListener('DOMContentLoaded', function () {
     return item.type === 'video' ? 'Videos' : (categoryLabels[item.category] || item.category || 'News');
   }
 
+  var moreBtn = document.getElementById('wire-more');
+  var PHONE_LIST_LIMIT = 12;
+
   function render() {
     var filtered = activeCategory === 'all' ? items : items.filter(function (i) { return i.category === activeCategory; });
     if (countEl) countEl.textContent = filtered.length + ' report' + (filtered.length === 1 ? '' : 's');
-    // The big wire slot goes to the newest story that has a photo. In
-    // "All stories" it also skips the story already shown as the Top story
-    // card above, so the two don't repeat each other.
-    function notHero(i) { return !(activeCategory === 'all' && heroUrl && i.url === heroUrl); }
-    var top = filtered.find(function (i) { return notHero(i) && /^https:\/\//i.test(i.image || ''); }) ||
-      filtered.find(notHero) || filtered[0];
-    var flag = top === filtered[0] ? 'Latest' : 'Featured';
+    if (!filtered.length) {
+      if (leadSlot) leadSlot.innerHTML = '';
+      if (listEl) listEl.innerHTML = '<p class="wire-empty">Nothing in this category on the wire right now. <button type="button" data-reset>Show all stories</button></p>';
+      if (moreBtn) moreBtn.hidden = true;
+      return;
+    }
+    // The big wire slot goes to the newest story from a named newsroom (or a
+    // real club announcement) that has a photo, then any newsroom story, so
+    // blogs, forums and video channels never take the biggest spot unless
+    // the filter has nothing else.
+    var top = filtered.find(function (i) { return isLeadEligible(i) && /^https:\/\//i.test(i.image || ''); }) ||
+      filtered.find(isLeadEligible) || filtered[0];
     var rest = leadSlot ? filtered.filter(function (i) { return i !== top; }) : filtered;
     if (leadSlot) {
-      leadSlot.innerHTML = top ?
+      leadSlot.innerHTML =
         '<a class="wire-lead" href="' + httpsUrl(top.url) + '" target="_blank" rel="noreferrer">' +
           wireThumb(top, 'wire-lead-thumb', true) +
-          '<div class="wire-lead-body"><p><span class="wire-lead-flag">' + flag + '</span><b>' + esc(labelFor(top)) + '</b> &middot; ' + timeAgo(top.published) + '</p>' +
+          '<div class="wire-lead-body"><p>' + sourceTag(top) + '<b>' + esc(labelFor(top)) + '</b> &middot; ' + timeAgo(top.published) + '</p>' +
           '<h3>' + esc(top.title) + '</h3>' +
-          '<span class="byline">' + esc(top.source) + ' ' + WIRE_ARROW + '</span></div></a>' : '';
+          '<span class="byline">' + esc(top.source) + ' ' + WIRE_ARROW + '</span></div></a>';
     }
     if (!listEl) return;
+    listEl.classList.remove('expanded');
     listEl.innerHTML = rest.map(function (item, idx) {
       var num = String(idx + (leadSlot ? 2 : 1)).padStart(2, '0');
       return '<a class="story" href="' + httpsUrl(item.url) + '" target="_blank" rel="noreferrer">' +
         '<span class="story-index">' + num + '</span>' +
         wireThumb(item) +
-        '<div><p><b>' + esc(labelFor(item)) + '</b> &middot; ' + timeAgo(item.published) + '</p>' +
+        '<div><p>' + sourceTag(item) + '<b>' + esc(labelFor(item)) + '</b> &middot; ' + timeAgo(item.published) + '</p>' +
         '<h3>' + esc(item.title) + '</h3>' +
         '<span class="byline">' + esc(item.source) + ' ' + WIRE_ARROW + '</span>' +
         '</div></a>';
     }).join('');
+    // On phones the list isn't a scroll box (that traps touch scrolling), so
+    // it shows the first few and a button for the rest (see extra.css).
+    if (moreBtn) {
+      moreBtn.hidden = rest.length <= PHONE_LIST_LIMIT;
+      moreBtn.textContent = 'Show all ' + filtered.length + ' reports';
+    }
   }
+  if (moreBtn) moreBtn.addEventListener('click', function () {
+    listEl.classList.add('expanded');
+    moreBtn.hidden = true;
+  });
+  if (listEl) listEl.addEventListener('click', function (e) {
+    if (e.target.closest('[data-reset]')) selectCategory('all');
+  });
 
   // ---- "Who's reporting most" ----
   // Counts stories per outlet over the last 24 hours (or the whole wire if
@@ -216,16 +225,31 @@ document.addEventListener('DOMContentLoaded', function () {
     box.hidden = false;
   })();
 
-  tabs.forEach(function (tab) {
-    tab.addEventListener('click', function () {
-      tabs.forEach(function (t) { t.classList.remove('active'); });
-      tab.classList.add('active');
-      activeCategory = tab.dataset.category;
-      render();
+  function selectCategory(cat) {
+    tabs.forEach(function (t) {
+      var on = t.dataset.category === cat;
+      t.classList.toggle('active', on);
+      t.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
+    activeCategory = cat;
+    render();
+  }
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () { selectCategory(tab.dataset.category); });
   });
 
   render();
+
+  // The nav's "Academy" link (/#academy) now opens the wire with the Youth &
+  // academy filter on; the homepage no longer has a separate academy section.
+  function openAcademyFromHash() {
+    if (location.hash !== '#academy') return;
+    selectCategory('academy');
+    var wire = document.getElementById('latest');
+    if (wire) wire.scrollIntoView();
+  }
+  openAcademyFromHash();
+  window.addEventListener('hashchange', openAcademyFromHash);
 
   // ---- "United on Screen" (videos) and "The Next Generation" (academy) ----
   // Both are rebuilt from the daily data feed so they always show the newest
@@ -261,29 +285,18 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   var videoGrid = document.querySelector('#videos .video-grid');
-  var videos = pickLatest(items.filter(function (i) { return i.type === 'video' && i.url; }), 6, 2);
+  // One row of three, newest first, one per channel, each marked as the
+  // club's own or a fan channel so commentary isn't mistaken for reporting.
+  var videos = pickLatest(items.filter(function (i) { return i.type === 'video' && i.url; }), 3, 1);
   if (videoGrid && videos.length >= 3) {
-    if (videos.length < 6) videos = videos.slice(0, 3);
     videoGrid.innerHTML = videos.map(function (v, idx) {
-      var official = CLUB_SOURCES.indexOf((v.source || '').trim().toLowerCase()) !== -1;
+      var official = isClub(v.source);
       var img = thumb(v, 'video-thumb', true);
       return '<a class="video-card" href="' + safeUrl(v.url) + '" target="_blank" rel="noreferrer">' +
         '<div class="video-art v' + (idx % 3) + (img ? ' has-image' : '') + '">' + img +
         '<span class="play">' + PLAY + '</span>' +
-        '<small>' + (official ? 'OFFICIAL &middot; ' : '') + esc(timeAgo(v.published).toUpperCase()) + '</small></div>' +
+        '<small>' + (official ? 'OFFICIAL' : 'FAN CHANNEL') + ' &middot; ' + esc(timeAgo(v.published).toUpperCase()) + '</small></div>' +
         '<p>' + esc(v.source) + '</p><h3>' + esc(v.title) + '</h3></a>';
-    }).join('');
-  }
-
-  var academyGrid = document.querySelector('#academy .academy-grid');
-  var academy = pickLatest(items.filter(function (i) { return i.category === 'academy' && i.url; }), 4, 2);
-  if (academyGrid && academy.length) {
-    academyGrid.innerHTML = academy.map(function (a) {
-      var img = thumb(a, 'academy-thumb-img');
-      return '<a href="' + safeUrl(a.url) + '" target="_blank" rel="noreferrer">' +
-        '<div class="academy-thumb' + (img ? ' has-image' : '') + '">' + img + '<i>' + esc(initials(a.source)) + '</i></div>' +
-        '<div class="academy-body"><span>Youth &amp; academy &middot; ' + esc(timeAgo(a.published)) + '</span>' +
-        '<h3>' + esc(a.title) + '</h3><small>' + esc(a.source) + ' ' + ARROW + '</small></div></a>';
     }).join('');
   }
 

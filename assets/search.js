@@ -5,6 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
   var input = document.getElementById('site-search-input');
   if (!input) return;
 
+  // Show the shortcut the visitor's keyboard actually has (Ctrl K off Apple
+  // devices). extra.css hides the hint on touch screens.
+  var hint = input.parentNode.querySelector('kbd');
+  if (hint && !/Mac|iPhone|iPad/i.test(navigator.platform || navigator.userAgent)) hint.textContent = 'Ctrl K';
+
   var results = document.createElement('div');
   results.className = 'search-results';
   results.setAttribute('role', 'listbox');

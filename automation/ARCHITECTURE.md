@@ -62,7 +62,11 @@ GA4 and the Ads tag share one `gtag.js` request (loaded with the AW id once eith
 
 ### Homepage sections built from the data feed
 
-`assets/home-latest.js` fills the lead card, the news wire, **"United on Screen"** (`#videos .video-grid`, newest videos, max 2 per channel) and **"The Next Generation"** (`#academy .academy-grid`, newest `academy` items) from `LATEST_ITEMS`, using each item's `image` thumbnail. The hand-written cards in `index.html` are only a fallback. The Weekly Roundup and Who's Saying What cards (`.feature-pair`) are hand-edited: update them in `index.html` when a new edition/analysis is published.
+`assets/home-latest.js` fills the news wire and **"United on Screen"** (`#videos .video-grid`, the newest three videos, one per channel, marked OFFICIAL or FAN CHANNEL) from `LATEST_ITEMS`, using each item's `image` thumbnail. The hand-written video cards in `index.html` are only a fallback. The Weekly Roundup and Who's Saying What cards (`.feature-pair`) are hand-edited: update them in `index.html` when a new edition/analysis is published; they are the editor's pick at the top of the page (there is no automatic "Top story" card any more).
+
+- **Wire labels.** Each wire item carries a label for who published it: **Confirmed** for the club (`CLUB_SOURCES`), **Reported** for a listed newsroom (`NATIONAL_REGIONAL_OUTLETS`), **Independent** for everything else (blogs, fanzines, forums, YouTube). Add an outlet to `NATIONAL_REGIONAL_OUTLETS` to have it labelled Reported. Attributed and Speculation are used claim by claim inside our own articles only. The wire's big lead slot only goes to a newsroom story or a real club announcement.
+- **Academy.** There is no separate academy section: the nav's `/#academy` link opens the wire with the Youth & academy filter on.
+- **Phones.** The wire list is not a scroll box below 900px; it shows 12 stories and a "Show all" button.
 
 ### Generated files — never hand-edit
 
