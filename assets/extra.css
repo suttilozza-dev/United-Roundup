@@ -851,7 +851,7 @@ footer .social-row{grid-column:1/-1;justify-content:center;gap:14px;margin-top:0
 .acc-table td.ok{background:#e8f3ec}.acc-table td.ok .v{color:#1d6f47}
 .acc-table td.label{background:#fbf1dc}.acc-table td.label .v{color:#8a5a00}
 .acc-table td.diff{background:#fbe7e5}.acc-table td.diff .v{color:#a61f1a}
-.acc-table td.na .v{color:#b3a79f}
+.acc-table td.na .v{color:#7d7068}
 .acc-table tr.bench td .v{color:#211613}
 .acc-more{margin-top:14px}
 .acc-more summary{cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:#211613;color:#fff;border-radius:99px;padding:11px 18px;font-size:.82rem;font-weight:900;list-style:none}
@@ -1073,12 +1073,6 @@ footer .social-row{grid-column:1/-1;justify-content:center;gap:14px;margin-top:0
   background:rgba(90,30,45,.12);
   color:#5a1e2d
 }
-/* Dark mode overrides for type badges */
-@media (prefers-color-scheme:dark) {
-  .src-type--wsr{background:rgba(30,58,95,.4);color:#7db8f0}
-  .src-type--wsw{background:rgba(45,90,39,.4);color:#7dd87a}
-  .src-type--bs{background:rgba(90,30,45,.4);color:#f07090}
-}
 
 /* Weekly Roundup 07: wide text tables, pull quotes, lists, numbered citations, numbered source list */
 .bs-table--wide td:nth-child(2){white-space:normal;font-weight:400}
@@ -1279,3 +1273,33 @@ nav.ur-toc a{display:inline;text-transform:none;letter-spacing:normal;font:700 .
 .community p:last-child{color:#fbe6dc}
 /* lighter accent where the accent sits on dark sections */
 .masthead .eyebrow,.dark-section .eyebrow,.ab-dark .ab-card-num,.prw-narratives p:first-child{color:#ef7a55}
+
+/* ==== Impeccable contrast pass 2 (2026-11-27): remaining WCAG AA fixes ==== */
+/* Dark bands on About / Editorial / Privacy / Terms: body text, links, cookie button */
+.ab-dark > div > p{color:#d9c9c0}
+.ab-dark > div > p a{color:#ffb38f}
+.ab-dark .cookie-pref-btn{color:#fff;border-color:#d9c9c0}
+/* X-post placeholder inside a dark article conclusion sits on a light card */
+.article-conclusion .ur-embed-placeholder p{color:#211613}
+/* Homepage */
+.mast-copy h1 em .mh-accent{color:#e2231a}
+.story-index{color:#9a6a58}
+.press-room-actions>a:hover{background:#a8381f}
+/* Accent text on beige/tinted panels needs a deeper shade than #c04527 */
+.academy-intro .eyebrow,.academy-intro>a,.sources-intro .eyebrow,.sources-intro a.source-directory-link,
+.prw-kicker,.prw-section-title>div>p,.prw-method>div>p,.prw-now-read>b{color:#a63a21}
+.source-lists .source-list:not(.source-list-video)>p{color:#6b544b}
+.prw-now-read>span{color:#66524a}
+/* Press Room Watch dark panels */
+.prw-now-card-top>span{color:#8a92a0}
+.prw-now-card footer b{color:#a3aab5}
+.prw-narrative-name>p,.prw-watchlist article i{color:#9ba2ae}
+.prw-rank{color:#9ba2ae}
+/* Press Room Watch light panels */
+.prw-topic-panel li>span{color:#8a6a5d}
+.prw-evidence>.prw-conference-count{color:#6f7682}
+/* ==== end contrast pass 2 ==== */
+
+/* Subheads promoted from h4 to h3 for a correct heading order (h2 > h3) keep the
+   small uppercase .ur-subhead look rather than the article h3 style. */
+.article-body h3.ur-subhead,.article-conclusion h3.ur-subhead,.analysis-page .article-conclusion h3.ur-subhead{margin:30px 0 12px;color:#b23d25;text-transform:uppercase;letter-spacing:.09em;font:900 .75rem/1.35 system-ui,sans-serif}
