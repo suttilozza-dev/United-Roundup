@@ -1410,9 +1410,9 @@ nav.ur-toc a{display:inline;text-transform:none;letter-spacing:normal;font:700 .
   .masthead--slim .ur-legend dd{white-space:normal}
 }
 
-/* Homepage banner v5 (Nov 2026 artwork, 1366x768). Full width on phones and
-   tablets; on wide screens its height is capped and the sides are filled with
-   the artwork's own edge colours (cream left, red right, black strip along the
-   bottom 12.6%) so the cap is invisible. */
-.brand-banner--v5{padding:0;background:linear-gradient(to bottom,transparent 87.43%,#0b0b0b 87.43%),linear-gradient(to right,#f8ede1 50%,#d12821 50%)}
-.brand-banner--v5 img{display:block;width:100%;height:auto;max-width:calc(min(62vh,640px) * 1.7786);margin:0 auto}
+/* Homepage banner v5 (Nov 2026 artwork, 1950x1097 source). Two files from it:
+   a 3:1 version for wider screens (the cream, red and black edges extended)
+   and the original 16:9 for phones (<picture> in index.html). Full width,
+   no cropping. */
+.brand-banner--v5{padding:0;background:#0a0a0a}
+.brand-banner--v5 picture,.brand-banner--v5 img{display:block;width:100%;height:auto}
