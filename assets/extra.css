@@ -1305,3 +1305,13 @@ nav.ur-toc a{display:inline;text-transform:none;letter-spacing:normal;font:700 .
 /* YouTube embeds (consent-gated, see cookie-consent.js): same figure as an X embed, with a 16:9 player. */
 .ur-embed--video{max-width:640px}
 .ur-embed--video iframe{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#000}
+
+/* Impeccable contrast pass 3 (2026-11-27): homepage feature cards from the
+   Weekly Roundup / YouTube update. White button text needs >= 4.5:1 in every
+   state, and the orange labels need a lighter shade on the dark red card. */
+.pair-read{background:#c04527}
+.pair-read:hover{background:#a8381f}
+.pair-wsw .pair-read:hover{background:#c8161d}
+.pair-big .pair-read{background:#c42d00}
+.pair-big .pair-read:hover{background:#a32600}
+.pair-card .eyebrow,.pair-number{color:#ffa27c}
