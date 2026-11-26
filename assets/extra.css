@@ -1348,11 +1348,11 @@ nav.ur-toc a{display:inline;text-transform:none;letter-spacing:normal;font:700 .
 .home .mast-side .dek{margin-top:0;color:#d9c7ba}
 .ur-legend{margin:0 0 26px;color:#d9c7ba}
 .ur-legend p{margin:0 0 10px;font-size:.9rem}
-.ur-legend dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 20px;margin:0}
+.ur-legend dl{display:grid;grid-template-columns:1fr;gap:8px;margin:0}
 .ur-legend dl>div{display:grid;grid-template-columns:8.25rem minmax(0,1fr);align-items:center;gap:10px;min-width:0}
 .ur-legend dt{min-width:0}
 .ur-legend dd{margin:0;font-size:.85rem;line-height:1.35}
-@media (width<=540px){.ur-legend dl{grid-template-columns:1fr}}
+
 /* Solid search field on the dark masthead so the placeholder reads (7.5:1) */
 .home .masthead .search{background:#fff;border-color:#fff}
 .search input::placeholder{color:#5f524c;opacity:1}
@@ -1391,3 +1391,28 @@ nav.ur-toc a{display:inline;text-transform:none;letter-spacing:normal;font:700 .
 .pair-prw .pair-date{color:#c9ccd4}
 .prw-feature-count{margin:0 0 22px;color:#ffa27c;font-size:.8rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
 .pair-prw .pair-dek{max-width:68ch}
+
+/* Homepage hero, slim version (2026-11-27): the banner carries the brand and
+   the tagline, so the band below holds only the label legend and search.
+   The page's h1 is kept for screen readers and search engines (.sr-only). */
+.home .masthead--slim{display:block;min-height:0;padding:28px clamp(20px,6vw,86px)}
+.home .masthead--slim:after{display:none}
+.masthead--slim .mast-side{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);align-items:center;gap:20px clamp(24px,4vw,64px);max-width:1320px;margin:0 auto}
+.masthead--slim .ur-legend{margin:0}
+.masthead--slim .ur-legend p{margin:0 0 10px}
+.masthead--slim .ur-legend dl{display:flex;flex-wrap:wrap;gap:10px 26px}
+.masthead--slim .ur-legend dl>div{display:flex;align-items:center;gap:8px}
+.masthead--slim .ur-legend dd{white-space:nowrap}
+.masthead--slim .search{max-width:none;margin:0}
+@media (width<=900px){
+  .home .masthead--slim{padding:22px 20px}
+  .masthead--slim .mast-side{grid-template-columns:1fr}
+  .masthead--slim .ur-legend dd{white-space:normal}
+}
+
+/* Homepage banner v5 (Nov 2026 artwork, 1366x768). Full width on phones and
+   tablets; on wide screens its height is capped and the sides are filled with
+   the artwork's own edge colours (cream left, red right, black strip along the
+   bottom 12.6%) so the cap is invisible. */
+.brand-banner--v5{padding:0;background:linear-gradient(to bottom,transparent 87.43%,#0b0b0b 87.43%),linear-gradient(to right,#f8ede1 50%,#d12821 50%)}
+.brand-banner--v5 img{display:block;width:100%;height:auto;max-width:calc(min(62vh,640px) * 1.7786);margin:0 auto}
