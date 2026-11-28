@@ -31,6 +31,8 @@ PRIVACY: GA4 and any tracking load only after cookie consent. Keep privacy.html 
 
 REPORT: files changed, what to check on the preview, and the commit message.
 
+ARTICLE ARCHIVE: every published article is kept as Markdown in `../articles/` (C:\Users\GGPC\Downloads\united-roundup-site\articles\), one file per article named `YYYY-MM-DD_section_slug.md`, with `README.md` as the index. A second copy is in `C:\Users\GGPC\OneDrive\Documents\United Roundup Articles\`. Read these when you need past coverage, wording or sources instead of parsing the site's HTML. They don't update themselves: after publishing an article, add its Markdown file to both folders and update the index.
+
 # CLAUDE.md
 
 Technical detail (what the site is, local commands, front-end includes, generated files never to hand-edit, the automation pipeline, Press Room Watch, Netlify deploy rules) is in `automation/ARCHITECTURE.md`. Read it before editing code or generated files.
